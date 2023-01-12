@@ -20,7 +20,7 @@ interface MainPageParams {
 }
 
 function MainPage(params: MainPageParams) {
-  const locationList = (params.locations ?? []).map(loc => <li><LocationWidget {...loc} /></li>);
+  const locationList = (params.locations ?? []).map(loc => (<li><LocationWidget {...loc} /></li>));
   return (
     <html>
       <head>
@@ -39,22 +39,20 @@ function MainPage(params: MainPageParams) {
 function LocationWidget(params: LocationDto) {
   return (
     <p>
-      Lat: {params.location.latitude}, Long: {params.location.longitude}
+      Lat: {params.latitude}, Long: {params.longitude}
     </p>
   );
 }
 
 interface LocationDto {
-    location: {
-        latitude: number,
-        longitude: number,
-    },
-    description?: string,
+    latitude: number,
+    longitude: number,
+    comment?: string,
 }
 
-async function queryLocations() {
+async function queryLocations(): Promise<LocationDto[]> {
   const client = await pool.connect();
-  const result = await client.queryObject<LocationDto>("select * from \"Location\"");
+  const result = await client.queryObject<LocationDto>("select latitude, longitude, comment from location");
   return result.rows;
 }
 
