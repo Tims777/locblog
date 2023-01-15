@@ -44,5 +44,6 @@ function updateGlobe(target: SVGSVGElement | SVGGElement, rotation: GeoRotation,
     .selectAll("path")
     .data(features)
     .join("path")
-    .attr("d", path);
+    .attr("d", path)
+    .attr("fill", d => (d as any).properties?.fill ?? "black");
 }
