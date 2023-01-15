@@ -1,8 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Globe from "../components/Globe.tsx";
 import Pin from "../components/Pin.tsx";
-import { GeoLocation, GeoObject } from "../types.ts";
-import { GeoRotation } from "../types.ts";
+import { GeoLocation, GeoRotation, GeoObject } from "../types.ts";
 import * as world from "../static/world.json" assert { type: "json" };
 import { Pool } from "postgres";
 
@@ -24,12 +23,12 @@ export default function Home() {
       <Head>
         <title>LocBlog</title>
       </Head>
-      <div>
+      <a href="/map">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={1000} height={500}>
           <Globe rotation={rotation} features={world.default.features as GeoObject[]} />
           <Pin rotation={rotation} location={location} />
         </svg>
-      </div>
+      </a>
     </>
   );
 }
