@@ -1,10 +1,10 @@
 import { Head } from "$fresh/runtime.ts";
-import Globe from "../components/Globe.tsx";
 import Pin from "../components/Pin.tsx";
 import { GeoLocation, GeoObject } from "../types.ts";
 import { GeoRotation } from "../types.ts";
 import * as world from "../static/world.json" assert { type: "json" };
 import { Pool } from "postgres";
+import Globe from "../islands/Globe.tsx";
 
 const dbString = Deno.env.get("DATABASE")!;
 const pool = new Pool(dbString, 3);
@@ -26,7 +26,7 @@ export default function Home() {
       </Head>
       <div>
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={1000} height={500}>
-          <Globe rotation={rotation} features={world.default.features as GeoObject[]} />
+          <Globe initialRotation={rotation} rotationSpeed={[10, 0]} features={world.default.features as GeoObject[]} />
           <Pin rotation={rotation} location={location} />
         </svg>
       </div>
