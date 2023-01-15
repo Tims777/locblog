@@ -1,4 +1,4 @@
-import { select as d3Select, geoPath, geoOrthographic } from "d3";
+import { geoPath, geoOrthographic } from "d3";
 import { GeoRotation, GeoObject } from "../types.ts";
 
 interface GlobeProps {
@@ -7,18 +7,19 @@ interface GlobeProps {
 }
 
 export default function Globe(props: GlobeProps) {
+  const paths = createGlobe(props)
   return (
-    <g ref={g => createGlobe(g!, props)} />
+    <g>
+      {paths}
+    </g>
   );
 }
 
-function createGlobe(target: SVGSVGElement | SVGGElement, props: GlobeProps) {
+function createGlobe(props: GlobeProps) {
   const projection = geoOrthographic().rotate(props.rotation ?? [0, 0]);
   const path = geoPath().projection(projection);
-  const globe = d3Select(target);
-  globe
-    .selectAll("path")
-    .data(props.features ?? [])
-    .join("path")
-    .attr("d", path);
+  return props.features?.map(feature => {
+    const d = path(feature);
+    return d ? (<path d={d}/>) : <></>;
+  });
 }

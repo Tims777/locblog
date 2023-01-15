@@ -1,5 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
-import Globe from "../islands/Globe.tsx";
+import Globe from "../components/Globe.tsx";
 import Pin from "../components/Pin.tsx";
 import { GeoLocation, GeoObject } from "../types.ts";
 import { GeoRotation } from "../types.ts";
