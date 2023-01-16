@@ -17,12 +17,14 @@ async function queryLocations(limit = 100): Promise<GeoLocation[]> {
 const location: GeoLocation = (await queryLocations())[0];
 
 export default function Home() {
-    return (
-      <>
-        <Head>
-          <title>LocBlog</title>
-        </Head>
-        <InteractiveMap center={location} />
-      </>
-    );
+  return (
+    <>
+      <Head>
+        <title>LocBlog</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css" />
+        <link rel="stylesheet" href="/style.css" />
+      </Head>
+      <InteractiveMap center={location} />
+    </>
+  );
 }

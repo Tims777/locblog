@@ -1,13 +1,20 @@
-import { geoPath, geoOrthographic } from "d3";
-import { GeoRotation, GeoObject } from "../types.ts";
+import { geoOrthographic, geoPath } from "d3";
+import { GeoObject, Rotation, Translation } from "../types.ts";
 
 interface GlobeProps {
-  rotation?: GeoRotation;
+  rotation?: Rotation;
+  translation?: Translation;
   features?: GeoObject[];
 }
 
+const PROP_DEFAULTS: GlobeProps = {
+  rotation: [0, 0],
+  translation: [0, 0],
+  features: [],
+};
+
 export default function Globe(props: GlobeProps) {
-  const paths = createGlobe(props)
+  const paths = createGlobe(props);
   return (
     <g>
       {paths}
@@ -16,10 +23,13 @@ export default function Globe(props: GlobeProps) {
 }
 
 function createGlobe(props: GlobeProps) {
-  const projection = geoOrthographic().rotate(props.rotation ?? [0, 0]);
-  const path = geoPath().projection(projection);
-  return props.features?.map(feature => {
+  props = { ...PROP_DEFAULTS, ...props };
+  const projection = geoOrthographic().translate(props.translation!).rotate(
+    props.rotation!,
+  );
+  const path = geoPath(projection);
+  return props.features!.map((feature) => {
     const d = path(feature);
-    return d ? (<path d={d}/>) : <></>;
+    return d ? <path d={d} /> : <></>;
   });
 }
