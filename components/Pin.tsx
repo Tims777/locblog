@@ -1,5 +1,5 @@
 import { geoOrthographic } from "d3";
-import { GeoLocation, Rotation, Translation } from "../types.ts";
+import { GeoLocation, Rotation, Translation } from "../types.d.ts";
 
 interface PinProps {
   location?: GeoLocation;

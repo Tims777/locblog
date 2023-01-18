@@ -1,32 +1,27 @@
 import { Head } from "$fresh/runtime.ts";
 import Globe from "../components/Globe.tsx";
 import Pin from "../components/Pin.tsx";
-import { GeoLocation, GeoObject, Rotation } from "../types.ts";
+import { GeoLocation, GeoObject, Rotation } from "../types.d.ts";
 import * as world from "../static/world.json" assert { type: "json" };
-import { Pool } from "postgres";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import db from "../data/database.ts";
 
-const dbString = Deno.env.get("DATABASE")!;
-const pool = new Pool(dbString, 3);
+export const handler: Handlers<GeoLocation> = {
+  async GET(req, ctx) {
+    const locations = await db.location.query(1, { orderBy: "id desc"});
+    return ctx.render([locations[0].longitude, locations[0].latitude]);
+  },
+};
 
-async function queryLocations(limit = 100): Promise<GeoLocation[]> {
-  const client = await pool.connect();
-  const result = await client.queryArray<GeoLocation>(
-    `select longitude, latitude from location order by id limit ${limit}`,
-  );
-  return result.rows;
-}
-
-const location: GeoLocation = (await queryLocations())[0];
-const rotation: Rotation = [-location[0], 0];
-
-export default function Home() {
+export default function HomePage(props: PageProps<GeoLocation>) {
+  const rotation: Rotation = [-props.data[0], 0];
   return (
     <>
       <Head>
         <title>LocBlog</title>
         <link rel="stylesheet" href="/style.css" />
       </Head>
-      <a href="/map" style="display: block">
+      <a href="/map">
         <svg
           class="globe"
           version="1.1"
@@ -37,7 +32,7 @@ export default function Home() {
             rotation={rotation}
             features={world.default.features as GeoObject[]}
           />
-          <Pin rotation={rotation} location={location} />
+          <Pin rotation={rotation} location={props.data} />
         </svg>
       </a>
     </>

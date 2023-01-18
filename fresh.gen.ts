@@ -5,15 +5,19 @@
 import config from "./deno.json" assert { type: "json" };
 import * as $0 from "./routes/index.tsx";
 import * as $1 from "./routes/map.tsx";
-import * as $$0 from "./islands/InteractiveMap.tsx";
+import * as $2 from "./routes/update.tsx";
+import * as $$0 from "./islands/GeoLocationInput.tsx";
+import * as $$1 from "./islands/InteractiveMap.tsx";
 
 const manifest = {
   routes: {
     "./routes/index.tsx": $0,
     "./routes/map.tsx": $1,
+    "./routes/update.tsx": $2,
   },
   islands: {
-    "./islands/InteractiveMap.tsx": $$0,
+    "./islands/GeoLocationInput.tsx": $$0,
+    "./islands/InteractiveMap.tsx": $$1,
   },
   baseUrl: import.meta.url,
   config,
