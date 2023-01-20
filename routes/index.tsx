@@ -4,7 +4,7 @@ import Pin from "../components/Pin.tsx";
 import { GeoLocation, GeoObject, Rotation } from "../types.d.ts";
 import * as world from "../static/world.json" assert { type: "json" };
 import { Handlers, PageProps } from "$fresh/server.ts";
-import db from "../data/database.ts";
+import db from "../services/database.ts";
 
 export const handler: Handlers<GeoLocation> = {
   async GET(req, ctx) {

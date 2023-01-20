@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import InteractiveMap from "../islands/InteractiveMap.tsx";
-import db from "../data/database.ts";
+import db from "../services/database.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { GeoLocation } from "../types.d.ts";
 

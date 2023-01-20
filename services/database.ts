@@ -2,7 +2,6 @@ import { Pool } from "postgres";
 import { GeoLocationDto } from "../types.d.ts";
 
 class Table<T> {
-
   constructor(
     private database: Database,
     private name: string,
@@ -26,7 +25,9 @@ class Table<T> {
       keys.push(`"${key}"`);
       values.push(`'${element[key]}'`);
     }
-    const query = `insert into ${this.name} (${keys.join(", ")}) values (${values.join(", ")})`;
+    const query = `insert into ${this.name} (${keys.join(", ")}) values (${
+      values.join(", ")
+    })`;
     console.log(query);
     await client.queryArray(query);
   }
@@ -36,7 +37,8 @@ class Database {
   pool: Pool;
 
   constructor() {
-    const dbString = Deno.env.get("DATABASE")!;
+    const dbString = Deno.env.get("DATABASE");
+    if (!dbString) console.error("DATABASE is not set.");
     this.pool = new Pool(dbString, 3);
   }
 
