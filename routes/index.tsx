@@ -37,8 +37,9 @@ export default function GlobePage(props: PageProps<GlobeProps>) {
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
-          width={1000}
-          height={500}
+          viewBox="-250 -250 500 500"
+          width="100%"
+          height="100%"
         >
           <Globe
             initialRotation={props.data.initialRotation}
