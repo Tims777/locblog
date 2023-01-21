@@ -39,7 +39,7 @@ class Database {
   constructor() {
     const dbString = Deno.env.get("DATABASE");
     if (!dbString) console.error("DATABASE is not set.");
-    this.pool = new Pool(dbString, 3);
+    this.pool = new Pool(dbString, 3, true);
   }
 
   location = new Table<GeoLocationDto>(this, "location", [

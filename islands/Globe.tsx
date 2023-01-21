@@ -24,8 +24,8 @@ export default function Globe(props: GlobeProps) {
     const handle = requestAnimationFrame((time) => {
       updateGlobe(ref.current!, rotation, props.features ?? []);
       setRotation(r => [
-        props.rotationSpeed![0] * time / 1000,
-        props.rotationSpeed![1] * time / 1000,
+        props.initialRotation![0] + props.rotationSpeed![0] * time / 1000,
+        props.initialRotation![1] + props.rotationSpeed![1] * time / 1000,
       ]);
     });
     return () => cancelAnimationFrame(handle);
@@ -38,7 +38,7 @@ export default function Globe(props: GlobeProps) {
 
 function updateGlobe(target: SVGSVGElement | SVGGElement, rotation: Rotation, features: GeoObject[]) {
   const projection = geoOrthographic().rotate(rotation);
-  const path = geoPath(projection);
+  const path = geoPath(projection).pointRadius(d => (d as any).properties?.radius ?? 1);
   const globe = d3Select(target);
   globe
     .selectAll("path")
