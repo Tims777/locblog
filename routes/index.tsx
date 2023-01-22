@@ -40,11 +40,7 @@ export default function GlobePage(props: PageProps<GlobeProps>) {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="-250 -250 500 500"
         >
-          <Globe
-            initialRotation={props.data.initialRotation}
-            rotationSpeed={props.data.rotationSpeed}
-            features={props.data.features}
-          />
+          <Globe {...props.data} />
         </svg>
       </a>
     </>

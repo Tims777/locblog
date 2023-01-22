@@ -8,23 +8,26 @@ import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import { Icon, Style } from "ol/style";
 import { useGeographic } from "ol/proj";
-import { GeoLocation } from "../types.d.ts";
+import { GeoLocation, GeoLocationDto } from "../types.d.ts";
 
-interface InteractiveMapProps {
-  center: GeoLocation;
-  features: GeoLocation[];
+export interface InteractiveMapProps {
+  center?: GeoLocation;
+  features?: GeoLocationDto[];
 }
+
+const PROP_DEFAULTS: Required<InteractiveMapProps> = {
+  center: [0, 0],
+  features: [],
+};
 
 export default function InteractiveMap(props: InteractiveMapProps) {
-  return (
-    <div class="interactive map" ref={(div) => createMap(div!, props)} />
-  );
+  return <div class="interactive map" ref={(div) => createMap(div!, props)} />;
 }
 
-function loadFeatures() {}
-
-function createMap(target: HTMLElement, props: InteractiveMapProps) {
-  useGeographic();
+function loadFeatures(locations: GeoLocationDto[]) {
+  const result = locations.map(loc => new Feature({
+    geometry: new Point([loc.longitude, loc.latitude])
+  }));
   const style = new Style({
     image: new Icon({
       src: "/pin.svg",
@@ -32,12 +35,16 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
       scale: 0.1,
     }),
   });
-  const iconFeature = new Feature({
-    geometry: new Point(props.center),
-  });
-  iconFeature.setStyle(style);
+  result.forEach(r => r.setStyle(style));
+  return result;
+}
+
+function createMap(target: HTMLElement, props: InteractiveMapProps) {
+  const p = { ...PROP_DEFAULTS, ...props };
+  console.log(props, p);
+  useGeographic();
   const vectorSource = new VectorSource({
-    features: loadFeatures(),
+    features: loadFeatures(p.features),
   });
   const map = new Map({
     target: target,
