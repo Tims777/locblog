@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import Globe, { GlobeProps } from "../islands/Globe.tsx";
-import { GeoLocation, GeoObject, Rotation } from "../types.d.ts";
+import { GeoObject, Rotation } from "../types.d.ts";
 import * as world from "../static/world.json" assert { type: "json" };
 import { Handlers, PageProps } from "$fresh/server.ts";
 import db from "../services/database.ts";

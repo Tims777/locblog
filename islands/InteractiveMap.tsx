@@ -12,6 +12,7 @@ import { GeoLocation } from "../types.d.ts";
 
 interface InteractiveMapProps {
   center: GeoLocation;
+  features: GeoLocation[];
 }
 
 export default function InteractiveMap(props: InteractiveMapProps) {
@@ -19,6 +20,8 @@ export default function InteractiveMap(props: InteractiveMapProps) {
     <div class="interactive map" ref={(div) => createMap(div!, props)} />
   );
 }
+
+function loadFeatures() {}
 
 function createMap(target: HTMLElement, props: InteractiveMapProps) {
   useGeographic();
@@ -32,10 +35,10 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
   const iconFeature = new Feature({
     geometry: new Point(props.center),
   });
-  const vectorSource = new VectorSource({
-    features: [iconFeature],
-  });
   iconFeature.setStyle(style);
+  const vectorSource = new VectorSource({
+    features: loadFeatures(),
+  });
   const map = new Map({
     target: target,
     layers: [
