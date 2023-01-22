@@ -13,21 +13,25 @@ import { GeoLocation, GeoLocationDto } from "../types.d.ts";
 export interface InteractiveMapProps {
   center?: GeoLocation;
   features?: GeoLocationDto[];
+  focus?: boolean;
 }
 
 const PROP_DEFAULTS: Required<InteractiveMapProps> = {
   center: [0, 0],
   features: [],
+  focus: false,
 };
 
 export default function InteractiveMap(props: InteractiveMapProps) {
-  return <div class="interactive map" ref={(div) => createMap(div!, props)} />;
+  return <div class="map" tabIndex={0} ref={(div) => createMap(div!, props)} />;
 }
 
 function loadFeatures(locations: GeoLocationDto[]) {
-  const result = locations.map(loc => new Feature({
-    geometry: new Point([loc.longitude, loc.latitude])
-  }));
+  const result = locations.map((loc) =>
+    new Feature({
+      geometry: new Point([loc.longitude, loc.latitude]),
+    })
+  );
   const style = new Style({
     image: new Icon({
       src: "/pin.svg",
@@ -35,7 +39,7 @@ function loadFeatures(locations: GeoLocationDto[]) {
       scale: 0.1,
     }),
   });
-  result.forEach(r => r.setStyle(style));
+  result.forEach((r) => r.setStyle(style));
   return result;
 }
 
@@ -64,4 +68,8 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
       zoom: 7,
     }),
   });
+
+  if (props.focus) {
+    target.focus();
+  }
 }
