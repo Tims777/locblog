@@ -21,7 +21,10 @@ export const handler: Handlers = {
       time: new Date(formData.get("time")!.toString()).toISOString(),
     };
     db.location.insert(location);
-    return ctx.render();
+    return new Response(null, {
+      status: 303,
+      headers: { Location: "/map" },
+    });
   },
 };
 
