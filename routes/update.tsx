@@ -4,7 +4,7 @@ import GeoLocationInput from "../islands/GeoLocationInput.tsx";
 import auth from "../services/authentication.ts";
 
 export const handler: Handlers = {
-  async GET(req, ctx) {
+  GET(req, ctx) {
     if (!auth.validateHTTPAuthorization(req)) {
       return auth.response.unauthorized;
     }

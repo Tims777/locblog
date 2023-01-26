@@ -18,7 +18,7 @@ class Table<T> {
     return result.rows;
   }
 
-  public async insert(element: Record<string, any>) {
+  public async insert(element: Record<string, unknown>) {
     const client = await this.database.pool.connect();
     const keys = [], values = [];
     for (const key of this.members) {
