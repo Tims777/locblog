@@ -5,16 +5,25 @@ interface GeoLocationDetailsProps {
 }
 
 export default function GeoLocationDetails(props: GeoLocationDetailsProps) {
-  console.log(props.location);
+  const date = props.location.time ? new Date(props.location.time as unknown as string).toLocaleDateString() : "?";
+  const lat = parseFloat(props.location.latitude as unknown as string).toFixed(3);
+  const lng = parseFloat(props.location.longitude as unknown as string).toFixed(3);
   return (
     <table>
       <tr>
+        <th colSpan={2}>{props.location.comment}</th>
+      </tr>
+      <tr>
+        <th>Visited</th>
+        <td>{date}</td>
+      </tr>
+      <tr>
         <th>Latitude</th>
-        <td>{props.location.latitude}</td>
+        <td>{lat}</td>
       </tr>
       <tr>
         <th>Longitude</th>
-        <td>{props.location.longitude}</td>
+        <td>{lng}</td>
       </tr>
     </table>
   );

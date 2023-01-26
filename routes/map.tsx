@@ -8,7 +8,7 @@ import { GeoLocation } from "../types.d.ts";
 
 export const handler: Handlers<InteractiveMapProps> = {
   async GET(req, ctx) {
-    const locations = await db.location.query(1, { orderBy: "id desc" });
+    const locations = await db.location.query(-1, { orderBy: "id desc" });
     const center: GeoLocation = [locations[0].longitude, locations[0].latitude];
     return ctx.render({ center, features: locations, focus: true });
   },

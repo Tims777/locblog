@@ -13,6 +13,7 @@ import { Icon, Style } from "ol/style";
 import { GeoLocation, GeoLocationDto } from "../types.d.ts";
 import GeoLocationDetails from "../components/GeoLocationDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
+import PopupContainer from "../components/PopupContainer.tsx";
 
 export interface InteractiveMapProps {
   center?: GeoLocation;
@@ -77,10 +78,11 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
   select.on("select", (event) => {
     const selected = event.selected as Feature[];
     if (selected.length) {
+      const dto = selected[0].getProperties() as GeoLocationDto;
       const element = renderToElement(
-        <GeoLocationDetails
-          location={selected[0].getProperties() as GeoLocationDto}
-        />
+        <PopupContainer>
+          <GeoLocationDetails location={dto} />
+        </PopupContainer>,
       );
       locationDetailsOverlay.setElement(element as HTMLElement);
       locationDetailsOverlay.setPosition(event.mapBrowserEvent.coordinate);

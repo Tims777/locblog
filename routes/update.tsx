@@ -15,10 +15,11 @@ export const handler: Handlers = {
       return auth.response.unauthorized;
     }
     const formData = await req.formData();
-    const location: Record<string, number | string> = {
+    const location: Record<string, unknown> = {
       latitude: parseFloat(formData.get("latitude")!.toString()),
       longitude: parseFloat(formData.get("longitude")!.toString()),
       time: new Date(formData.get("time")!.toString()).toISOString(),
+      description: formData.get("description")?.toString(),
     };
     await db.location.insert(location);
     return new Response(null, {
@@ -33,6 +34,10 @@ export default function UpdatePage() {
     <div>
       <form method="POST">
         <GeoLocationInput includeTime />
+        <label>
+          Description
+          <input type="text" name="description" />
+        </label>
         <button type="submit">Update</button>
       </form>
     </div>

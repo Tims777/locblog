@@ -26,9 +26,8 @@ class Table<T> {
       values.push(`'${element[key]}'`);
     }
     const query = `insert into ${this.name} (${keys.join(", ")}) values (${
-      values.join(", ")
+      values.join(",")
     })`;
-    console.log(query);
     await client.queryArray(query);
   }
 }
@@ -46,6 +45,8 @@ class Database {
     "latitude",
     "longitude",
     "time",
+    "comment",
+    "resource"
   ]);
 }
 

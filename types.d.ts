@@ -9,5 +9,7 @@ export type GeoLocation = Pair<number>;
 export interface GeoLocationDto {
   latitude: number;
   longitude: number;
-  time: Date;
+  time?: Date;
+  comment?: string;
+  resource?: string;
 }
