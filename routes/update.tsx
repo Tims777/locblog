@@ -20,7 +20,7 @@ export const handler: Handlers = {
       longitude: parseFloat(formData.get("longitude")!.toString()),
       time: new Date(formData.get("time")!.toString()).toISOString(),
     };
-    db.location.insert(location);
+    await db.location.insert(location);
     return new Response(null, {
       status: 303,
       headers: { Location: "/map" },
