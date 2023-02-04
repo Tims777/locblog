@@ -9,6 +9,7 @@ class AuthenticationService {
       );
     }
   }
+
   public validateHTTPAuthorization(auth: Request) {
     const authorizationString = auth.headers.get("authorization");
     const [type, credentials] = authorizationString?.split(" ") ?? [];

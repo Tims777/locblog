@@ -3,6 +3,8 @@
     "$fresh/": "https://deno.land/x/fresh@1.1.2/",
     "std": "https://deno.land/std@0.173.0",
     "std/": "https://deno.land/std@0.173.0/",
+    "ldkit": "https://deno.land/x/ldkit@v0.7.0/mod.ts",
+    "ldkit/namespaces": "https://deno.land/x/ldkit@v0.7.0/namespaces.ts",
     "preact": "https://esm.sh/preact@10.11.0",
     "preact/": "https://esm.sh/preact@10.11.0/",
     "preact-render-to-string": "https://esm.sh/*preact-render-to-string@5.2.4",

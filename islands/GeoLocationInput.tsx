@@ -1,4 +1,5 @@
 import { createRef } from "preact";
+import localities from "../services/localities.ts";
 
 function makeLocalTimestamp(utcTimestamp: number) {
   return utcTimestamp - new Date().getTimezoneOffset() * 60 * 1000;
@@ -6,12 +7,14 @@ function makeLocalTimestamp(utcTimestamp: number) {
 
 interface GeoLocationInputProps {
   includeTime?: boolean;
+  includeName?: boolean;
 }
 
 export default function GeoLocationInput(props: GeoLocationInputProps) {
   const latRef = createRef<HTMLInputElement>();
   const lngRef = createRef<HTMLInputElement>();
   const tmeRef = createRef<HTMLInputElement>();
+  const nmeRef = createRef<HTMLInputElement>();
   const btnRef = createRef<HTMLButtonElement>();
 
   function autoFill() {
@@ -25,6 +28,14 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
       });
     } else {
       alert("GeoLocation is not available on your device, sorry!");
+    }
+  }
+
+  async function updatePredefinedPlacesList() {    
+    const name = nmeRef.current!.value;
+    const result = await localities.find(name);
+    for (const loc of result) {
+      console.log(loc);
     }
   }
 
@@ -44,6 +55,15 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
       <label>
         Date (UTC)
         <input ref={tmeRef} name="time" type="datetime-local" step="any" />
+      </label>,
+    );
+  }
+
+  if (props.includeName) {
+    inputs.push(
+      <label>
+        Description
+        <input ref={nmeRef} type="text" name="description" onInput={updatePredefinedPlacesList} />
       </label>,
     );
   }

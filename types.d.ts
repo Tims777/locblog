@@ -13,3 +13,5 @@ export interface GeoLocationDto {
   comment?: string;
   resource?: string;
 }
+export type ValueFunction<TArgs, TResult> = (args: TArgs) => TResult;
+export type Template = ValueFunction<Record<string, string>, string>;
