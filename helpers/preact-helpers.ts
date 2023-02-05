@@ -1,7 +1,7 @@
-import { render, type ComponentChild } from "preact";
+import { type ComponentChild, render } from "preact";
 
 export function renderToElement(node: ComponentChild): Element {
-    const template = document.createElement("template");
-    render(node, template);
-    return template.firstElementChild!;
-  }
+  const template = document.createElement("template");
+  render(node, template);
+  return template.firstElementChild!;
+}

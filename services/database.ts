@@ -45,8 +45,8 @@ class Database {
     "latitude",
     "longitude",
     "time",
-    "comment",
-    "resource"
+    "label",
+    //"resource"
   ]);
 }
 

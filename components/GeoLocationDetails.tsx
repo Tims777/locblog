@@ -11,7 +11,7 @@ export default function GeoLocationDetails(props: GeoLocationDetailsProps) {
   return (
     <table>
       <tr>
-        <th colSpan={2}>{props.location.comment}</th>
+        <th colSpan={2}>{props.location.label}</th>
       </tr>
       <tr>
         <th>Visited</th>

@@ -1,5 +1,7 @@
 import { createRef } from "preact";
+import { useState } from "preact/hooks";
 import localities from "../services/localities.ts";
+import { Locality } from "../types.d.ts";
 
 function makeLocalTimestamp(utcTimestamp: number) {
   return utcTimestamp - new Date().getTimezoneOffset() * 60 * 1000;
@@ -7,18 +9,25 @@ function makeLocalTimestamp(utcTimestamp: number) {
 
 interface GeoLocationInputProps {
   includeTime?: boolean;
-  includeName?: boolean;
+  includeLabel?: boolean;
 }
 
 export default function GeoLocationInput(props: GeoLocationInputProps) {
+  const [proposedLocalities, setProposedLocalities] = useState<Locality[]>([]);
+
   const latRef = createRef<HTMLInputElement>();
   const lngRef = createRef<HTMLInputElement>();
   const tmeRef = createRef<HTMLInputElement>();
-  const nmeRef = createRef<HTMLInputElement>();
+  const lblRef = createRef<HTMLInputElement>();
   const btnRef = createRef<HTMLButtonElement>();
 
-  function autoFill() {
-    if (navigator.geolocation) {
+  function autoFill(latitude?: number, longitude?: number, label?: string) {
+    if (latitude && longitude && label) {
+      latRef.current!.valueAsNumber = latitude;
+      lngRef.current!.valueAsNumber = longitude;
+      tmeRef.current!.valueAsNumber = makeLocalTimestamp(Date.now());
+      lblRef.current!.value = label;
+    } else if (navigator.geolocation) {
       btnRef.current!.disabled = true;
       navigator.geolocation.getCurrentPosition((location) => {
         latRef.current!.valueAsNumber = location.coords.latitude;
@@ -31,12 +40,10 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
     }
   }
 
-  async function updatePredefinedPlacesList() {    
-    const name = nmeRef.current!.value;
+  async function updateProposedLocalities() {
+    const name = lblRef.current!.value;
     const result = await localities.find(name);
-    for (const loc of result) {
-      console.log(loc);
-    }
+    setProposedLocalities(result);
   }
 
   const inputs = [
@@ -59,19 +66,39 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
     );
   }
 
-  if (props.includeName) {
+  if (props.includeLabel) {
     inputs.push(
       <label>
-        Description
-        <input ref={nmeRef} type="text" name="description" onInput={updatePredefinedPlacesList} />
+        Label
+        <input
+          ref={lblRef}
+          type="text"
+          name="label"
+          onInput={updateProposedLocalities}
+        />
       </label>,
     );
   }
 
+  const localitySelectors = proposedLocalities.map((l) => (
+    <button
+      type="button"
+      title={l.description}
+      onClick={() => autoFill(l.latitude, l.longitude, l.label)}
+    >
+      {l.label}
+    </button>
+  ));
+
   return (
     <>
-      {inputs}
-      <button ref={btnRef} type="button" onClick={autoFill}>
+      <fieldset>
+        {inputs}
+      </fieldset>
+      <fieldset>
+        {localitySelectors}
+      </fieldset>
+      <button ref={btnRef} type="button" onClick={() => autoFill()}>
         Locate
       </button>
     </>

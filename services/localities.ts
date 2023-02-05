@@ -1,23 +1,5 @@
-import { Template } from "../types.d.ts";
-
-function createTemplate(src: string): Template {
-  const regex = /\$\{(.+?)\}/;
-  const parts = src.split(regex);
-  return (args: Record<string, string>) => {
-    return parts
-      .map((part, index) => index % 2 == 0 ? part : args[part])
-      .join("");
-  };
-}
-
-class Locality {
-  constructor(
-    public lat: number,
-    public lon: number,
-    public label?: string,
-    public description?: string,
-  ) {}
-}
+import { createTemplate } from "../helpers/string-helpers.ts";
+import { Locality, Template } from "../types.d.ts";
 
 class WikidataLocalityQueryService {
   private getUrl: Template;
@@ -36,12 +18,12 @@ class WikidataLocalityQueryService {
     return pages
       .filter((l) => l.coordinates)
       .map((l) =>
-        new Locality(
-          l.coordinates[0].lat,
-          l.coordinates[0].lon,
-          l.entityterms.label[0],
-          l.entityterms.description[0],
-        )
+        ({
+          latitude: l.coordinates[0].lat,
+          longitude: l.coordinates[0].lon,
+          label: l.entityterms.label[0],
+          description: l.entityterms.description[0],
+        })
       );
   }
 }

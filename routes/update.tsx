@@ -19,7 +19,7 @@ export const handler: Handlers = {
       latitude: parseFloat(formData.get("latitude")!.toString()),
       longitude: parseFloat(formData.get("longitude")!.toString()),
       time: new Date(formData.get("time")!.toString()).toISOString(),
-      description: formData.get("description")?.toString(),
+      label: formData.get("label")?.toString(),
     };
     await db.location.insert(location);
     return new Response(null, {
@@ -33,7 +33,7 @@ export default function UpdatePage() {
   return (
     <div>
       <form method="POST">
-        <GeoLocationInput includeTime includeName />
+        <GeoLocationInput includeTime includeLabel />
         <button type="submit">Update</button>
       </form>
     </div>

@@ -10,8 +10,14 @@ export interface GeoLocationDto {
   latitude: number;
   longitude: number;
   time?: Date;
-  comment?: string;
+  label?: string;
   resource?: string;
 }
 export type ValueFunction<TArgs, TResult> = (args: TArgs) => TResult;
 export type Template = ValueFunction<Record<string, string>, string>;
+export interface Locality {
+  latitude: number;
+  longitude: number;
+  label?: string;
+  description?: string;
+}
