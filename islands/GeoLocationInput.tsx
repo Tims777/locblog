@@ -1,5 +1,5 @@
 import { createRef } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import localities from "../services/localities.ts";
 import { Locality } from "../types.d.ts";
 
@@ -9,11 +9,10 @@ function makeLocalTimestamp(utcTimestamp: number) {
 
 interface GeoLocationInputProps {
   includeTime?: boolean;
-  includeLabel?: boolean;
 }
 
 export default function GeoLocationInput(props: GeoLocationInputProps) {
-  const [proposedLocalities, setProposedLocalities] = useState<Locality[]>([]);
+  const [searchResult, setSearchResult] = useState<Locality[]>([]);
 
   const latRef = createRef<HTMLInputElement>();
   const lngRef = createRef<HTMLInputElement>();
@@ -21,12 +20,12 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
   const lblRef = createRef<HTMLInputElement>();
   const btnRef = createRef<HTMLButtonElement>();
 
-  function autoFill(latitude?: number, longitude?: number, label?: string) {
-    if (latitude && longitude && label) {
-      latRef.current!.valueAsNumber = latitude;
-      lngRef.current!.valueAsNumber = longitude;
+  function autoFill(locality?: Locality) {
+    if (locality) {
+      latRef.current!.valueAsNumber = locality.latitude;
+      lngRef.current!.valueAsNumber = locality.longitude;
       tmeRef.current!.valueAsNumber = makeLocalTimestamp(Date.now());
-      lblRef.current!.value = label;
+      lblRef.current!.value = locality.label ?? "";
     } else if (navigator.geolocation) {
       btnRef.current!.disabled = true;
       navigator.geolocation.getCurrentPosition((location) => {
@@ -40,13 +39,39 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
     }
   }
 
+  let searchController: AbortController | null = null;
+
   async function updateProposedLocalities() {
-    const name = lblRef.current!.value;
-    const result = await localities.find(name);
-    setProposedLocalities(result);
+    const searchText = lblRef.current!.value;
+    searchController?.abort();
+    searchController = new AbortController();
+    if (searchText) {
+      const current: Locality = {
+        label: searchText,
+        latitude: parseFloat(latRef.current!.value),
+        longitude: parseFloat(lngRef.current!.value),
+      };
+      try {
+        const result = await localities.find(searchText, searchController.signal);
+        setSearchResult([current, ...result]);
+      } catch (err) {
+        if (err.name != "AbortError") throw err;
+      }
+    } else {
+      setSearchResult([]);
+    }
   }
 
   const inputs = [
+    <label>
+      Label
+      <input
+        ref={lblRef}
+        type="text"
+        name="label"
+        onInput={updateProposedLocalities}
+      />
+    </label>,
     <label>
       Latitude
       <input ref={latRef} name="latitude" type="number" step="any" />
@@ -57,6 +82,10 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
     </label>,
   ];
 
+  useEffect(() => {
+    updateProposedLocalities();
+  }, []);
+
   if (props.includeTime) {
     inputs.push(
       <label>
@@ -66,29 +95,22 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
     );
   }
 
-  if (props.includeLabel) {
-    inputs.push(
+  const localitySelectors = searchResult.map((l, i) => {
+    return (
       <label>
-        Label
         <input
-          ref={lblRef}
-          type="text"
-          name="label"
-          onInput={updateProposedLocalities}
+          type="radio"
+          name="locality"
+          checked={i == 0}
+          onChange={() => autoFill(l)}
         />
-      </label>,
+        <span class="locality label">{l.label}</span>
+        {l.description
+          ? <span class="locality description">({l.description})</span>
+          : <></>}
+      </label>
     );
-  }
-
-  const localitySelectors = proposedLocalities.map((l) => (
-    <button
-      type="button"
-      title={l.description}
-      onClick={() => autoFill(l.latitude, l.longitude, l.label)}
-    >
-      {l.label}
-    </button>
-  ));
+  });
 
   return (
     <>
@@ -96,7 +118,9 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
         {inputs}
       </fieldset>
       <fieldset>
-        {localitySelectors}
+        <ul>
+          {localitySelectors.map((s) => <li>{s}</li>)}
+        </ul>
       </fieldset>
       <button ref={btnRef} type="button" onClick={() => autoFill()}>
         Locate

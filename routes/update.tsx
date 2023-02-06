@@ -33,7 +33,7 @@ export default function UpdatePage() {
   return (
     <div>
       <form method="POST">
-        <GeoLocationInput includeTime includeLabel />
+        <GeoLocationInput includeTime />
         <button type="submit">Update</button>
       </form>
     </div>

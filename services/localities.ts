@@ -10,9 +10,9 @@ class WikidataLocalityQueryService {
     this.getUrl = createTemplate(queryUrl!);
   }
 
-  public async find(query: string): Promise<Locality[]> {
+  public async find(query: string, signal?: AbortSignal ): Promise<Locality[]> {
     const url = this.getUrl({ query });
-    const response = await fetch(url);
+    const response = await fetch(url, { signal });
     const result = await response.json();
     const pages: any[] = Object.values(result.query.pages);
     return pages
