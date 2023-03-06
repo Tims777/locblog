@@ -1,30 +1,18 @@
-import { GeoLocationDto } from "../types.d.ts";
+import { Serialized } from "../helpers/serialization-helpers.ts";
+import TableBuilder from "../helpers/table-helpers.tsx";
+import { Place} from "../schema/place.ts";
 
 interface GeoLocationDetailsProps {
-  location: GeoLocationDto;
+  place: Serialized<Place>;
 }
 
-export default function GeoLocationDetails(props: GeoLocationDetailsProps) {
-  const date = props.location.time ? new Date(props.location.time as unknown as string).toLocaleDateString() : "?";
-  const lat = parseFloat(props.location.latitude as unknown as string).toFixed(3);
-  const lng = parseFloat(props.location.longitude as unknown as string).toFixed(3);
-  return (
-    <table>
-      <tr>
-        <th colSpan={2}>{props.location.label}</th>
-      </tr>
-      <tr>
-        <th>Visited</th>
-        <td>{date}</td>
-      </tr>
-      <tr>
-        <th>Latitude</th>
-        <td>{lat}</td>
-      </tr>
-      <tr>
-        <th>Longitude</th>
-        <td>{lng}</td>
-      </tr>
-    </table>
-  );
+export default function PlaceDetails(props: GeoLocationDetailsProps) {
+  return new TableBuilder(props.place.name)
+    .appendMany(
+      "Visited",
+      props.place.visits.map((v) => new Date(v.date).toLocaleDateString()),
+    )
+    .append("Latitude", props.place.latitude.toFixed(3))
+    .append("Longitude", props.place.longitude.toFixed(3))
+    .complete();
 }

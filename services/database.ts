@@ -1,24 +1,26 @@
 import { Pool } from "postgres";
-import { GeoLocationDto } from "../types.d.ts";
+import { PlaceSchema } from "../schema/place.ts";
+import { array } from "../schema/validators.ts";
 
-class Table<T> {
+class Table<S> {
   constructor(
     private database: Database,
-    private name: string,
-    private members: string[],
+    private view: string,
+    private schema: S,
   ) {}
 
-  public async query(limit: number, params?: { orderBy: string }) {
+  public async query(params?: { orderBy?: string; limit?: number }) {
     const client = await this.database.pool.connect();
-    let query = `select ${this.members.join(", ")} from ${this.name}`;
+    let query = `select * from ${this.view}`;
     if (params?.orderBy) query += ` order by ${params.orderBy}`;
-    if (limit > 0) query += ` limit ${limit}`;
-    const result = await client.queryObject<T>(query);
+    if (params?.limit) query += ` limit ${params.limit}`;
+    const result = await client.queryObject(query);
     client.release();
-    return result.rows;
+    const validator = array.of(this.schema);
+    return validator(result.rows);
   }
 
-  public async insert(element: Record<string, unknown>) {
+  /*public async insert(element: Record<string, unknown>) {
     const client = await this.database.pool.connect();
     const keys = [], values = [];
     for (const key of this.members) {
@@ -29,7 +31,7 @@ class Table<T> {
       values.join(",")
     })`;
     await client.queryArray(query);
-  }
+  }*/
 }
 
 class Database {
@@ -41,13 +43,7 @@ class Database {
     this.pool = new Pool(dbString, 3, true);
   }
 
-  location = new Table<GeoLocationDto>(this, "location", [
-    "latitude",
-    "longitude",
-    "time",
-    "label",
-    //"resource"
-  ]);
+  location = new Table(this, "place_overview", PlaceSchema);
 }
 
 const db = new Database();

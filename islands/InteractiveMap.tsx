@@ -10,14 +10,16 @@ import Select from "ol/interaction/Select";
 import Overlay from "ol/Overlay";
 import { useGeographic } from "ol/proj";
 import { Icon, Style } from "ol/style";
-import { GeoLocation, GeoLocationDto } from "../types.d.ts";
-import GeoLocationDetails from "../components/GeoLocationDetails.tsx";
+import { GeoLocation } from "../types.d.ts";
+import PlaceDetails from "../components/GeoLocationDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
 import PopupContainer from "../components/PopupContainer.tsx";
+import { Place } from "../schema/place.ts";
+import { Serialized } from "../helpers/serialization-helpers.ts";
 
 export interface InteractiveMapProps {
   center?: GeoLocation;
-  features?: GeoLocationDto[];
+  features?: Serialized<Place[]>;
   focus?: boolean;
 }
 
@@ -31,17 +33,26 @@ export default function InteractiveMap(props: InteractiveMapProps) {
   return <div class="map" tabIndex={0} ref={(div) => createMap(div!, props)} />;
 }
 
-function loadFeatures(locations: GeoLocationDto[]) {
-  return locations.map((loc) =>
+function fixPlace(place: Place) {
+  place.visits = place.visits.map((v) => ({
+    ...v,
+    date: new Date(v.date),
+  }));
+  return place;
+}
+
+function loadFeatures(places: Serialized<Place[]>) {
+  return places.map((place) =>
     new Feature({
-      ...loc,
-      geometry: new Point([loc.longitude, loc.latitude]),
+      ...place,
+      geometry: new Point([place.longitude, place.latitude]),
     })
   );
 }
 
-function loadLayers(features: Feature<any>[]) {
+function loadLayers(features: Feature<unknown>[]) {
   const vectorSource = new VectorSource({ features });
+  // TODO: Only display features whose parent is currently selected
   const tileSource = new OSM(); // new Stamen({layer: "terrain-background"})
   return [
     new TileLayer({ source: tileSource }),
@@ -72,16 +83,16 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
 
   const select = new Select({ style: selectedStyle });
 
-  const locationDetailsOverlay = new Overlay({});
+  const locationDetailsOverlay = new Overlay({ autoPan: true });
   const overlays = [locationDetailsOverlay];
 
   select.on("select", (event) => {
     const selected = event.selected as Feature[];
     if (selected.length) {
-      const dto = selected[0].getProperties() as GeoLocationDto;
+      const dto = selected[0].getProperties() as Serialized<Place>;
       const element = renderToElement(
         <PopupContainer>
-          <GeoLocationDetails location={dto} />
+          <PlaceDetails place={dto} />
         </PopupContainer>,
       );
       locationDetailsOverlay.setElement(element as HTMLElement);

@@ -7,7 +7,7 @@ import db from "../services/database.ts";
 
 export const handler: Handlers<GlobeProps> = {
   async GET(req, ctx) {
-    const locations = await db.location.query(-1, { orderBy: "id desc" });
+    const locations = await db.location.query({ orderBy: "last_visit desc" });
     const features = [
       {
         type: "Sphere",
@@ -17,7 +17,7 @@ export const handler: Handlers<GlobeProps> = {
       ...locations.map((l) => ({
         type: "Point",
         coordinates: [l.longitude, l.latitude],
-        properties: { fill: "red", radius: 1 },
+        properties: { fill: "red", radius: 1.5 },
       })),
     ] as GeoObject[];
     const initialRotation: Rotation = [-locations[0].longitude, 0];
