@@ -7,20 +7,23 @@ import db from "../services/database.ts";
 
 export const handler: Handlers<GlobeProps> = {
   async GET(req, ctx) {
-    const locations = await db.place_overview.query({ orderBy: "last_visit desc" });
+    const places = await db.place_overview.query({
+      orderBy: "last_visit asc",
+    });
     const features = [
       {
         type: "Sphere",
         properties: { fill: "lightgray" },
       },
       ...world.default.features,
-      ...locations.map((l) => ({
+      ...places.map((l) => ({
         type: "Point",
         coordinates: [l.longitude, l.latitude],
         properties: { fill: "red", radius: 1.5 },
       })),
     ] as GeoObject[];
-    const initialRotation: Rotation = [-locations[0].longitude, 0];
+    const first = places[0];
+    const initialRotation: Rotation = [-first.longitude, 0];
     const rotationSpeed: Rotation = [10, 0];
     return ctx.render({ features, initialRotation, rotationSpeed });
   },
