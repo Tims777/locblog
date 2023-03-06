@@ -7,7 +7,7 @@ import db from "../services/database.ts";
 
 export const handler: Handlers<GlobeProps> = {
   async GET(req, ctx) {
-    const locations = await db.location.query({ orderBy: "last_visit desc" });
+    const locations = await db.place_overview.query({ orderBy: "last_visit desc" });
     const features = [
       {
         type: "Sphere",

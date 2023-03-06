@@ -17,7 +17,7 @@ export const PlaceSchema = createSchema({
   longitude: longitude,
   visits: array.of(VisitSchema),
   parent: uuid.optional(),
-  last_visit: date,
+  last_visit: date.optional(),
 });
 
 export type Place = Type<typeof PlaceSchema>;

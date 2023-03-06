@@ -33,14 +33,6 @@ export default function InteractiveMap(props: InteractiveMapProps) {
   return <div class="map" tabIndex={0} ref={(div) => createMap(div!, props)} />;
 }
 
-function fixPlace(place: Place) {
-  place.visits = place.visits.map((v) => ({
-    ...v,
-    date: new Date(v.date),
-  }));
-  return place;
-}
-
 function loadFeatures(places: Serialized<Place[]>) {
   return places.map((place) =>
     new Feature({
@@ -50,7 +42,7 @@ function loadFeatures(places: Serialized<Place[]>) {
   );
 }
 
-function loadLayers(features: Feature<unknown>[]) {
+function loadLayers(features: Feature<any>[]) {
   const vectorSource = new VectorSource({ features });
   // TODO: Only display features whose parent is currently selected
   const tileSource = new OSM(); // new Stamen({layer: "terrain-background"})

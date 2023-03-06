@@ -15,13 +15,20 @@ export const handler: Handlers = {
       return auth.response.unauthorized;
     }
     const formData = await req.formData();
-    const location: Record<string, unknown> = {
+    const id = crypto.randomUUID();
+    console.log(id);
+    const place: Record<string, unknown> = {
+      id: id,
       latitude: parseFloat(formData.get("latitude")!.toString()),
       longitude: parseFloat(formData.get("longitude")!.toString()),
-      time: new Date(formData.get("time")!.toString()).toISOString(),
-      label: formData.get("label")?.toString(),
+      name: formData.get("label")?.toString(),
     };
-    await db.location.insert(location);
+    await db.place.insert(place);
+    const visit: Record<string, unknown> = {
+      place: id,
+      date: new Date(formData.get("time")!.toString()).toISOString(),
+    }
+    await db.visit.insert(visit);
     return new Response(null, {
       status: 303,
       headers: { Location: "/map" },

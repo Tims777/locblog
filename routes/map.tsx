@@ -9,7 +9,7 @@ import { serialize } from "../helpers/serialization-helpers.ts";
 
 export const handler: Handlers<InteractiveMapProps> = {
   async GET(req, ctx) {
-    const locations = await db.location.query({ orderBy: "last_visit desc" });
+    const locations = await db.place_overview.query({ orderBy: "last_visit desc" });
     const center: GeoLocation = [locations[0].longitude, locations[0].latitude];
     return ctx.render({ center, features: serialize(locations), focus: true });
   },
