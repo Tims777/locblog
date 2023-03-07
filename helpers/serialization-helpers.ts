@@ -9,6 +9,7 @@ type SerializedRecord<T> = Simplify<Serialized<T>>;
 export type Serialized<T> = {
   [K in keyof T]: T[K] extends Primitive ? T[K]
     : T[K] extends Serializable ? string
+    : T[K] extends Serializable | undefined ? Partial<string>
     : T[K] extends Record<any, any> ? SerializedRecord<T[K]>
     : unknown;
 };

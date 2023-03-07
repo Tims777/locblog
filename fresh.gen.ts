@@ -11,6 +11,7 @@ import * as $4 from "./routes/update.tsx";
 import * as $$0 from "./islands/GeoLocationInput.tsx";
 import * as $$1 from "./islands/Globe.tsx";
 import * as $$2 from "./islands/InteractiveMap.tsx";
+import * as $$3 from "./islands/PlaceDetails.tsx";
 
 const manifest = {
   routes: {
@@ -24,6 +25,7 @@ const manifest = {
     "./islands/GeoLocationInput.tsx": $$0,
     "./islands/Globe.tsx": $$1,
     "./islands/InteractiveMap.tsx": $$2,
+    "./islands/PlaceDetails.tsx": $$3,
   },
   baseUrl: import.meta.url,
   config,
