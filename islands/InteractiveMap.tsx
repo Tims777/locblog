@@ -11,15 +11,15 @@ import Overlay from "ol/Overlay";
 import { useGeographic } from "ol/proj";
 import { Icon, Style } from "ol/style";
 import { GeoLocation } from "../types.d.ts";
-import PlaceDetails from "../components/GeoLocationDetails.tsx";
+import PlaceDetails from "../components/PlaceDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
 import PopupContainer from "../components/PopupContainer.tsx";
 import { Place } from "../schema/place.ts";
-import { Serialized } from "../helpers/serialization-helpers.ts";
+import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
 
 export interface InteractiveMapProps {
   center?: GeoLocation;
-  features?: Serialized<Place[]>;
+  features?: MaybeSerialized<Place[]>;
   focus?: boolean;
 }
 
@@ -33,7 +33,7 @@ export default function InteractiveMap(props: InteractiveMapProps) {
   return <div class="map" tabIndex={0} ref={(div) => createMap(div!, props)} />;
 }
 
-function loadFeatures(places: Serialized<Place[]>) {
+function loadFeatures(places: MaybeSerialized<Place[]>) {
   return places.map((place) =>
     new Feature({
       ...place,
@@ -81,7 +81,7 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
   select.on("select", (event) => {
     const selected = event.selected as Feature[];
     if (selected.length) {
-      const dto = selected[0].getProperties() as Serialized<Place>;
+      const dto = selected[0].getProperties() as MaybeSerialized<Place>;
       const element = renderToElement(
         <PopupContainer>
           <PlaceDetails place={dto} />

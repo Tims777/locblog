@@ -13,7 +13,4 @@ export type Serialized<T> = {
     : unknown;
 };
 
-export function serialize<T>(value: T): Serialized<T> {
-    // TODO perform actual serialization here
-    return value as Serialized<T>;
-}
+export type MaybeSerialized<T> = T | Serialized<T>;

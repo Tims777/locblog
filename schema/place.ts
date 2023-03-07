@@ -16,6 +16,7 @@ export const PlaceSchema = createSchema({
   latitude: latitude,
   longitude: longitude,
   visits: array.of(VisitSchema),
+  resource: text.optional(),
   parent: uuid.optional(),
   last_visit: date.optional(),
 });

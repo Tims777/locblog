@@ -1,6 +1,13 @@
 import { Pool } from "postgres";
+import { DocumentSchema } from "../schema/document.ts";
 import { PlaceSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
+
+interface QueryProps {
+  where?: Record<string, string>;
+  orderBy?: string;
+  limit?: number;
+}
 
 class View<S> {
   constructor(
@@ -9,12 +16,17 @@ class View<S> {
     private schema: S,
   ) {}
 
-  public async query(params?: { orderBy?: string; limit?: number }) {
+  public async query(props?: QueryProps) {
     const client = await this.database.pool.connect();
     let query = `select * from ${this.name}`;
-    if (params?.orderBy) query += ` order by ${params.orderBy}`;
-    if (params?.limit) query += ` limit ${params.limit}`;
-    const result = await client.queryObject(query);
+    let where = "where";
+    for (const field in props?.where) {
+      query += ` ${where} ${field} = $${field}`;
+      where = "and";
+    }
+    if (props?.orderBy) query += ` order by ${props.orderBy}`;
+    if (props?.limit) query += ` limit ${props.limit}`;
+    const result = await client.queryObject(query, props?.where);
     client.release();
     const validator = array.of(this.schema);
     return validator(result.rows);
@@ -34,9 +46,9 @@ class Table<S> {
       keys.push(`"${key}"`);
       values.push(`'${element[key]}'`);
     }
-    const query = `insert into ${this.name} (${
-      keys.join(", ")
-    }) values (${values.join(",")})`;
+    const query = `insert into ${this.name} (${keys.join(", ")}) values (${
+      values.join(",")
+    })`;
     await client.queryArray(query);
   }
 }
@@ -52,6 +64,7 @@ class Database {
 
   visit = new Table(this, "visit");
   place = new Table(this, "place");
+  document = new View(this, "document", DocumentSchema);
   place_overview = new View(this, "place_overview", PlaceSchema);
 }
 

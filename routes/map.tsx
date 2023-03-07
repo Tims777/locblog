@@ -5,7 +5,6 @@ import InteractiveMap, {
 import db from "../services/database.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { GeoLocation } from "../types.d.ts";
-import { serialize } from "../helpers/serialization-helpers.ts";
 
 export const handler: Handlers<InteractiveMapProps> = {
   async GET(req, ctx) {
@@ -14,7 +13,7 @@ export const handler: Handlers<InteractiveMapProps> = {
     });
     const last = places[places.length - 1];
     const center: GeoLocation = [last.longitude, last.latitude];
-    return ctx.render({ center, features: serialize(places), focus: true });
+    return ctx.render({ center, features: places, focus: true });
   },
 };
 

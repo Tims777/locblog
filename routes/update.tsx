@@ -27,7 +27,7 @@ export const handler: Handlers = {
     const visit: Record<string, unknown> = {
       place: id,
       date: new Date(formData.get("time")!.toString()).toISOString(),
-    }
+    };
     await db.visit.insert(visit);
     return new Response(null, {
       status: 303,

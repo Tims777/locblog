@@ -1,11 +1,13 @@
 import { type VNode } from "preact";
 
+type CellContent = string | number | VNode<any>;
+
 export default class TableBuilder {
   private cells: VNode<HTMLElement>[][] = [];
 
-  constructor(private title?: string) {}
+  constructor(private title?: CellContent) {}
 
-  public append(title: string, ...contents: string[]) {
+  public append(title: CellContent, ...contents: CellContent[]) {
     const row = [
       <th>{title}</th>,
       ...contents.map((c) => <td>{c}</td>),
@@ -14,7 +16,7 @@ export default class TableBuilder {
     return this;
   }
 
-  public appendMany(title: string, ...contents: string[][]) {
+  public appendMany(title: CellContent, ...contents: CellContent[][]) {
     const rowCount = Math.max(...contents.map((c) => c?.length ?? 0));
     for (let i = 0; i < rowCount; i++) {
       const row = [

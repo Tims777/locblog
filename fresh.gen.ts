@@ -3,18 +3,22 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import config from "./deno.json" assert { type: "json" };
-import * as $0 from "./routes/index.tsx";
-import * as $1 from "./routes/map.tsx";
-import * as $2 from "./routes/update.tsx";
+import * as $0 from "./routes/_404.tsx";
+import * as $1 from "./routes/index.tsx";
+import * as $2 from "./routes/map.tsx";
+import * as $3 from "./routes/post/[...locator].tsx";
+import * as $4 from "./routes/update.tsx";
 import * as $$0 from "./islands/GeoLocationInput.tsx";
 import * as $$1 from "./islands/Globe.tsx";
 import * as $$2 from "./islands/InteractiveMap.tsx";
 
 const manifest = {
   routes: {
-    "./routes/index.tsx": $0,
-    "./routes/map.tsx": $1,
-    "./routes/update.tsx": $2,
+    "./routes/_404.tsx": $0,
+    "./routes/index.tsx": $1,
+    "./routes/map.tsx": $2,
+    "./routes/post/[...locator].tsx": $3,
+    "./routes/update.tsx": $4,
   },
   islands: {
     "./islands/GeoLocationInput.tsx": $$0,
