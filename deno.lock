@@ -205,6 +205,8 @@
     "https://esm.sh/ol@7.3.0/Map": "c319a87f90b4ea1140c6dc7875dd979750a7ac8c56230068ea21b71da7eb5517",
     "https://esm.sh/ol@7.3.0/Overlay": "0080a22127017fb0ff9e8e01d965c2c6ebee1c9236430d555c90bef011f6cedc",
     "https://esm.sh/ol@7.3.0/View": "db36a313460932703f6474b3568aa73e13c05140c97cc75af380458a120b423c",
+    "https://esm.sh/ol@7.3.0/coordinate": "c4e2f7e710bec8ffeb1e4a50018a1f9141b09f699b68a08de2280142b878c07e",
+    "https://esm.sh/ol@7.3.0/extent": "ad500b0ea270744cedbd9397051fa4c1c68f9dd98c978dc7477a307e42dde08a",
     "https://esm.sh/ol@7.3.0/geom/Point": "efa6f81b8b2a12d810541ca5f401f8ab0573cc76658d020a52ce5a7fa942039a",
     "https://esm.sh/ol@7.3.0/interaction/Select": "ced9aa3839ac6d5f8d3e8ffdc87fcaa2d01da229b4ea8393d6a1e0256785064c",
     "https://esm.sh/ol@7.3.0/layer/Tile": "8f07f52c2e0b3c80623cf53cd64360d22a718da366eaebe448a672fcdecb6e12",

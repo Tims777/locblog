@@ -17,6 +17,7 @@ import { renderToElement } from "../helpers/preact-helpers.ts";
 import PopupContainer from "../components/PopupContainer.tsx";
 import { Place } from "../schema/place.ts";
 import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
+import { getCenter } from "../helpers/ol-helpers.ts";
 
 export interface InteractiveMapProps {
   center?: GeoLocation;
@@ -89,14 +90,19 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
   select.on("select", (event) => {
     const selected = event.selected as Feature[];
     if (selected.length) {
-      const all = selected.flatMap(s => s.getProperties().features as Feature[]).map(f => f.getProperties());
+      const all = selected.flatMap((s) =>
+        s.getProperties().features as Feature[]
+      );
+      const places = all.map((f) =>
+        f.getProperties() as MaybeSerialized<Place>
+      );
       const element = renderToElement(
         <PopupContainer>
-          <PlaceDetails places={all as MaybeSerialized<Place>[]} />
+          <PlaceDetails places={places} />
         </PopupContainer>,
       );
       locationDetailsOverlay.setElement(element as HTMLElement);
-      locationDetailsOverlay.setPosition(event.mapBrowserEvent.coordinate);
+      locationDetailsOverlay.setPosition(getCenter(all));
     } else {
       locationDetailsOverlay.setElement(undefined);
       locationDetailsOverlay.setPosition(undefined);

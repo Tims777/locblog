@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { createStepper } from "../helpers/preact-helpers.ts";
-import { Serialized, type MaybeSerialized } from "../helpers/serialization-helpers.ts";
+import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
 import TableBuilder from "../helpers/table-helpers.tsx";
 import { Place } from "../schema/place.ts";
 
