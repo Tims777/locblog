@@ -1,17 +1,15 @@
 {
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.1.2/",
-    "std": "https://deno.land/std@0.173.0",
-    "std/": "https://deno.land/std@0.173.0/",
-    "ldkit": "https://deno.land/x/ldkit@v0.7.0/mod.ts",
-    "ldkit/namespaces": "https://deno.land/x/ldkit@v0.7.0/namespaces.ts",
-    "preact": "https://esm.sh/preact@10.11.0",
-    "preact/": "https://esm.sh/preact@10.11.0/",
-    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@5.2.4",
-    "d3": "https://esm.sh/d3@7.8.1",
+    "std": "https://deno.land/std@0.178.0",
+    "std/": "https://deno.land/std@0.178.0/",
+    "preact": "https://esm.sh/preact@10.13.0",
+    "preact/": "https://esm.sh/preact@10.13.0/",
+    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@5.2.6",
+    "d3": "https://esm.sh/d3@7.8.2",
     "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
-    "ol": "https://esm.sh/ol@7.2.1",
-    "ol/": "https://esm.sh/ol@7.2.1/",
-    "computed-types/": "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types/src/"
+    "ol": "https://esm.sh/ol@7.3.0",
+    "ol/": "https://esm.sh/ol@7.3.0/",
+    "computed-types": "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.11.2/src/index.ts"
   }
 }
