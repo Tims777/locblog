@@ -6,11 +6,12 @@ import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
-import Select from "ol/interaction/Select";
+import Select, { type SelectEvent } from "ol/interaction/Select";
 import Overlay from "ol/Overlay";
 import Cluster from "ol/source/Cluster";
+import Style from "ol/style/Style";
+import Icon from "ol/style/Icon";
 import { useGeographic } from "ol/proj";
-import { Icon, Style } from "ol/style";
 import { GeoLocation } from "../types.d.ts";
 import PlaceDetails from "../islands/PlaceDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
@@ -39,22 +40,30 @@ function loadFeatures(places: MaybeSerialized<Place[]>) {
   return places.map((place) =>
     new Feature({
       ...place,
-      geometry: new Point([place.longitude, place.latitude]),
+      geometry: new Point([place.longitude, place.latitude], "XY"),
     })
   );
 }
 
-function loadLayers(features: Feature<Point>[], style: Style) {
+function loadLayers(features: Feature[], style: Style) {
   const vectorSource = new VectorSource({ features });
   const clusterSource = new Cluster({
     source: vectorSource,
     distance: 10,
     minDistance: 5,
   });
-  const tileSource = new OSM(); // new Stamen({layer: "terrain-background"})
+  const tileSource = new OSM({}); // new Stamen({layer: "terrain-background"})
   return [
-    new TileLayer({ source: tileSource }),
-    new VectorLayer({ source: clusterSource, style }),
+    new TileLayer({
+      source: tileSource,
+      preload: Infinity,
+    }),
+    new VectorLayer({
+      source: clusterSource,
+      style,
+      updateWhileInteracting: true,
+      updateWhileAnimating: true,
+    }),
   ];
 }
 
@@ -87,14 +96,14 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
   const locationDetailsOverlay = new Overlay({ autoPan: true });
   const overlays = [locationDetailsOverlay];
 
-  select.on("select", (event) => {
-    const selected = event.selected as Feature[];
+  select.on("select", (event: SelectEvent) => {
+    const selected = event.selected;
     if (selected.length) {
-      const all = selected.flatMap((s) =>
-        s.getProperties().features as Feature[]
+      const all = selected.flatMap((x: Feature) =>
+        (x.getProperties() as { features: Feature[] }).features
       );
-      const places = all.map((f) =>
-        f.getProperties() as MaybeSerialized<Place>
+      const places = all.map((x: Feature) =>
+        x.getProperties() as MaybeSerialized<Place>
       );
       const element = renderToElement(
         <PopupContainer>
