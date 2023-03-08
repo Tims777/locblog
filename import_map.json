@@ -12,6 +12,7 @@
     "ol/": "https://esm.sh/ol@7.3.0/",
     "micromark": "https://esm.sh/micromark@3.1.0",
     "micromark-extension-gfm": "https://esm.sh/micromark-extension-gfm@2.0.1",
+    "micromark-extension-directive": "https://esm.sh/micromark-extension-directive@2.1.2",
     "computed-types": "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.11.2/src/index.ts"
   }
 }

@@ -9,3 +9,7 @@ export function createTemplate(src: string): Template {
       .join("");
   };
 }
+
+export function slug(text: string): string {
+  return text.toLowerCase().replace(/\s/, "-")
+}

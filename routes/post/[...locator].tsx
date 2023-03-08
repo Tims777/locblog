@@ -1,9 +1,8 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { micromark as render } from "micromark";
-import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { Document } from "../../schema/document.ts";
 import db from "../../services/database.ts";
+import md from "../../services/markdown.ts";
 
 export const handler: Handlers<Document> = {
   async GET(req, ctx) {
@@ -20,11 +19,7 @@ export const handler: Handlers<Document> = {
 };
 
 export default function PostPage(props: PageProps<Document>) {
-  const options = {
-    extensions: [gfm()],
-    htmlExtensions: [gfmHtml({ clobberPrefix: "" })],
-  };
-  const pageContent = { __html: render(props.data.content, options) };
+  const pageContent = { __html: md.render(props.data.content) };
   return (
     <>
       <Head>
