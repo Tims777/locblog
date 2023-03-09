@@ -10,6 +10,6 @@ export function createTemplate(src: string): Template {
   };
 }
 
-export function slug(text: string): string {
-  return text.toLowerCase().replace(/\s/, "-")
+export function slug(text?: string): string {
+  return text?.toLowerCase().replace(/\s/, "-") ?? "";
 }

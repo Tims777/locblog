@@ -19,14 +19,15 @@ export const handler: Handlers<Document> = {
 };
 
 export default function PostPage(props: PageProps<Document>) {
-  const pageContent = { __html: md.render(props.data.content) };
   return (
     <>
       <Head>
         <title>LocBlog</title>
         <link rel="stylesheet" href="/style.css" />
       </Head>
-      <main class="markdown-body" dangerouslySetInnerHTML={pageContent} />
+      <main class="markdown-body">
+        {md.render(props.data.content)}
+      </main>
     </>
   );
 }

@@ -40,7 +40,7 @@ export default function Globe(props: Partial<GlobeProps>) {
         ]);
       });
       return () => cancelAnimationFrame(handle);
-    }, [rotation]);
+    }, [staticGlobeProps]);
   }
 
   return <g ref={ref}>{createGlobe(staticGlobeProps)}</g>;

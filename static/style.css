@@ -11,3 +11,27 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.columns-1, .columns-2, .columns-3, .columns-4, .columns-5 {
+  display: flex;
+}
+
+.columns-1 > * {
+  width: 100%;
+}
+
+.columns-2 > * {
+  width: 50%;
+}
+
+.columns-3 > * {
+  width: 33%;
+}
+
+.columns-4 > * {
+  width: 25%;
+}
+
+.columns-5 > * {
+  width: 20%;
+}
