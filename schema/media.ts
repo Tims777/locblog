@@ -8,9 +8,9 @@ import {
 } from "./validators.ts";
 
 export enum MediaType {
-  "image",
-  "video",
-  "audio",
+  "image" = "image",
+  "video" = "video",
+  "audio" = "audio",
 }
 
 export const MediaSchema = createSchema({
