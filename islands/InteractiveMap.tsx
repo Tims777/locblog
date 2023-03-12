@@ -16,7 +16,7 @@ import { GeoLocation } from "../types.d.ts";
 import PlaceDetails from "../islands/PlaceDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
 import PopupContainer from "../components/PopupContainer.tsx";
-import { Place } from "../schema/place.ts";
+import { type PlaceDetails as Place } from "../schema/place.ts";
 import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
 import { getCenter } from "../helpers/ol-helpers.ts";
 

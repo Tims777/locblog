@@ -1,6 +1,8 @@
 import { Pool } from "postgres";
 import { DocumentSchema } from "../schema/document.ts";
-import { PlaceSchema } from "../schema/place.ts";
+import { GallerySchema } from "../schema/gallery.ts";
+import { MediaSchema } from "../schema/media.ts";
+import { PlaceDetailsSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
 
 interface QueryProps {
@@ -33,7 +35,7 @@ class View<S> {
   }
 }
 
-class Table<S> {
+class Table {
   constructor(
     private database: Database,
     private name: string,
@@ -65,7 +67,8 @@ class Database {
   visit = new Table(this, "visit");
   place = new Table(this, "place");
   document = new View(this, "document", DocumentSchema);
-  place_overview = new View(this, "place_overview", PlaceSchema);
+  gallery = new View(this, "gallery", GallerySchema);
+  place_overview = new View(this, "place_overview", PlaceDetailsSchema);
 }
 
 const db = new Database();

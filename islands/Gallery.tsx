@@ -2,11 +2,14 @@ import { StateUpdater, useEffect, useState } from "preact/hooks";
 import { type VNode } from "preact";
 import { slug } from "../helpers/string-helpers.ts";
 import { GalleryRow } from "../components/GalleryRow.tsx";
+import { type Gallery } from "../schema/gallery.ts";
+import { type Media, MediaType } from "../schema/media.ts";
 
+type GalleryContent = VNode;
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
+export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
 export const galleryClass = "gallery";
-
-type GalleryImage = VNode;
+export const unsupportedMediaTypeClass = "unsupported-media";
 
 interface GalleryProps {
   name?: string;
@@ -50,27 +53,52 @@ function distribute<T>(targets: T[], pattern: number[]) {
   throw new Error("Cannot distribute among invalid pattern!");
 }
 
-function lazyLoadGallery(
+function asNode(media: Media): GalleryContent {
+  switch (media.type) {
+    case MediaType.image:
+      return <img src={media.preview ?? media.location} />;
+  }
+  console.warn(`Media type ${media.type} is not currently supported.`);
+  return <div class={unsupportedMediaTypeClass}/>;
+}
+
+async function fetchGallery(name: string) {
+  const url = galleryUrl(name);
+  const response = await fetch(url);
+  if (response.ok) {
+    const json = await response.json() as Gallery;
+    return json.content.map(asNode);
+  } else {
+    console.error(`Gallery ${name} could not be loaded.`);
+    return null;
+  }
+}
+
+async function lazyLoadGallery(
   props: GalleryProps,
-  setImages: StateUpdater<GalleryImage[][]>,
+  setContent: StateUpdater<GalleryContent[][]>,
 ) {
   if (!props.name) return;
   props = { ...PROP_DEFAULTS, ...props };
-  console.log("Loading gallery", props.name);
-  setImages([[<>"Loading..."</>]]);
-  const images = Array.from(Array(31).keys()).map((x) => <div>{x}</div>);
-  const pattern = getColumnCountPattern(props.columns!);
-  setImages(distribute(images, pattern));
+  console.debug(`Loading gallery ${props.name}`);
+  setContent([[<>Loading...</>]]);
+  const content = await fetchGallery(props.name!);
+  if (!content) {
+    setContent([[<>Loading failed.</>]]);
+  } else {
+    const pattern = getColumnCountPattern(props.columns!);
+    setContent(distribute(content, pattern));
+  }
 }
 
 export default function Gallery(props: GalleryProps) {
-  const [images, setImages] = useState<GalleryImage[][]>([]);
+  const [content, setContent] = useState<GalleryContent[][]>([]);
   useEffect(() => {
-    lazyLoadGallery(props, setImages);
+    lazyLoadGallery(props, setContent);
   }, [props]);
   return (
     <figure class={galleryClass}>
-      {images.map(asChildren).map(GalleryRow)}
+      {content.map(asChildren).map(GalleryRow)}
     </figure>
   );
 }

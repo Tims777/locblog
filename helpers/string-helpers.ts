@@ -1,5 +1,8 @@
 import { Template } from "../types.d.ts";
 
+const urlSpecialChars = /[-._~:/?#\[\]@!$&'()*+,;=%]+/g;
+const disallowedSlugChars = /[^\w-]/g;
+
 export function createTemplate(src: string): Template {
   const regex = /\$\{(.+?)\}/;
   const parts = src.split(regex);
@@ -10,6 +13,8 @@ export function createTemplate(src: string): Template {
   };
 }
 
-export function slug(text?: string): string {
-  return text?.toLowerCase().replace(/\s/, "-") ?? "";
+export function slug(text: string): string {
+  return text.toLowerCase()
+    .replaceAll(urlSpecialChars, "-")
+    .replaceAll(disallowedSlugChars, "");
 }

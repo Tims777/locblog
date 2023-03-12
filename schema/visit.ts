@@ -1,8 +1,9 @@
-import { createSchema, date, integer, Type } from "./validators.ts";
+import { createSchema, date, integer, uuid, type Type } from "./validators.ts";
 
 export const VisitSchema = createSchema({
+  id: uuid,
   date: date,
-  days: integer,
+  days: integer.optional(),
 });
 
 export type Visit = Type<typeof VisitSchema>;

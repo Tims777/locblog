@@ -1,13 +1,14 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Document } from "../../schema/document.ts";
-import db from "../../services/database.ts";
-import md from "../../services/markdown.ts";
+import { type Document } from "../../../schema/document.ts";
+import db from "../../../services/database.ts";
+import md from "../../../services/markdown.ts";
 
 export const handler: Handlers<Document> = {
-  async GET(req, ctx) {
+  async GET(_, ctx) {
+    const path = [ctx.params.categories, ctx.params.name].join("/");
     const doc = await db.document.query({
-      where: { locator: ctx.params.locator },
+      where: { path },
       limit: 1,
     });
     if (doc.length) {

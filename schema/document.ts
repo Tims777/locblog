@@ -1,6 +1,7 @@
-import { createSchema, text, Type } from "./validators.ts";
+import { createSchema, text, Type, uuid } from "./validators.ts";
 
 export const DocumentSchema = createSchema({
+  id: uuid,
   content: text,
   path: text.optional(),
 });

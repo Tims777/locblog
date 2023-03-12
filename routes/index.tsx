@@ -1,12 +1,12 @@
 import { Head } from "$fresh/runtime.ts";
 import Globe, { GlobeProps } from "../islands/Globe.tsx";
 import { GeoObject, Rotation } from "../types.d.ts";
-import * as world from "../static/world.json" assert { type: "json" };
+import { default as world } from "../static/world.json" assert { type: "json" };
 import { Handlers, PageProps } from "$fresh/server.ts";
 import db from "../services/database.ts";
 
 export const handler: Handlers<GlobeProps> = {
-  async GET(req, ctx) {
+  async GET(_, ctx) {
     const places = await db.place_overview.query({
       orderBy: "last_visit asc",
     });
@@ -15,7 +15,7 @@ export const handler: Handlers<GlobeProps> = {
         type: "Sphere",
         properties: { fill: "lightgray" },
       },
-      ...world.default.features,
+      ...world.features,
       ...places.map((l) => ({
         type: "Point",
         coordinates: [l.longitude, l.latitude],

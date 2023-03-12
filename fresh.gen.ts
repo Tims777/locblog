@@ -4,10 +4,11 @@
 
 import config from "./deno.json" assert { type: "json" };
 import * as $0 from "./routes/_404.tsx";
-import * as $1 from "./routes/index.tsx";
-import * as $2 from "./routes/map.tsx";
-import * as $3 from "./routes/post/[...locator].tsx";
-import * as $4 from "./routes/update.tsx";
+import * as $1 from "./routes/api/gallery/[name].ts";
+import * as $2 from "./routes/index.tsx";
+import * as $3 from "./routes/map.tsx";
+import * as $4 from "./routes/post/[...categories]/[name].tsx";
+import * as $5 from "./routes/update.tsx";
 import * as $$0 from "./islands/Gallery.tsx";
 import * as $$1 from "./islands/GeoLocationInput.tsx";
 import * as $$2 from "./islands/Globe.tsx";
@@ -17,10 +18,11 @@ import * as $$4 from "./islands/PlaceDetails.tsx";
 const manifest = {
   routes: {
     "./routes/_404.tsx": $0,
-    "./routes/index.tsx": $1,
-    "./routes/map.tsx": $2,
-    "./routes/post/[...locator].tsx": $3,
-    "./routes/update.tsx": $4,
+    "./routes/api/gallery/[name].ts": $1,
+    "./routes/index.tsx": $2,
+    "./routes/map.tsx": $3,
+    "./routes/post/[...categories]/[name].tsx": $4,
+    "./routes/update.tsx": $5,
   },
   islands: {
     "./islands/Gallery.tsx": $$0,

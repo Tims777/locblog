@@ -2,13 +2,13 @@ import { useState } from "preact/hooks";
 import { createStepper } from "../helpers/preact-helpers.ts";
 import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
 import TableBuilder from "../helpers/table-helpers.tsx";
-import { Place } from "../schema/place.ts";
+import { type PlaceDetails } from "../schema/place.ts";
 
 interface PlaceDetailsProps {
-  places: MaybeSerialized<Place>[];
+  places: MaybeSerialized<PlaceDetails>[];
 }
 
-function byLastVisitDate(a: MaybeSerialized<Place>, b: MaybeSerialized<Place>) {
+function byLastVisitDate(a: MaybeSerialized<PlaceDetails>, b: MaybeSerialized<PlaceDetails>) {
   return new Date(a.last_visit ?? 0).getTime() - new Date(b.last_visit ?? 0).getTime();
 }
 

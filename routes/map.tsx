@@ -7,7 +7,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { GeoLocation } from "../types.d.ts";
 
 export const handler: Handlers<InteractiveMapProps> = {
-  async GET(req, ctx) {
+  async GET(_, ctx) {
     const places = await db.place_overview.query({
       orderBy: "last_visit asc",
     });
