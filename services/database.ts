@@ -1,7 +1,6 @@
 import { Pool } from "postgres";
 import { DocumentSchema } from "../schema/document.ts";
 import { GallerySchema } from "../schema/gallery.ts";
-import { MediaSchema } from "../schema/media.ts";
 import { PlaceDetailsSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
 
@@ -58,8 +57,9 @@ class Table {
 class Database {
   pool: Pool;
 
-  constructor() {
-    const dbString = Deno.env.get("DATABASE");
+  constructor(
+    dbString = Deno.env.get("DATABASE")
+  ) {
     if (!dbString) console.error("DATABASE is not set.");
     this.pool = new Pool(dbString, 3, true);
   }

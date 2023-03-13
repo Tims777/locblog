@@ -56,7 +56,7 @@ function distribute<T>(targets: T[], pattern: number[]) {
 function asNode(media: Media): GalleryContent {
   switch (media.type) {
     case MediaType.image:
-      return <img src={media.preview ?? media.location} />;
+      return <img src={media.preview ?? media.resource} />;
   }
   console.warn(`Media type ${media.type} is not currently supported.`);
   return <div class={unsupportedMediaTypeClass}/>;

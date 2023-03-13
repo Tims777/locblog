@@ -4,9 +4,11 @@ import { type Document } from "../../../schema/document.ts";
 import db from "../../../services/database.ts";
 import md from "../../../services/markdown.ts";
 
+const notEmpty = (x: string) => x.trim() !== "";
+
 export const handler: Handlers<Document> = {
   async GET(_, ctx) {
-    const path = [ctx.params.categories, ctx.params.name].join("/");
+    const path = [ctx.params.categories, ctx.params.name].filter(notEmpty).join("/");
     const doc = await db.document.query({
       where: { path },
       limit: 1,

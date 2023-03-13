@@ -1,8 +1,7 @@
 class AuthenticationService {
-  private adminCreds?: string;
-
-  constructor() {
-    this.adminCreds = Deno.env.get("ADMIN_CREDENTIALS");
+  constructor(
+    private adminCreds = Deno.env.get("ADMIN_CREDENTIALS"),
+  ) {
     if (!this.adminCreds) {
       console.warn(
         "ADMIN_CREDENTIALS are not set, basic authorization will be unavailable.",
