@@ -12,8 +12,7 @@ export const galleryClass = "gallery";
 export const unsupportedMediaTypeClass = "unsupported-media";
 
 interface GalleryProps {
-  name?: string;
-  children?: VNode | VNode[];
+  children: string[];
   columns?: string | number | number[];
 }
 
@@ -59,10 +58,11 @@ function asNode(media: Media): GalleryContent {
       return <img src={media.preview ?? media.resource} />;
   }
   console.warn(`Media type ${media.type} is not currently supported.`);
-  return <div class={unsupportedMediaTypeClass}/>;
+  return <div class={unsupportedMediaTypeClass} />;
 }
 
 async function fetchGallery(name: string) {
+  console.debug(`Loading gallery ${name}`);
   const url = galleryUrl(name);
   const response = await fetch(url);
   if (response.ok) {
@@ -78,17 +78,15 @@ async function lazyLoadGallery(
   props: GalleryProps,
   setContent: StateUpdater<GalleryContent[][]>,
 ) {
-  if (!props.name) return;
   props = { ...PROP_DEFAULTS, ...props };
-  console.debug(`Loading gallery ${props.name}`);
+  const pattern = getColumnCountPattern(props.columns!);
   setContent([[<>Loading...</>]]);
-  const content = await fetchGallery(props.name!);
-  if (!content) {
-    setContent([[<>Loading failed.</>]]);
-  } else {
-    const pattern = getColumnCountPattern(props.columns!);
-    setContent(distribute(content, pattern));
+  let content: GalleryContent[] = [];
+  for (const galleryName of props.children) {
+    const result = await fetchGallery(galleryName);
+    if (result) content = [...content, ...result];
   }
+  setContent(distribute(content, pattern));
 }
 
 export default function Gallery(props: GalleryProps) {

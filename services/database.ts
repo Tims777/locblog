@@ -67,7 +67,7 @@ class Database {
   visit = new Table(this, "visit");
   place = new Table(this, "place");
   document = new View(this, "document", DocumentSchema);
-  gallery = new View(this, "gallery", GallerySchema);
+  gallery = new View(this, "gallery_aggregate", GallerySchema);
   place_overview = new View(this, "place_overview", PlaceDetailsSchema);
 }
 
