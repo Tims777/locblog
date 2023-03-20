@@ -9,6 +9,7 @@
     "preact-markdown": "https://esm.sh/react-markdown@7.1.2?alias=react:preact/compat",
     "remark-directive": "https://esm.sh/remark-directive@2.0.1",
     "remark-directive-rehype": "https://esm.sh/remark-directive-rehype@0.4.2",
+    "remark-gfm": "https://esm.sh/remark-gfm@3.0.1",
     "d3": "https://esm.sh/d3@7.8.2",
     "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
     "ol/": "https://cdn.skypack.dev/ol@7.3.0/",
