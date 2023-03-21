@@ -1,5 +1,5 @@
 import { StateUpdater, useEffect, useState } from "preact/hooks";
-import { type VNode } from "preact";
+import { type ComponentChild, type VNode } from "preact";
 import { slug } from "../helpers/string-helpers.ts";
 import { GalleryRow } from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
@@ -8,11 +8,9 @@ import { type Media, MediaType } from "../schema/media.ts";
 type GalleryContent = VNode;
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
-export const galleryClass = "gallery";
-export const unsupportedMediaTypeClass = "unsupported-media";
 
 interface GalleryProps {
-  children: string[];
+  children: ComponentChild[];
   columns?: string | number | number[];
 }
 
@@ -58,7 +56,7 @@ function asNode(media: Media): GalleryContent {
       return <img src={media.preview ?? media.resource} />;
   }
   console.warn(`Media type ${media.type} is not currently supported.`);
-  return <div class={unsupportedMediaTypeClass} />;
+  return <></>;
 }
 
 async function fetchGallery(name: string) {
@@ -82,9 +80,13 @@ async function lazyLoadGallery(
   const pattern = getColumnCountPattern(props.columns!);
   setContent([[<>Loading...</>]]);
   let content: GalleryContent[] = [];
-  for (const galleryName of props.children) {
-    const result = await fetchGallery(galleryName);
-    if (result) content = [...content, ...result];
+  for (const child of props.children) {
+    if (typeof child === "string") {
+      const result = await fetchGallery(child);
+      if (result) content = [...content, ...result];
+    } else {
+      console.warn("Invalid gallery content:", child)
+    }
   }
   setContent(distribute(content, pattern));
 }
@@ -95,7 +97,7 @@ export default function Gallery(props: GalleryProps) {
     lazyLoadGallery(props, setContent);
   }, [props]);
   return (
-    <figure class={galleryClass}>
+    <figure class="not-prose">
       {content.map(asChildren).map(GalleryRow)}
     </figure>
   );

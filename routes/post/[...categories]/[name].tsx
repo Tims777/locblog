@@ -26,9 +26,8 @@ export default function PostPage(props: PageProps<Document>) {
     <>
       <Head>
         <title>LocBlog</title>
-        <link rel="stylesheet" href="/style.css" />
       </Head>
-      <main class="markdown-body">
+      <main class="prose prose-lg mx-auto max-w-2xl">
         {md.render(props.data.content)}
       </main>
     </>

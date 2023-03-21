@@ -33,7 +33,7 @@ const PROP_DEFAULTS: Required<InteractiveMapProps> = {
 };
 
 export default function InteractiveMap(props: InteractiveMapProps) {
-  return <div class="map" tabIndex={0} ref={(div) => createMap(div!, props)} />;
+  return <div class="w-full h-full" tabIndex={0} ref={(div) => createMap(div!, props)} />;
 }
 
 function loadFeatures(places: MaybeSerialized<Place[]>) {

@@ -1,8 +1,5 @@
 import { type VNode } from "preact";
 
-export const rowClass = "row";
-export const colCountClass = (count: number) => `columns-${count}`;
-
 interface GalleryRowProps {
   children?: VNode | VNode[];
 }
@@ -19,6 +16,14 @@ function count(x: unknown | unknown[]): number {
 
 export function GalleryRow(props: GalleryRowProps) {
   const childCount = count(props.children);
-  const classes = [rowClass, colCountClass(childCount)];
+  const classes = [
+    "grid",
+    `grid-cols-${childCount}`,
+    "max-sm:grid-cols-1",
+    "m-2",
+    "gap-2",
+    "items-center",
+    "[&>*]:w-full"
+  ];
   return <div class={classes.join(" ")}>{props.children}</div>;
 }
