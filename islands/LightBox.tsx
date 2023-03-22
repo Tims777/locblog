@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "preact/hooks";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { type SlideData, type UIElementData } from "photoswipe";
+import GalleryCaption from "../components/GalleryCaption.tsx";
+import { renderToString } from "preact-render-to-string";
 
 const captionPlugin = {
   name: "caption",
@@ -11,7 +13,11 @@ const captionPlugin = {
       const captions = current?.parentElement?.getElementsByTagName(
         "figcaption",
       );
-      el.innerHTML = captions?.length ? captions[0].outerHTML : "";
+      el.innerHTML = captions?.length
+        ? renderToString(
+          <GalleryCaption size="lg">{captions[0].textContent}</GalleryCaption>,
+        )
+        : "";
     });
   },
 } as UIElementData;
@@ -42,6 +48,7 @@ function initialize(
   console.debug("Initializing LightBox");
   const lightbox = new PhotoSwipeLightbox({
     appendToEl,
+    bgOpacity: 1,
     gallerySelector: props.gallerySelector,
     children: props.contentSelector,
     pswpModule: () => import("photoswipe"),
