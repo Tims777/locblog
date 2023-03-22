@@ -4,8 +4,8 @@ import { slug } from "../helpers/string-helpers.ts";
 import { GalleryRow } from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
 import { type Media, MediaType } from "../schema/media.ts";
+import { GalleryContent } from "../components/GalleryContent.tsx";
 
-type GalleryContent = VNode;
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
 
@@ -50,13 +50,8 @@ function distribute<T>(targets: T[], pattern: number[]) {
   throw new Error("Cannot distribute among invalid pattern!");
 }
 
-function asNode(media: Media): GalleryContent {
-  switch (media.type) {
-    case MediaType.image:
-      return <img src={media.preview ?? media.resource} />;
-  }
-  console.warn(`Media type ${media.type} is not currently supported.`);
-  return <></>;
+function asNode(media: Media): VNode {
+  return <GalleryContent {...media} />;
 }
 
 async function fetchGallery(name: string) {
@@ -74,12 +69,12 @@ async function fetchGallery(name: string) {
 
 async function lazyLoadGallery(
   props: GalleryProps,
-  setContent: StateUpdater<GalleryContent[][]>,
+  setContent: StateUpdater<VNode[][]>,
 ) {
   props = { ...PROP_DEFAULTS, ...props };
   const pattern = getColumnCountPattern(props.columns!);
   setContent([[<>Loading...</>]]);
-  let content: GalleryContent[] = [];
+  let content: VNode[] = [];
   for (const child of props.children) {
     if (typeof child === "string") {
       const result = await fetchGallery(child);
@@ -92,7 +87,7 @@ async function lazyLoadGallery(
 }
 
 export default function Gallery(props: GalleryProps) {
-  const [content, setContent] = useState<GalleryContent[][]>([]);
+  const [content, setContent] = useState<VNode[][]>([]);
   useEffect(() => {
     lazyLoadGallery(props, setContent);
   }, [props]);
