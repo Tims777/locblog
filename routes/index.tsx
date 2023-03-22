@@ -38,7 +38,7 @@ export default function GlobePage(props: PageProps<GlobeProps>) {
       </Head>
       <a href="/map">
         <svg
-          class="w-full h-full"
+          class="w-screen h-screen"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="-250 -250 500 500"
