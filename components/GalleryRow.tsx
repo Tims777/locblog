@@ -20,7 +20,7 @@ export function GalleryRow(props: GalleryRowProps) {
     "grid",
     `grid-cols-${childCount}`,
     "max-sm:grid-cols-1",
-    "m-2",
+    "my-2",
     "gap-2",
     "items-center",
     "[&>*]:w-full"
