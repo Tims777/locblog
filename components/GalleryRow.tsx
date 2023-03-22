@@ -14,7 +14,7 @@ function count(x: unknown | unknown[]): number {
   }
 }
 
-export function GalleryRow(props: GalleryRowProps) {
+export default function GalleryRow(props: GalleryRowProps) {
   const childCount = count(props.children);
   const classes = [
     "grid",

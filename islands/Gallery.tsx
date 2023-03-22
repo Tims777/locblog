@@ -1,12 +1,15 @@
 import { StateUpdater, useEffect, useState } from "preact/hooks";
 import { type ComponentChild, type VNode } from "preact";
 import { slug } from "../helpers/string-helpers.ts";
-import { GalleryRow } from "../components/GalleryRow.tsx";
+import GalleryRow from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
 import { type Media } from "../schema/media.ts";
-import { GalleryContent } from "../components/GalleryContent.tsx";
+import GalleryContent from "../components/GalleryContent.tsx";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { Head } from "$fresh/runtime.ts";
+import { type UIElementData } from "photoswipe";
+import { renderToString } from "preact-render-to-string";
+import GalleryCaption from "../components/GalleryCaption.tsx";
 
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
@@ -96,8 +99,27 @@ function initializeLightBox() {
     children: `.${galleryContentClass}`,
     pswpModule: () => import("photoswipe"),
   });
+  lightbox.on(
+    "uiRegister",
+    () => lightbox.pswp?.ui?.registerElement(captionPlugin),
+  );
   lightbox.init();
 }
+
+const captionPlugin = {
+  name: "caption",
+  appendTo: "wrapper",
+  onInit: (el, pswp) => {
+    pswp.on("change", () => {
+      const current = pswp.currSlide?.data.element;
+      const description = current?.getAttribute("data-pswp-description");
+      const html = renderToString(
+        <GalleryCaption size="lg">{description}</GalleryCaption>,
+      );
+      el.innerHTML = html;
+    });
+  },
+} as UIElementData;
 
 export default function Gallery(props: GalleryProps) {
   const [content, setContent] = useState<VNode[][]>([]);

@@ -1,27 +1,7 @@
 import { type Media } from "../schema/media.ts";
+import GalleryCaption from "./GalleryCaption.tsx";
 
-const contentClasses = [
-  "w-full",
-  "peer",
-].join(" ");
-
-const captionClasses = [
-  "absolute",
-  "bottom-0",
-  "w-full",
-  "overflow-scroll",
-  "leading-4",
-  "max-h-16",
-  "peer-hover:translate-y-16",
-  "duration-500",
-  "text-sm",
-  "text-white",
-  "p-1",
-  "bg-gradient-to-t",
-  "from-black",
-].join(" ");
-
-function updatePhotoSwipeSizes(event: { currentTarget: HTMLImageElement }) {
+function updatePhotoSwipeData(event: { currentTarget: HTMLImageElement }) {
   const img = event.currentTarget;
   const parent = img.parentElement;
   const maxZoom = 2;
@@ -32,30 +12,27 @@ function updatePhotoSwipeSizes(event: { currentTarget: HTMLImageElement }) {
   parent?.setAttribute("data-pswp-height", height.toFixed(0));
 }
 
-export function GalleryContent(props: Media & { class: string }) {
+export default function GalleryContent(props: Media & { class: string }) {
   let caption, content;
   switch (props.type) {
     case "image":
       content = (
         <a
-          class={[props.class, contentClasses].join(" ")}
+          class={[props.class, "w-full", "peer/content"].join(" ")}
           href={props.resource}
+          data-pswp-description={props.description}
         >
           <img
             class="w-full"
             src={props.preview ?? props.resource}
             alt={props.alt}
             title={props.title}
-            onLoad={updatePhotoSwipeSizes}
+            onLoad={updatePhotoSwipeData}
           />
         </a>
       );
       if (props.description) {
-        caption = (
-          <caption class={captionClasses}>
-            {props.description}
-          </caption>
-        );
+        caption = <GalleryCaption>{props.description}</GalleryCaption>
       }
       break;
     default:
