@@ -1,6 +1,7 @@
 import {
   _enum,
   createSchema,
+  integer,
   text,
   type Type,
   url,
@@ -21,6 +22,8 @@ export const MediaSchema = createSchema({
   title: text.optional(),
   description: text.optional(),
   alt: text.optional(),
+  width: integer.optional(),
+  height: integer.optional(),
 });
 
 export type Media = Type<typeof MediaSchema>;

@@ -21,17 +21,34 @@ const captionClasses = [
   "from-black",
 ].join(" ");
 
-export function GalleryContent(props: Media) {
+function updatePhotoSwipeSizes(event: { currentTarget: HTMLImageElement }) {
+  const img = event.currentTarget;
+  const parent = img.parentElement;
+  const maxZoom = 2;
+  const width = window.screen.width * maxZoom;
+  const ratio = img.height / img.width;
+  const height = width * ratio;
+  parent?.setAttribute("data-pswp-width", width.toFixed(0));
+  parent?.setAttribute("data-pswp-height", height.toFixed(0));
+}
+
+export function GalleryContent(props: Media & { class: string }) {
   let caption, content;
   switch (props.type) {
     case "image":
       content = (
-        <img
-          class={contentClasses}
-          src={props.preview ?? props.resource}
-          alt={props.alt}
-          title={props.title}
-        />
+        <a
+          class={[props.class, contentClasses].join(" ")}
+          href={props.resource}
+        >
+          <img
+            class="w-full"
+            src={props.preview ?? props.resource}
+            alt={props.alt}
+            title={props.title}
+            onLoad={updatePhotoSwipeSizes}
+          />
+        </a>
       );
       if (props.description) {
         caption = (

@@ -3,11 +3,15 @@ import { type ComponentChild, type VNode } from "preact";
 import { slug } from "../helpers/string-helpers.ts";
 import { GalleryRow } from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
-import { type Media, MediaType } from "../schema/media.ts";
+import { type Media } from "../schema/media.ts";
 import { GalleryContent } from "../components/GalleryContent.tsx";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import { Head } from "$fresh/runtime.ts";
 
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
+export const galleryClass = "gallery";
+export const galleryContentClass = "gallery-content";
 
 interface GalleryProps {
   children: ComponentChild[];
@@ -51,7 +55,7 @@ function distribute<T>(targets: T[], pattern: number[]) {
 }
 
 function asNode(media: Media): VNode {
-  return <GalleryContent {...media} />;
+  return <GalleryContent class={galleryContentClass} {...media} />;
 }
 
 async function fetchGallery(name: string) {
@@ -80,20 +84,37 @@ async function lazyLoadGallery(
       const result = await fetchGallery(child);
       if (result) content = [...content, ...result];
     } else {
-      console.warn("Invalid gallery content:", child)
+      console.warn("Invalid gallery content:", child);
     }
   }
   setContent(distribute(content, pattern));
 }
 
+function initializeLightBox() {
+  const lightbox = new PhotoSwipeLightbox({
+    gallerySelector: `.${galleryClass}`,
+    children: `.${galleryContentClass}`,
+    pswpModule: () => import("photoswipe"),
+  });
+  lightbox.init();
+}
+
 export default function Gallery(props: GalleryProps) {
   const [content, setContent] = useState<VNode[][]>([]);
   useEffect(() => {
-    lazyLoadGallery(props, setContent);
+    lazyLoadGallery(props, setContent).then(initializeLightBox);
   }, [props]);
   return (
-    <figure class="not-prose">
-      {content.map(asChildren).map(GalleryRow)}
-    </figure>
+    <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://esm.sh/photoswipe@5.3.6/dist/photoswipe.css"
+        />
+      </Head>
+      <figure class={[galleryClass, "not-prose"].join(" ")}>
+        {content.map(asChildren).map(GalleryRow)}
+      </figure>
+    </>
   );
 }

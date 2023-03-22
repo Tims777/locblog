@@ -13,6 +13,8 @@
     "twind": "https://esm.sh/@twind/core@1.1.3",
     "twind-preset-tailwind": "https://esm.sh/@twind/preset-tailwind@1.1.4",
     "twind-preset-typography": "https://esm.sh/@twind/preset-typography@1.0.7",
+    "photoswipe": "https://esm.sh/photoswipe@5.3.6",
+    "photoswipe/": "https://esm.sh/photoswipe@5.3.6/",
     "d3": "https://esm.sh/d3@7.8.2",
     "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
     "ol/": "https://cdn.skypack.dev/ol@7.3.0/",
