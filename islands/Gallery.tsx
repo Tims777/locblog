@@ -1,5 +1,5 @@
-import { StateUpdater, useEffect, useState } from "preact/hooks";
-import { type ComponentChild, type VNode } from "preact";
+import { StateUpdater, useEffect, useMemo, useState } from "preact/hooks";
+import { type ComponentChild, ComponentChildren, type VNode } from "preact";
 import { slug } from "../helpers/string-helpers.ts";
 import GalleryRow from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
@@ -10,6 +10,7 @@ import { Head } from "$fresh/runtime.ts";
 import { type UIElementData } from "photoswipe";
 import { renderToString } from "preact-render-to-string";
 import GalleryCaption from "../components/GalleryCaption.tsx";
+import { revive } from "../helpers/preact-helpers.ts";
 
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
@@ -17,7 +18,7 @@ export const galleryClass = "gallery";
 export const galleryContentClass = "gallery-content";
 
 interface GalleryProps {
-  children: ComponentChild[];
+  children: ComponentChildren;
   columns?: string | number | number[];
 }
 
@@ -74,23 +75,17 @@ async function fetchGallery(name: string) {
   }
 }
 
-async function lazyLoadGallery(
-  props: GalleryProps,
-  setContent: StateUpdater<VNode[][]>,
+async function lazyLoadGalleryContent(
+  galleryNames: string[],
+  setContent: StateUpdater<VNode[]>,
 ) {
-  props = { ...PROP_DEFAULTS, ...props };
-  const pattern = getColumnCountPattern(props.columns!);
-  setContent([[<>Loading...</>]]);
+  setContent([<>Loading...</>]);
   let content: VNode[] = [];
-  for (const child of props.children) {
-    if (typeof child === "string") {
-      const result = await fetchGallery(child);
-      if (result) content = [...content, ...result];
-    } else {
-      console.warn("Invalid gallery content:", child);
-    }
+  for (const name of galleryNames) {
+    const result = await fetchGallery(name);
+    if (result) content = [...content, ...result];
   }
-  setContent(distribute(content, pattern));
+  setContent(content);
 }
 
 function initializeLightBox() {
@@ -121,11 +116,53 @@ const captionPlugin = {
   },
 } as UIElementData;
 
+function parseGalleryContent(
+  elements: ComponentChild[],
+): { eager: unknown[]; lazy: string[] } {
+  const eager = [];
+  const lazy = [];
+  for (const el of elements) {
+    if (!el) {
+      continue;
+    } else if (typeof el === "string") {
+      const galleryName = el.trim();
+      if (galleryName) lazy.push(galleryName);
+    } else if (
+      typeof el === "object" && "props" in el && "children" in el.props
+    ) {
+      eager.push(...makeArray(el.props.children));
+    }
+  }
+  return { eager, lazy };
+}
+
+function defined(x: unknown) {
+  return !!x;
+}
+
 export default function Gallery(props: GalleryProps) {
-  const [content, setContent] = useState<VNode[][]>([]);
+  props = { ...PROP_DEFAULTS, ...props };
+  const { eager, lazy } = useMemo(
+    () => parseGalleryContent(makeArray(props.children)),
+    [props.children],
+  );
+  const eagerContent = useMemo(
+    () => eager.map(revive).filter(defined) as VNode[],
+    [eager],
+  );
+  const [lazyContent, setLazyContent] = useState<VNode[]>([]);
+  const rows = useMemo(
+    () => {
+      const pattern = getColumnCountPattern(props.columns!);
+      return distribute([...eagerContent, ...lazyContent], pattern)
+        .map(asChildren)
+        .map(GalleryRow);
+    },
+    [eagerContent, lazyContent],
+  );
   useEffect(() => {
-    lazyLoadGallery(props, setContent).then(initializeLightBox);
-  }, [props]);
+    lazyLoadGalleryContent(lazy, setLazyContent).then(initializeLightBox);
+  }, [lazy]);
   return (
     <>
       <Head>
@@ -135,7 +172,7 @@ export default function Gallery(props: GalleryProps) {
         />
       </Head>
       <figure class={[galleryClass, "not-prose"].join(" ")}>
-        {content.map(asChildren).map(GalleryRow)}
+        {rows}
       </figure>
     </>
   );
