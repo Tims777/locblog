@@ -26,7 +26,12 @@ export function GalleryContent(props: Media) {
   switch (props.type) {
     case "image":
       content = (
-        <img class={contentClasses} src={props.preview ?? props.resource} />
+        <img
+          class={contentClasses}
+          src={props.preview ?? props.resource}
+          alt={props.alt}
+          title={props.title}
+        />
       );
       if (props.description) {
         caption = (

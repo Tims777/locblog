@@ -20,7 +20,7 @@ export const MediaSchema = createSchema({
   preview: url.optional(),
   title: text.optional(),
   description: text.optional(),
-  altText: text.optional(),
+  alt: text.optional(),
 });
 
 export type Media = Type<typeof MediaSchema>;
