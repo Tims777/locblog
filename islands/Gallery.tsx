@@ -4,13 +4,11 @@ import { slug } from "../helpers/string-helpers.ts";
 import GalleryRow from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
 import { type Media } from "../schema/media.ts";
-import GalleryContent from "../components/GalleryContent.tsx";
+import GalleryContent, { type CustomGalleryContent } from "../components/GalleryContent.tsx";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { Head } from "$fresh/runtime.ts";
 import { type UIElementData } from "photoswipe";
-import { renderToString } from "preact-render-to-string";
-import GalleryCaption from "../components/GalleryCaption.tsx";
-import { revive } from "../helpers/preact-helpers.ts";
+import { asChildren, makeArray, revive } from "../helpers/preact-helpers.ts";
 
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
@@ -26,14 +24,6 @@ const PROP_DEFAULTS: Omit<GalleryProps, "name"> = {
   children: [],
   columns: 3,
 };
-
-function makeArray<T>(target: T | T[]): T[] {
-  return Array.isArray(target) ? target : [target];
-}
-
-function asChildren<T>(x: T) {
-  return { children: x };
-}
 
 function getColumnCountPattern(arg: string | number | number[]): number[] {
   if (typeof arg === "string") {
@@ -58,8 +48,14 @@ function distribute<T>(targets: T[], pattern: number[]) {
   throw new Error("Cannot distribute among invalid pattern!");
 }
 
-function asNode(media: Media): VNode {
-  return <GalleryContent class={galleryContentClass} {...media} />;
+function asGalleryContent(media: Media | VNode): VNode {
+  let content;
+  if ("props" in media) {
+    content = { type: "custom", content: media } as CustomGalleryContent;
+  } else {
+    content = media;
+  }
+  return <GalleryContent class={galleryContentClass} {...content} />;
 }
 
 async function fetchGallery(name: string) {
@@ -68,7 +64,7 @@ async function fetchGallery(name: string) {
   const response = await fetch(url);
   if (response.ok) {
     const json = await response.json() as Gallery;
-    return json.content.map(asNode);
+    return json.content.map(asGalleryContent);
   } else {
     console.error(`Gallery ${name} could not be loaded.`);
     return null;
@@ -94,11 +90,26 @@ function initializeLightBox() {
     children: `.${galleryContentClass}`,
     pswpModule: () => import("photoswipe"),
   });
+  lightbox.addFilter("domItemData", (itemData, element, linkEl) => {
+    const imgEl = element.firstElementChild;
+    if (imgEl instanceof HTMLImageElement) {
+      const maxZoom = 2;
+      const width = window.screen.width * maxZoom;
+      const ratio = imgEl.height / imgEl.width;
+      const height = width * ratio;
+      itemData.w = width;
+      itemData.h = height;
+      itemData.msrc = imgEl.src;
+    }
+    itemData.src = linkEl.href;
+    return itemData;
+  });
   lightbox.on(
     "uiRegister",
     () => lightbox.pswp?.ui?.registerElement(captionPlugin),
   );
   lightbox.init();
+  return lightbox;
 }
 
 const captionPlugin = {
@@ -107,11 +118,8 @@ const captionPlugin = {
   onInit: (el, pswp) => {
     pswp.on("change", () => {
       const current = pswp.currSlide?.data.element;
-      const description = current?.getAttribute("data-pswp-description");
-      const html = renderToString(
-        <GalleryCaption size="lg">{description}</GalleryCaption>,
-      );
-      el.innerHTML = html;
+      const captions = current?.parentElement?.getElementsByTagName("figcaption");
+      el.innerHTML = captions?.length ? captions[0].outerHTML : "";
     });
   },
 } as UIElementData;
@@ -136,21 +144,53 @@ function parseGalleryContent(
   return { eager, lazy };
 }
 
-function defined(x: unknown) {
-  return !!x;
+function defined<T>(x: T | null | undefined): x is T {
+  return x !== null && x !== undefined;
+}
+
+function findTitle(node: unknown): string | null {
+  if (node && typeof node === "object" && "props" in node) {
+    const props = node.props;
+    if (props && typeof props === "object") {
+      if ("title" in props && typeof props.title === "string") {
+        return props.title;
+      } else if ("children" in props) {
+        for (const child of makeArray(props.children)) {
+          const title = findTitle(child);
+          if (title) return title;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function appendClass(props: Record<string, unknown>, ...newClassNames: string[]) {
+  const currentClasses = [];
+  if ("class" in props && typeof props.class === "string") {
+    currentClasses.push(...props.class.split(" "));
+  }
+  props.class = [...currentClasses, ...newClassNames].join(" ");
 }
 
 export default function Gallery(props: GalleryProps) {
   props = { ...PROP_DEFAULTS, ...props };
+
+  // Load content
   const { eager, lazy } = useMemo(
     () => parseGalleryContent(makeArray(props.children)),
     [props.children],
   );
   const eagerContent = useMemo(
-    () => eager.map(revive).filter(defined) as VNode[],
+    () => eager.map(revive).filter(defined).map(asGalleryContent),
     [eager],
   );
   const [lazyContent, setLazyContent] = useState<VNode[]>([]);
+  useEffect(() => {
+    lazyLoadGalleryContent(lazy, setLazyContent);
+  }, [lazy]);
+
+  // Build rows
   const rows = useMemo(
     () => {
       const pattern = getColumnCountPattern(props.columns!);
@@ -160,9 +200,13 @@ export default function Gallery(props: GalleryProps) {
     },
     [eagerContent, lazyContent],
   );
+
+  // Initialize LightBox
   useEffect(() => {
-    lazyLoadGalleryContent(lazy, setLazyContent).then(initializeLightBox);
-  }, [lazy]);
+    const lightbox = initializeLightBox();
+    return () => lightbox.destroy();
+  }, [rows]);
+
   return (
     <>
       <Head>

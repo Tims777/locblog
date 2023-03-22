@@ -35,3 +35,11 @@ export function revive(el: unknown): VNode | null {
   }
   return null;
 }
+
+export function makeArray<T>(target: T | T[]): T[] {
+  return Array.isArray(target) ? target : [target];
+}
+
+export function asChildren<T>(x: T) {
+  return { children: x };
+}
