@@ -13,7 +13,8 @@ import * as $$0 from "./islands/Gallery.tsx";
 import * as $$1 from "./islands/GeoLocationInput.tsx";
 import * as $$2 from "./islands/Globe.tsx";
 import * as $$3 from "./islands/InteractiveMap.tsx";
-import * as $$4 from "./islands/PlaceDetails.tsx";
+import * as $$4 from "./islands/LightBox.tsx";
+import * as $$5 from "./islands/PlaceDetails.tsx";
 
 const manifest = {
   routes: {
@@ -29,7 +30,8 @@ const manifest = {
     "./islands/GeoLocationInput.tsx": $$1,
     "./islands/Globe.tsx": $$2,
     "./islands/InteractiveMap.tsx": $$3,
-    "./islands/PlaceDetails.tsx": $$4,
+    "./islands/LightBox.tsx": $$4,
+    "./islands/PlaceDetails.tsx": $$5,
   },
   baseUrl: import.meta.url,
   config,

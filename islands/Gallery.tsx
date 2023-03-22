@@ -5,9 +5,7 @@ import GalleryRow from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
 import { type Media } from "../schema/media.ts";
 import GalleryContent, { type CustomGalleryContent } from "../components/GalleryContent.tsx";
-import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { Head } from "$fresh/runtime.ts";
-import { type UIElementData } from "photoswipe";
 import { asChildren, makeArray, revive } from "../helpers/preact-helpers.ts";
 
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
@@ -84,46 +82,6 @@ async function lazyLoadGalleryContent(
   setContent(content);
 }
 
-function initializeLightBox() {
-  const lightbox = new PhotoSwipeLightbox({
-    gallerySelector: `.${galleryClass}`,
-    children: `.${galleryContentClass}`,
-    pswpModule: () => import("photoswipe"),
-  });
-  lightbox.addFilter("domItemData", (itemData, element, linkEl) => {
-    const imgEl = element.firstElementChild;
-    if (imgEl instanceof HTMLImageElement) {
-      const maxZoom = 2;
-      const width = window.screen.width * maxZoom;
-      const ratio = imgEl.height / imgEl.width;
-      const height = width * ratio;
-      itemData.w = width;
-      itemData.h = height;
-      itemData.msrc = imgEl.src;
-    }
-    itemData.src = linkEl.href;
-    return itemData;
-  });
-  lightbox.on(
-    "uiRegister",
-    () => lightbox.pswp?.ui?.registerElement(captionPlugin),
-  );
-  lightbox.init();
-  return lightbox;
-}
-
-const captionPlugin = {
-  name: "caption",
-  appendTo: "wrapper",
-  onInit: (el, pswp) => {
-    pswp.on("change", () => {
-      const current = pswp.currSlide?.data.element;
-      const captions = current?.parentElement?.getElementsByTagName("figcaption");
-      el.innerHTML = captions?.length ? captions[0].outerHTML : "";
-    });
-  },
-} as UIElementData;
-
 function parseGalleryContent(
   elements: ComponentChild[],
 ): { eager: unknown[]; lazy: string[] } {
@@ -146,31 +104,6 @@ function parseGalleryContent(
 
 function defined<T>(x: T | null | undefined): x is T {
   return x !== null && x !== undefined;
-}
-
-function findTitle(node: unknown): string | null {
-  if (node && typeof node === "object" && "props" in node) {
-    const props = node.props;
-    if (props && typeof props === "object") {
-      if ("title" in props && typeof props.title === "string") {
-        return props.title;
-      } else if ("children" in props) {
-        for (const child of makeArray(props.children)) {
-          const title = findTitle(child);
-          if (title) return title;
-        }
-      }
-    }
-  }
-  return null;
-}
-
-function appendClass(props: Record<string, unknown>, ...newClassNames: string[]) {
-  const currentClasses = [];
-  if ("class" in props && typeof props.class === "string") {
-    currentClasses.push(...props.class.split(" "));
-  }
-  props.class = [...currentClasses, ...newClassNames].join(" ");
 }
 
 export default function Gallery(props: GalleryProps) {
@@ -200,12 +133,6 @@ export default function Gallery(props: GalleryProps) {
     },
     [eagerContent, lazyContent],
   );
-
-  // Initialize LightBox
-  useEffect(() => {
-    const lightbox = initializeLightBox();
-    return () => lightbox.destroy();
-  }, [rows]);
 
   return (
     <>
