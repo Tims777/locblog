@@ -22,8 +22,7 @@ export default function MapPage(props: PageProps<InteractiveMapProps>) {
     <>
       <Head>
         <title>LocBlog</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css" />
-        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="https://esm.sh/ol@7.3.0/ol.css" />
       </Head>
       <main class="w-screen h-screen">
         <InteractiveMap {...props.data} />

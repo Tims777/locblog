@@ -34,7 +34,6 @@ export default function GlobePage(props: PageProps<GlobeProps>) {
     <>
       <Head>
         <title>LocBlog</title>
-        <link rel="stylesheet" href="/style.css" />
       </Head>
       <a href="/map">
         <svg
