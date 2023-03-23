@@ -31,6 +31,11 @@ export const handler: Handlers<GlobeProps> = {
 
 export default function GlobePage(props: PageProps<GlobeProps>) {
   return (
+    <>
+      <Head>
+        <title>LocBlog</title>
+      </Head>
+      <a href="/map">
         <svg
           class="w-screen h-screen"
           version="1.1"
@@ -39,5 +44,7 @@ export default function GlobePage(props: PageProps<GlobeProps>) {
         >
           <Globe {...props.data} />
         </svg>
+      </a>
+    </>
   );
 }
