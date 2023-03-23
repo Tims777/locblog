@@ -11,6 +11,7 @@ import Overlay from "ol/Overlay";
 import Cluster from "ol/source/Cluster";
 import Style from "ol/style/Style";
 import Icon from "ol/style/Icon";
+import type MapEvent from "ol/MapEvent";
 import { useGeographic } from "ol/proj";
 import { GeoLocation } from "../types.d.ts";
 import PlaceDetails from "../islands/PlaceDetails.tsx";
@@ -20,14 +21,19 @@ import { type PlaceDetails as Place } from "../schema/place.ts";
 import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
 import { getCenter } from "../helpers/ol-helpers.ts";
 
+const minZoom = 2;
+const maxZoom = 20;
+
 export interface InteractiveMapProps {
   center?: GeoLocation;
+  zoom?: number;
   features?: MaybeSerialized<Place[]>;
   focus?: boolean;
 }
 
 const PROP_DEFAULTS: Required<InteractiveMapProps> = {
   center: [0, 0],
+  zoom: 7,
   features: [],
   focus: false,
 };
@@ -77,16 +83,47 @@ function loadStyle() {
   });
 }
 
+function updatePermalink(event: MapEvent) {
+  const view = event.map.getView();
+  const center = view.getCenter() ?? [undefined, undefined];
+  const state = {
+    lat: center[0]?.toFixed(3),
+    lon: center[1]?.toFixed(3),
+    zoom: view.getZoom()?.toFixed(0),
+  }
+  const url = new URL(window.location.href);
+  for (const [k, v] of Object.entries(state)) {
+    if (v) url.searchParams.set(k, v);
+  }
+  window.history.replaceState(state, "", url);
+}
+
+function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
+  const params = new URL(window.location.href).searchParams;
+  let center = defaultCenter;
+  if (params.has("lat") && params.has("lon")) {
+    console.log(params.get("lat"));
+    center = [params.get("lat")!, params.get("lon")!].map(parseFloat) as GeoLocation
+  }
+  let zoom = defaultZoom;
+  if (params.has("zoom")) {
+    zoom = parseFloat(params.get("zoom")!);
+  }
+  return new View({
+    minZoom,
+    maxZoom,
+    center,
+    zoom,
+  });
+}
+
 function createMap(target: HTMLElement, props: InteractiveMapProps) {
   const p = { ...PROP_DEFAULTS, ...props };
   useGeographic();
   const style = loadStyle();
   const features = loadFeatures(p.features);
   const layers = loadLayers(features, style);
-  const view = new View({
-    center: props.center,
-    zoom: 7,
-  });
+  const view = loadView(p.center, p.zoom);
 
   const selectedStyle = style.clone();
   selectedStyle.getImage().setRotation(-0.1);
@@ -126,6 +163,8 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
   });
 
   map.addInteraction(select);
+
+  map.on("moveend", updatePermalink)
 
   if (props.focus) {
     target.focus();
