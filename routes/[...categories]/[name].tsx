@@ -1,10 +1,10 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { galleryContentClass } from "../../../islands/Gallery.tsx";
-import LightBox from "../../../islands/LightBox.tsx";
-import { type Document } from "../../../schema/document.ts";
-import db from "../../../services/database.ts";
-import md from "../../../services/markdown.ts";
+import { galleryContentClass } from "../../islands/Gallery.tsx";
+import LightBox from "../../islands/LightBox.tsx";
+import { type Document } from "../../schema/document.ts";
+import db from "../../services/database.ts";
+import md from "../../services/markdown.ts";
 
 const notEmpty = (x: string) => x.trim() !== "";
 
