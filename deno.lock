@@ -180,6 +180,7 @@
     "https://cdn.skypack.dev/-/rbush@v3.0.1-nXnaOyjHHos3hCKQGGPV/dist=es2019,mode=imports/optimized/rbush.js": "4a900bbcc73b82f0033d8ec659571bff07fa46469b828ca38209468a4c4a3339",
     "https://cdn.skypack.dev/ol@7.3.0/Feature": "62fb7d98582e2f55b2a88c61304b62ed67acc95a70188c392946b5d249efe81f",
     "https://cdn.skypack.dev/ol@7.3.0/Map": "a903d9e5dd8a0d4d183b8f0ecce79e797038e188ed42cc2cd2679e6a23ca212b",
+    "https://cdn.skypack.dev/ol@7.3.0/MapEvent": "324cae1a35a36db9547dc0cabbcf434ad6a81457adb7edafb3ff4f336a287def",
     "https://cdn.skypack.dev/ol@7.3.0/Overlay": "0a57a25944d10cfc878d0def8f48bc5d82a7374abb09c5b5c4e8f0cfe09916bf",
     "https://cdn.skypack.dev/ol@7.3.0/View": "8d3c7f8214692d953cb5b562c5b6c55d20144c3461349de5dfac1348eb6c2904",
     "https://cdn.skypack.dev/ol@7.3.0/extent": "4108e4c05cda0ddcfbf213de69d8bbdaad8e7810102f6c1a445186873380414e",

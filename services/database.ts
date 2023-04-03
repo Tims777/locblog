@@ -1,5 +1,6 @@
 import { Pool } from "postgres";
 import { DocumentSchema } from "../schema/document.ts";
+import { FlightSchema } from "../schema/flight.ts";
 import { GallerySchema } from "../schema/gallery.ts";
 import { PlaceDetailsSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
@@ -69,6 +70,7 @@ class Database {
   document = new View(this, "document", DocumentSchema);
   gallery = new View(this, "gallery_aggregate", GallerySchema);
   place_overview = new View(this, "place_overview", PlaceDetailsSchema);
+  flight_overview = new View(this, "flight_aggregate", FlightSchema);
 }
 
 const db = new Database();

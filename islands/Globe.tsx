@@ -64,10 +64,21 @@ function createGlobe(props: StaticGlobeProps) {
     return (
       <path
         d={path(feature) ?? undefined}
-        fill={getProperty(feature, "fill") ?? undefined}
+        {...feature.properties}
       />
     );
   });
+}
+
+function setCustomPropeties(
+  this: SVGPathElement | d3.BaseType,
+  data: GeoObject,
+) {
+  if (!data.properties) return;
+  const target = d3Select(this);
+  for (const [k, v] of Object.entries(data.properties)) {
+    target.attr(k, v);
+  }
 }
 
 function updateGlobe(
@@ -81,5 +92,5 @@ function updateGlobe(
     .data(props.features)
     .join("path")
     .attr("d", path)
-    .attr("fill", (d) => getProperty(d, "fill") ?? "black");
+    .each(setCustomPropeties);
 }
