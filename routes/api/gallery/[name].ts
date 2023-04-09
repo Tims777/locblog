@@ -1,5 +1,8 @@
 import { Handlers } from "$fresh/server.ts";
-import { createJsonResponse, createErrorResponse } from "../../../helpers/response-helpers.ts";
+import {
+  createErrorResponse,
+  createJsonResponse,
+} from "../../../helpers/response-helpers.ts";
 import db from "../../../services/database.ts";
 
 export const handler: Handlers = {

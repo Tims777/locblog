@@ -4,7 +4,9 @@ import { slug } from "../helpers/string-helpers.ts";
 import GalleryRow from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
 import { type Media } from "../schema/media.ts";
-import GalleryContent, { type CustomGalleryContent } from "../components/GalleryContent.tsx";
+import GalleryContent, {
+  type CustomGalleryContent,
+} from "../components/GalleryContent.tsx";
 import { Head } from "$fresh/runtime.ts";
 import { asChildren, makeArray, revive } from "../helpers/preact-helpers.ts";
 

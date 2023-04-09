@@ -52,7 +52,10 @@ export default function GeoLocationInput(props: GeoLocationInputProps) {
         longitude: parseFloat(lngRef.current!.value),
       };
       try {
-        const result = await localities.find(searchText, searchController.signal);
+        const result = await localities.find(
+          searchText,
+          searchController.signal,
+        );
         setSearchResult([current, ...result]);
       } catch (err) {
         if (err.name != "AbortError") throw err;

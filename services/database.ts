@@ -59,7 +59,7 @@ class Database {
   pool: Pool;
 
   constructor(
-    dbString = Deno.env.get("DATABASE")
+    dbString = Deno.env.get("DATABASE"),
   ) {
     if (!dbString) console.error("DATABASE is not set.");
     this.pool = new Pool(dbString, 3, true);

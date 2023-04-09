@@ -8,8 +8,12 @@ interface PlaceDetailsProps {
   places: MaybeSerialized<PlaceDetails>[];
 }
 
-function byLastVisitDate(a: MaybeSerialized<PlaceDetails>, b: MaybeSerialized<PlaceDetails>) {
-  return new Date(a.last_visit ?? 0).getTime() - new Date(b.last_visit ?? 0).getTime();
+function byLastVisitDate(
+  a: MaybeSerialized<PlaceDetails>,
+  b: MaybeSerialized<PlaceDetails>,
+) {
+  return new Date(a.last_visit ?? 0).getTime() -
+    new Date(b.last_visit ?? 0).getTime();
 }
 
 export default function PlaceDetails(props: PlaceDetailsProps) {

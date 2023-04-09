@@ -10,21 +10,19 @@ class WikidataLocalityQueryService {
     this.getUrl = createTemplate(queryUrl!);
   }
 
-  public async find(query: string, signal?: AbortSignal ): Promise<Locality[]> {
+  public async find(query: string, signal?: AbortSignal): Promise<Locality[]> {
     const url = this.getUrl({ query });
     const response = await fetch(url, { signal });
     const result = await response.json();
     const pages: any[] = Object.values(result.query.pages);
     return pages
       .filter((l) => l.coordinates)
-      .map((l) =>
-        ({
-          latitude: l.coordinates[0].lat,
-          longitude: l.coordinates[0].lon,
-          label: l.entityterms.label[0],
-          description: l.entityterms.description[0],
-        })
-      );
+      .map((l) => ({
+        latitude: l.coordinates[0].lat,
+        longitude: l.coordinates[0].lon,
+        label: l.entityterms.label[0],
+        description: l.entityterms.description[0],
+      }));
   }
 }
 

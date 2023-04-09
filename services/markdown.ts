@@ -7,10 +7,10 @@ import configureGlobe from "../configurators/Globe.ts";
 import MarkdownPreactifier from "preactify-markdown/mod.ts";
 
 const config = {
-    gallery: { component: Gallery, configure: configureGallery },
-    map: { component: Map, configure: configureMap },
-    globe: { component: Globe, configure: configureGlobe },
-  }
+  gallery: { component: Gallery, configure: configureGallery },
+  map: { component: Map, configure: configureMap },
+  globe: { component: Globe, configure: configureGlobe },
+};
 
 const md = new MarkdownPreactifier(config);
 export default md;

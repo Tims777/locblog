@@ -23,7 +23,7 @@ export default function GalleryRow(props: GalleryRowProps) {
     "my-2",
     "gap-2",
     "items-center",
-    "[&>*]:w-full"
+    "[&>*]:w-full",
   ];
   return <div class={classes.join(" ")}>{props.children}</div>;
 }
