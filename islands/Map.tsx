@@ -1,4 +1,4 @@
-import Map from "ol/Map";
+import OlMap from "ol/Map";
 import View from "ol/View";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
@@ -13,6 +13,7 @@ import Style from "ol/style/Style";
 import Icon from "ol/style/Icon";
 import type MapEvent from "ol/MapEvent";
 import { useGeographic } from "ol/proj";
+import { Head } from "$fresh/runtime.ts";
 import { GeoLocation } from "../types.d.ts";
 import PlaceDetails from "../islands/PlaceDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
@@ -24,22 +25,35 @@ import { getCenter } from "../helpers/ol-helpers.ts";
 const minZoom = 2;
 const maxZoom = 20;
 
-export interface InteractiveMapProps {
+export interface MapProps {
   center?: GeoLocation;
   zoom?: number;
   features?: MaybeSerialized<Place[]>;
   focus?: boolean;
+  permalink?: boolean;
 }
 
-const PROP_DEFAULTS: Required<InteractiveMapProps> = {
+const PROP_DEFAULTS: Required<MapProps> = {
   center: [0, 0],
   zoom: 7,
   features: [],
-  focus: false,
+  focus: true,
+  permalink: true,
 };
 
-export default function InteractiveMap(props: InteractiveMapProps) {
-  return <div class="w-full h-full" tabIndex={0} ref={(div) => createMap(div!, props)} />;
+export default function Map(props: MapProps) {
+  return (
+    <>
+      <Head>
+        <link rel="stylesheet" href="https://esm.sh/ol@7.3.0/ol.css" />
+      </Head>
+      <div
+        class="w-full h-full"
+        tabIndex={0}
+        ref={(div) => createMap(div!, props)}
+      />
+    </>
+  );
 }
 
 function loadFeatures(places: MaybeSerialized<Place[]>) {
@@ -90,7 +104,7 @@ function updatePermalink(event: MapEvent) {
     lat: center[0]?.toFixed(3),
     lon: center[1]?.toFixed(3),
     zoom: view.getZoom()?.toFixed(0),
-  }
+  };
   const url = new URL(window.location.href);
   for (const [k, v] of Object.entries(state)) {
     if (v) url.searchParams.set(k, v);
@@ -103,7 +117,9 @@ function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
   let center = defaultCenter;
   if (params.has("lat") && params.has("lon")) {
     console.log(params.get("lat"));
-    center = [params.get("lat")!, params.get("lon")!].map(parseFloat) as GeoLocation
+    center = [params.get("lat")!, params.get("lon")!].map(
+      parseFloat,
+    ) as GeoLocation;
   }
   let zoom = defaultZoom;
   if (params.has("zoom")) {
@@ -117,7 +133,7 @@ function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
   });
 }
 
-function createMap(target: HTMLElement, props: InteractiveMapProps) {
+function createMap(target: HTMLElement, props: MapProps) {
   const p = { ...PROP_DEFAULTS, ...props };
   useGeographic();
   const style = loadStyle();
@@ -155,7 +171,7 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
     }
   });
 
-  const map = new Map({
+  const map = new OlMap({
     target,
     layers,
     view,
@@ -164,9 +180,11 @@ function createMap(target: HTMLElement, props: InteractiveMapProps) {
 
   map.addInteraction(select);
 
-  map.on("moveend", updatePermalink)
+  if (p.permalink) {
+    map.on("moveend", updatePermalink);
+  }
 
-  if (props.focus) {
+  if (p.focus) {
     target.focus();
   }
 

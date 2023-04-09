@@ -13,8 +13,8 @@ export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
 export const galleryClass = "gallery";
 export const galleryContentClass = "gallery-content";
 
-interface GalleryProps {
-  children: ComponentChildren;
+export interface GalleryProps {
+  children?: ComponentChildren;
   columns?: string | number | number[];
 }
 

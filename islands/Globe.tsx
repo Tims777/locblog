@@ -1,19 +1,25 @@
 import { geoOrthographic, geoPath, select as d3Select } from "d3";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { GeoObject, Rotation, Translation } from "../types.d.ts";
+import { default as world } from "../static/world.json" assert { type: "json" };
+
+const background = {
+  type: "Sphere",
+  properties: { fill: "lightgray" },
+};
 
 export interface GlobeProps {
   features?: GeoObject[];
   initialRotation?: Rotation;
   translation?: Translation;
-  rotationSpeed?: Rotation | null;
+  rotationSpeed?: Rotation;
 }
 
 const PROP_DEFAULTS: Required<GlobeProps> = {
   features: [],
   initialRotation: [0, 0],
   translation: [0, 0],
-  rotationSpeed: null,
+  rotationSpeed: [10, 0],
 };
 
 interface StaticGlobeProps {
@@ -26,10 +32,10 @@ export default function Globe(props: Partial<GlobeProps>) {
   const p = { ...PROP_DEFAULTS, ...props };
   const ref = useRef<SVGGElement>(null);
   const [rotation, setRotation] = useState<Rotation>(p.initialRotation);
+  const offset = useMemo(() => performance.now(), []);
   const staticGlobeProps: StaticGlobeProps = { ...p, rotation };
 
   if (p.rotationSpeed) {
-    const [offset, setOffset] = useState(performance.now());
     useEffect(() => {
       const handle = requestAnimationFrame((time) => {
         const correctedTime = (time - offset) / 1000;
@@ -43,7 +49,16 @@ export default function Globe(props: Partial<GlobeProps>) {
     }, [staticGlobeProps]);
   }
 
-  return <g ref={ref}>{createGlobe(staticGlobeProps)}</g>;
+  return (
+    <svg
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-250 -250 500 500"
+      class="w-full h-full"
+    >
+      <g ref={ref}>{createGlobe(staticGlobeProps)}</g>
+    </svg>
+  );
 }
 
 function createPathGenerator(rotation: Rotation, translation: Translation) {
@@ -60,7 +75,12 @@ function getProperty<T = unknown>(obj: GeoObject, name: string): T | null {
 
 function createGlobe(props: StaticGlobeProps) {
   const path = createPathGenerator(props.rotation, props.translation);
-  return props.features.map((feature) => {
+  const allFeatures = [
+    background,
+    ...world.features,
+    ...props.features,
+  ] as GeoObject[];
+  return allFeatures.map((feature) => {
     return (
       <path
         d={path(feature) ?? undefined}
@@ -86,10 +106,15 @@ function updateGlobe(
   props: StaticGlobeProps,
 ) {
   const path = createPathGenerator(props.rotation, props.translation);
+  const allFeatures = [
+    background,
+    ...world.features,
+    ...props.features,
+  ] as GeoObject[];
   const globe = d3Select(target);
   globe
     .selectAll("path")
-    .data(props.features)
+    .data(allFeatures)
     .join("path")
     .attr("d", path)
     .each(setCustomPropeties);

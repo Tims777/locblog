@@ -1,6 +1,6 @@
 {
   "imports": {
-    "$fresh/": "https://deno.land/x/fresh@1.1.5/",
+    "$fresh/": "https://deno.land/x/fresh@1.1.4/",
     "std/": "https://deno.land/std@0.182.0/",
     "postgres": "https://deno.land/x/postgres@v0.17.0/mod.ts",
     "preact": "https://esm.sh/preact@10.13.2",
@@ -17,6 +17,7 @@
     "photoswipe/": "https://esm.sh/photoswipe@5.3.7/",
     "d3": "https://esm.sh/d3@7.8.2",
     "ol/": "https://cdn.skypack.dev/ol@7.3.0/",
-    "computed-types": "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.11.2/src/index.ts"
+    "computed-types": "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.11.2/src/index.ts",
+    "preactify-markdown/": "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.2.0/"
   }
 }

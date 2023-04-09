@@ -6,14 +6,11 @@ import config from "./deno.json" assert { type: "json" };
 import * as $0 from "./routes/[...categories]/[name].tsx";
 import * as $1 from "./routes/_404.tsx";
 import * as $2 from "./routes/api/gallery/[name].ts";
-import * as $3 from "./routes/globe.tsx";
-import * as $4 from "./routes/map.tsx";
-import * as $5 from "./routes/update.tsx";
 import * as $$0 from "./islands/Gallery.tsx";
 import * as $$1 from "./islands/GeoLocationInput.tsx";
 import * as $$2 from "./islands/Globe.tsx";
-import * as $$3 from "./islands/InteractiveMap.tsx";
-import * as $$4 from "./islands/LightBox.tsx";
+import * as $$3 from "./islands/LightBox.tsx";
+import * as $$4 from "./islands/Map.tsx";
 import * as $$5 from "./islands/PlaceDetails.tsx";
 
 const manifest = {
@@ -21,16 +18,13 @@ const manifest = {
     "./routes/[...categories]/[name].tsx": $0,
     "./routes/_404.tsx": $1,
     "./routes/api/gallery/[name].ts": $2,
-    "./routes/globe.tsx": $3,
-    "./routes/map.tsx": $4,
-    "./routes/update.tsx": $5,
   },
   islands: {
     "./islands/Gallery.tsx": $$0,
     "./islands/GeoLocationInput.tsx": $$1,
     "./islands/Globe.tsx": $$2,
-    "./islands/InteractiveMap.tsx": $$3,
-    "./islands/LightBox.tsx": $$4,
+    "./islands/LightBox.tsx": $$3,
+    "./islands/Map.tsx": $$4,
     "./islands/PlaceDetails.tsx": $$5,
   },
   baseUrl: import.meta.url,
