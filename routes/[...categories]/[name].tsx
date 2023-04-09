@@ -1,8 +1,13 @@
 import { Head } from "$fresh/runtime.ts";
+import { RouteConfig } from "$fresh/server.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Mdast } from "preactify-markdown/types.d.ts";
 import db from "../../services/database.ts";
 import md from "../../services/markdown.ts";
+
+export const config: RouteConfig = {
+  routeOverride: "/:categories(.*?){/:name}?",
+};
 
 const notEmpty = (x: string) => x.trim() !== "";
 
