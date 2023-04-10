@@ -6,14 +6,10 @@ import db from "../services/database.ts";
 export default async function configure(
   directive: Directive,
 ): Promise<MapProps | false> {
-  if (directive.type == "textDirective") {
-    return false;
-  }
-
   const features = await db.place_overview.query({
     orderBy: "last_visit asc",
   });
   const last = features[features.length - 1];
   const center: GeoLocation = [last.longitude, last.latitude];
-  return { center, features };
+  return { center, features, ...directive.attributes };
 }

@@ -6,10 +6,6 @@ import db from "../services/database.ts";
 export default async function configure(
   directive: Directive,
 ): Promise<GlobeProps | false> {
-  if (directive.type == "textDirective") {
-    return false;
-  }
-
   const visits = await db.place_overview.query({
     orderBy: "last_visit asc",
   });
@@ -37,5 +33,5 @@ export default async function configure(
   ] as GeoObject[];
   const first = visits[0];
   const initialRotation: Rotation = [-first.longitude, 0];
-  return { features, initialRotation };
+  return { features, initialRotation, ...directive.attributes };
 }
