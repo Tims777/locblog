@@ -1,10 +1,10 @@
-import { boolean, createSchema, text, Type, uuid } from "./validators.ts";
+import { createSchema, text, Type, uuid } from "./validators.ts";
 
 export const DocumentSchema = createSchema({
   id: uuid,
+  type: text,
   content: text,
   path: text.optional(),
-  fullscreen: boolean.optional(),
 });
 
 export type Document = Type<typeof DocumentSchema>;
