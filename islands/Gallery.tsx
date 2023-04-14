@@ -4,11 +4,11 @@ import { slug } from "../helpers/string-helpers.ts";
 import GalleryRow from "../components/GalleryRow.tsx";
 import { type Gallery } from "../schema/gallery.ts";
 import { type Media } from "../schema/media.ts";
+import { asChildren, makeArray, revive } from "../helpers/preact-helpers.ts";
 import GalleryContent, {
   type CustomGalleryContent,
 } from "../components/GalleryContent.tsx";
-import { Head } from "$fresh/runtime.ts";
-import { asChildren, makeArray, revive } from "../helpers/preact-helpers.ts";
+import LightBox from "../islands/LightBox.tsx";
 
 export const galleryId = (name: string) => `gallery-${slug(name)}`;
 export const galleryUrl = (name: string) => `/api/gallery/${slug(name)}`;
@@ -138,15 +138,13 @@ export default function Gallery(props: GalleryProps) {
 
   return (
     <>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://esm.sh/photoswipe@5.3.6/dist/photoswipe.css"
-        />
-      </Head>
       <figure class={[galleryClass, "not-prose"].join(" ")}>
         {rows}
       </figure>
+      <LightBox
+        gallerySelector="body"
+        contentSelector={`.${galleryContentClass}`}
+      />
     </>
   );
 }

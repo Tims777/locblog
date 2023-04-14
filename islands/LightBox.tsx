@@ -1,23 +1,25 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useContext, useEffect, useRef } from "preact/hooks";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { type SlideData, type UIElementData } from "photoswipe";
 import GalleryCaption from "../components/GalleryCaption.tsx";
 import { renderToString } from "preact-render-to-string";
+import { Head } from "$fresh/runtime.ts";
+import { createContext } from "preact";
+
+const LIGHTBOX_CONTEXT = createContext({ present: false });
 
 const captionPlugin = {
   name: "caption",
   appendTo: "wrapper",
   onInit: (el, pswp) => {
     pswp.on("change", () => {
-      const current = pswp.currSlide?.data.element;
-      const captions = current?.parentElement?.getElementsByTagName(
-        "figcaption",
-      );
-      el.innerHTML = captions?.length
-        ? renderToString(
+      const parent = pswp.currSlide?.data.element?.parentElement;
+      const captions = parent?.getElementsByTagName("figcaption");
+      if (captions?.length) {
+        el.innerHTML = renderToString(
           <GalleryCaption size="lg">{captions[0].textContent}</GalleryCaption>,
-        )
-        : "";
+        );
+      }
     });
   },
 } as UIElementData;
@@ -68,13 +70,23 @@ interface LightBoxProps {
 }
 
 export default function LightBox(props: LightBoxProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const context = useContext(LIGHTBOX_CONTEXT);
+  if (context.present) return null;
+  else context.present = true;
+
   useEffect(() => {
     const lightbox = initialize(
-      ref.current!,
+      document.body,
       props,
     );
     return () => lightbox.destroy();
   }, []);
-  return <div ref={ref} class="lightbox" />;
+  return (
+    <Head>
+      <link
+        rel="stylesheet"
+        href="https://esm.sh/photoswipe@5.3.6/dist/photoswipe.css"
+      />
+    </Head>
+  );
 }
