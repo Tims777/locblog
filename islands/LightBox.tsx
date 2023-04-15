@@ -2,11 +2,10 @@ import { useContext, useEffect, useRef } from "preact/hooks";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { type SlideData, type UIElementData } from "photoswipe";
 import GalleryCaption from "../components/GalleryCaption.tsx";
-import { renderToString } from "preact-render-to-string";
-import { Head } from "$fresh/runtime.ts";
+import { render } from "preact";
 import { createContext } from "preact";
 
-const LIGHTBOX_CONTEXT = createContext({ present: false });
+const LIGHTBOX_CONTEXT = createContext({ initialized: false });
 
 const captionPlugin = {
   name: "caption",
@@ -16,8 +15,9 @@ const captionPlugin = {
       const parent = pswp.currSlide?.data.element?.parentElement;
       const captions = parent?.getElementsByTagName("figcaption");
       if (captions?.length) {
-        el.innerHTML = renderToString(
+        render(
           <GalleryCaption size="lg">{captions[0].textContent}</GalleryCaption>,
+          el,
         );
       }
     });
@@ -43,6 +43,20 @@ const itemDataFilter = (
   return itemData;
 };
 
+function loadStyle() {
+  render(
+    <link
+      rel="stylesheet"
+      href="https://esm.sh/photoswipe@5.3.6/dist/photoswipe.css"
+    />,
+    document.head,
+  );
+}
+
+function unloadStyle() {
+  // TODO
+}
+
 function initialize(
   appendToEl: HTMLElement,
   props: LightBoxProps,
@@ -60,6 +74,8 @@ function initialize(
     "uiRegister",
     () => lightbox?.pswp?.ui?.registerElement(captionPlugin),
   );
+  lightbox.on("init", () => loadStyle());
+  lightbox.on("destroy", () => unloadStyle());
   lightbox.init();
   return lightbox;
 }
@@ -71,8 +87,7 @@ interface LightBoxProps {
 
 export default function LightBox(props: LightBoxProps) {
   const context = useContext(LIGHTBOX_CONTEXT);
-  if (context.present) return null;
-  else context.present = true;
+  if (context.initialized) return null;
 
   useEffect(() => {
     const lightbox = initialize(
@@ -81,12 +96,6 @@ export default function LightBox(props: LightBoxProps) {
     );
     return () => lightbox.destroy();
   }, []);
-  return (
-    <Head>
-      <link
-        rel="stylesheet"
-        href="https://esm.sh/photoswipe@5.3.6/dist/photoswipe.css"
-      />
-    </Head>
-  );
+
+  context.initialized = true;
 }
