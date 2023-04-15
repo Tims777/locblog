@@ -5,5 +5,5 @@ export interface DocumentOverviewProps {
 }
 
 export default function DocumentOverview(props: DocumentOverviewProps) {
-  return <ul>{props.documents.map((p) => <li><a href={p.path}>{p.path}</a></li>)}</ul>;
+  return <ul>{props.documents.map((p) => <li><a href={p.path}>{p.title}</a></li>)}</ul>;
 }
