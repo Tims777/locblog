@@ -15,11 +15,11 @@ const captionPlugin = {
     pswp.on("change", () => {
       const parent = pswp.currSlide?.data.element?.parentElement;
       const captions = parent?.getElementsByTagName("figcaption");
-      el.innerHTML = captions?.length
-        ? renderToString(
+      if (captions?.length) {
+        el.innerHTML = renderToString(
           <GalleryCaption size="lg">{captions[0].textContent}</GalleryCaption>,
-        )
-        : "";
+        );
+      }
     });
   },
 } as UIElementData;
