@@ -9,7 +9,7 @@ const captionClasses = (textSize: string, lineHeight: number) =>
     "absolute",
     "bottom-0",
     "w-full",
-    "overflow-scroll",
+    "overflow-y-auto",
     `leading-${lineHeight}`,
     `max-h-${lineHeight * lineCount}`,
     "peer-hover/content:translate-y-16",
