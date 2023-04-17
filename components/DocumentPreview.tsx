@@ -4,11 +4,11 @@ export default function DocumentPreviewProps(props: DocumentPreviewProps) {
   return (
     <a
       href={props.path}
-      class="block relative mb-4 shadow-lg shadow-gray-500 hover:rotate-1 transition min-h-[3rem] bg-gray-200"
+      class="block relative mb-4 shadow-lg shadow-gray-500 hover:rotate-1 transition min-h-[3rem] bg-gray-500"
     >
-      <img src={props.thumbnail} />
-      <div class="absolute bottom-0 w-full h-12 text-center">
-        <h2 class="text-lg p-2 bg-gray-200 text-black font-mono bg-opacity-90">
+      <img src={props.thumbnail?.resource} />
+      <div class="absolute bottom-0 w-full text-center">
+        <h2 class="text-xl p-2 text-white drop-shadow-lg font-mono bg-gradient-to-t from-black">
           {props.title}
         </h2>
       </div>

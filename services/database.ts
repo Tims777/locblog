@@ -69,7 +69,7 @@ class Database {
 
   visit = new Table(this, "visit");
   place = new Table(this, "place");
-  document = new View(this, "document", DocumentSchema);
+  document = new View(this, "document_aggregate", DocumentSchema);
   gallery = new View(this, "gallery_aggregate", GallerySchema);
   place_overview = new View(this, "place_overview", PlaceDetailsSchema);
   flight_overview = new View(this, "flight_aggregate", FlightSchema);

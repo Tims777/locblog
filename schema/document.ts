@@ -1,12 +1,15 @@
-import { createSchema, date, text, Type, url, uuid } from "./validators.ts";
+import { AuthorSchema } from "./author.ts";
+import { MediaSchema } from "./media.ts";
+import { createSchema, date, text, Type, uuid } from "./validators.ts";
 
 export const DocumentSchema = createSchema({
   id: uuid,
   type: text,
   title: text,
   content: text,
-  thumbnail: url.optional(),
+  thumbnail: MediaSchema.optional(),
   published: date.optional(),
+  author: AuthorSchema.optional(),
   path: text.optional(),
 });
 
