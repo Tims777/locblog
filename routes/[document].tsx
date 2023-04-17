@@ -38,13 +38,16 @@ export const handler: Handlers<PreparedDocument> = {
     }
 
     const doc = docs[0];
-    const content = await parseAndConfigure(doc.content, { req, ctx });
+    const title = doc.title;
+    const parseContext = { req, ctx, doc };
+    const content = await parseAndConfigure(doc.content, parseContext);
     const header =
-      /* doc.header ? await parseAndConfigure(doc.header, { req, ctx }) : */ undefined;
+      /* doc.header ? await parseAndConfigure(doc.header, parseContext) : */ undefined;
 
     return ctx.render({
-      content,
+      title,
       header,
+      content,
     });
   },
 };
