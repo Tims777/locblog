@@ -1,5 +1,6 @@
 import { AuthorSchema } from "./author.ts";
 import { MediaSchema } from "./media.ts";
+import { StyleSchema } from "./style.ts";
 import { createSchema, date, text, Type, uuid } from "./validators.ts";
 
 export const DocumentSchema = createSchema({
@@ -10,6 +11,7 @@ export const DocumentSchema = createSchema({
   thumbnail: MediaSchema.optional(),
   published: date.optional(),
   author: AuthorSchema.optional(),
+  style: StyleSchema.optional(),
   path: text.optional(),
 });
 

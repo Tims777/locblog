@@ -116,7 +116,6 @@ function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
   const params = new URL(window.location.href).searchParams;
   let center = defaultCenter;
   if (params.has("lat") && params.has("lon")) {
-    console.log(params.get("lat"));
     center = [params.get("lat")!, params.get("lon")!].map(
       parseFloat,
     ) as GeoLocation;

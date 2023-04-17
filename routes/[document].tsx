@@ -12,14 +12,17 @@ export const config: RouteConfig = {
 
 interface PreparedDocument {
   title?: string;
+  style: string[];
   header?: Mdast;
   content: Mdast;
+  footer?: Mdast;
 }
 
 async function parseAndConfigure(
-  markdown: string,
+  markdown: string | undefined,
   context: ConfiguratorContext,
 ) {
+  if (!markdown) return undefined;
   const mdast = md.parse(markdown);
   await md.configure(mdast, context);
   return mdast;
@@ -39,21 +42,23 @@ export const handler: Handlers<PreparedDocument> = {
 
     const doc = docs[0];
     const title = doc.title;
+    const style = doc.style?.classes ?? [];
     const parseContext = { req, ctx, doc };
     const content = await parseAndConfigure(doc.content, parseContext);
-    const header =
-      /* doc.header ? await parseAndConfigure(doc.header, parseContext) : */ undefined;
+    const header = await parseAndConfigure(doc.style?.header, parseContext);
+    const footer = await parseAndConfigure(doc.style?.footer, parseContext);
 
     return ctx.render({
       title,
+      style,
       header,
       content,
+      footer,
     });
   },
 };
 
 export default function DocumentPage(props: PageProps<PreparedDocument>) {
-  const classList = ["prose", "prose-lg", "max-w-2xl", "mx-auto", "p-2"];
   const title = props.data.title ?? "LocBlog";
 
   const body = [];
@@ -61,13 +66,16 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
     body.push(<header>{md.preactify(props.data.header)}</header>);
   }
   body.push(<main>{md.preactify(props.data.content)}</main>);
+  if (props.data.footer) {
+    body.push(<footer>{md.preactify(props.data.header)}</footer>);
+  }
 
   return (
     <>
       <Head>
         <title>{title}</title>
       </Head>
-      <body class={classList.join(" ")}>
+      <body class={props.data.style.join(" ")}>
         {body}
       </body>
     </>
