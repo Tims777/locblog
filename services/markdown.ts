@@ -8,6 +8,7 @@ import Globe from "../islands/Globe.tsx";
 import configureGlobe from "../configurators/Globe.ts";
 import DocumentOverview from "../components/DocumentOverview.tsx";
 import configureDocumentOverview from "../configurators/DocumentOverview.ts";
+import type { ConfiguratorContext } from "../types.d.ts";
 
 const config = {
   fullscreen: { component: FullScreen },
@@ -20,5 +21,5 @@ const config = {
   globe: { component: Globe, configure: configureGlobe },
 };
 
-const md = new MarkdownPreactifier(config);
+const md = new MarkdownPreactifier<ConfiguratorContext>(config);
 export default md;

@@ -4,6 +4,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { Mdast } from "preactify-markdown/types.d.ts";
 import db from "../services/database.ts";
 import md from "../services/markdown.ts";
+import type { ConfiguratorContext } from "../types.d.ts";
 
 export const config: RouteConfig = {
   routeOverride: "/:path(.*?)",
@@ -15,14 +16,17 @@ interface PreparedDocument {
   content: Mdast;
 }
 
-async function parseAndConfigure(markdown: string) {
+async function parseAndConfigure(
+  markdown: string,
+  context: ConfiguratorContext,
+) {
   const mdast = md.parse(markdown);
-  await md.configure(mdast);
+  await md.configure(mdast, context);
   return mdast;
 }
 
 export const handler: Handlers<PreparedDocument> = {
-  async GET(_, ctx) {
+  async GET(req, ctx) {
     const path = ctx.params.path;
     const docs = await db.document.query({
       where: { path },
@@ -34,8 +38,9 @@ export const handler: Handlers<PreparedDocument> = {
     }
 
     const doc = docs[0];
-    const content = await parseAndConfigure(doc.content);
-    const header = doc.header ? await parseAndConfigure(doc.header) : undefined;
+    const content = await parseAndConfigure(doc.content, { req, ctx });
+    const header =
+      /* doc.header ? await parseAndConfigure(doc.header, { req, ctx }) : */ undefined;
 
     return ctx.render({
       content,

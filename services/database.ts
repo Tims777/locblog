@@ -9,6 +9,7 @@ interface QueryProps {
   where?: Record<string, string>;
   orderBy?: string;
   limit?: number;
+  offset?: number;
 }
 
 class View<S> {
@@ -28,6 +29,7 @@ class View<S> {
     }
     if (props?.orderBy) query += ` order by ${props.orderBy}`;
     if (props?.limit) query += ` limit ${props.limit}`;
+    if (props?.offset) query += ` offset ${props.offset}`;
     const result = await client.queryObject(query, props?.where);
     client.release();
     const validator = array.of(this.schema);
