@@ -1,5 +1,5 @@
 import { type Document } from "../schema/document.ts";
-import DocumentPreview from "./DocumentPreview.tsx";
+import Postcard from "./Postcard.tsx";
 
 export interface DocumentOverviewProps {
   documents: Document[];
@@ -22,7 +22,13 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
   return (
     <>
       <div class="not-prose">
-        {props.documents.map((p) => <DocumentPreview {...p} />)}
+        {props.documents.map((p) => (
+          <Postcard
+            title={p.title}
+            image={p.thumbnail?.resource}
+            href={p.path}
+          />
+        ))}
       </div>
       <div class="text-center">
         {navigation}
