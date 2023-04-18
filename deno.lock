@@ -702,11 +702,11 @@
     "https://esm.sh/v115/unist-util-visit@4.1.2/deno/unist-util-visit.mjs": "61188f7e267b47d295aafa1c9540065dff19a861928657c5d748ae3f9b37cdb8",
     "https://esm.sh/v115/unist-util-visit@4.1.2/index.d.ts": "f09e4fc44ac6966714f2d08b16751a024de38d160266dd5d4bad82c4c98a567f",
     "https://esm.sh/v115/unist-util-visit@4.1.2/lib/index.d.ts": "71d6b5a076ad182caac98f494e61b66371ec13cdb1cb33448b9088f8fb7c1a70",
-    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.0/deps.ts": "f5dd26dbf6543fb6d0629404763bcbcf3cbf7c0a542d6f1f2dccb08e3c4b0359",
-    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.0/lib/directives.ts": "8ef245807b51ce92516cc58f16031885631c8bc9b23f4b6a6f7c6b60d043f741",
-    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.0/lib/markdown.ts": "468491c322985cadf519e66a7fda259700519a5b257edead188c7f5dc0608ec6",
-    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.0/lib/preactify.ts": "bfc243e7a571df3b4699fdd1514e1ef4e2ea5b14dc8bf407f4e15dc1a811d668",
-    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.0/mod.ts": "69efcdede0f53665af0efe6002006475ed5430665b0a48a892a2715a7d8f0fe8",
-    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.0/types.d.ts": "62dabfcd518e4d4ef6e45a0fff12abba02678549708041041e37d7f4c9c7a55f"
+    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/deps.ts": "986c6300fcb967c9b11a035a643873820999aa220b0ec08e9901e77271a4b51a",
+    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/lib/directives.ts": "82509d52cc0674cf312a6dc924767ad6c07fca77158f853ee41ae21d78beb9af",
+    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/lib/markdown.ts": "79e2a38943a086a6e224c86e161c66daa0bb2597e5cb113569358a5febb6332b",
+    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/lib/preactify.ts": "6ae356a418a6c00e76eac9fdd77977cce07522ed679951ffbff591438704bd00",
+    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/mod.ts": "69efcdede0f53665af0efe6002006475ed5430665b0a48a892a2715a7d8f0fe8",
+    "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/types.d.ts": "637043d36be27d629957f2cb80d9cdc2201dd071e9f04ec01dd3efb9fe617e93"
   }
 }

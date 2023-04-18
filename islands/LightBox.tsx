@@ -87,15 +87,16 @@ interface LightBoxProps {
 
 export default function LightBox(props: LightBoxProps) {
   const context = useContext(LIGHTBOX_CONTEXT);
-  if (context.initialized) return null;
+  if (!context.initialized) {
+    useEffect(() => {
+      const lightbox = initialize(
+        document.body,
+        props,
+      );
+      return () => lightbox.destroy();
+    }, []);
 
-  useEffect(() => {
-    const lightbox = initialize(
-      document.body,
-      props,
-    );
-    return () => lightbox.destroy();
-  }, []);
-
-  context.initialized = true;
+    context.initialized = true;
+  }
+  return null;
 }

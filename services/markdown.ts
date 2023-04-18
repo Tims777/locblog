@@ -1,5 +1,4 @@
 import MarkdownPreactifier from "preactify-markdown/mod.ts";
-import FullScreen from "../components/FullScreen.tsx";
 import Gallery from "../islands/Gallery.tsx";
 import configureGallery from "../configurators/Gallery.ts";
 import Map from "../islands/Map.tsx";
@@ -8,10 +7,12 @@ import Globe from "../islands/Globe.tsx";
 import configureGlobe from "../configurators/Globe.ts";
 import DocumentOverview from "../components/DocumentOverview.tsx";
 import configureDocumentOverview from "../configurators/DocumentOverview.ts";
+import Navigation from "../components/Navigation.tsx";
 import type { ConfiguratorContext } from "../types.d.ts";
 
 const config = {
-  fullscreen: { component: FullScreen },
+  div: { component: "div" },
+  navigation: { component: Navigation },
   documents: {
     component: DocumentOverview,
     configure: configureDocumentOverview,
@@ -19,7 +20,7 @@ const config = {
   gallery: { component: Gallery, configure: configureGallery },
   map: { component: Map, configure: configureMap },
   globe: { component: Globe, configure: configureGlobe },
-};
+} as const;
 
 const md = new MarkdownPreactifier<ConfiguratorContext>(config);
 export default md;

@@ -44,7 +44,7 @@ export const handler: Handlers<PreparedDocument> = {
     const title = doc.title;
     const style = doc.style?.classes ?? [];
     const parseContext = { req, ctx, doc };
-    const content = await parseAndConfigure(doc.content, parseContext);
+    const content = (await parseAndConfigure(doc.content, parseContext))!;
     const header = await parseAndConfigure(doc.style?.header, parseContext);
     const footer = await parseAndConfigure(doc.style?.footer, parseContext);
 
@@ -67,7 +67,7 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
   }
   body.push(<main>{md.preactify(props.data.content)}</main>);
   if (props.data.footer) {
-    body.push(<footer>{md.preactify(props.data.header)}</footer>);
+    body.push(<footer>{md.preactify(props.data.footer)}</footer>);
   }
 
   return (
