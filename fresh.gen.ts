@@ -7,11 +7,10 @@ import * as $0 from "./routes/[document].tsx";
 import * as $1 from "./routes/_404.tsx";
 import * as $2 from "./routes/api/gallery/[name].ts";
 import * as $$0 from "./islands/Gallery.tsx";
-import * as $$1 from "./islands/GeoLocationInput.tsx";
-import * as $$2 from "./islands/Globe.tsx";
-import * as $$3 from "./islands/LightBox.tsx";
-import * as $$4 from "./islands/Map.tsx";
-import * as $$5 from "./islands/PlaceDetails.tsx";
+import * as $$1 from "./islands/Globe.tsx";
+import * as $$2 from "./islands/LightBox.tsx";
+import * as $$3 from "./islands/Map.tsx";
+import * as $$4 from "./islands/PlaceDetails.tsx";
 
 const manifest = {
   routes: {
@@ -21,11 +20,10 @@ const manifest = {
   },
   islands: {
     "./islands/Gallery.tsx": $$0,
-    "./islands/GeoLocationInput.tsx": $$1,
-    "./islands/Globe.tsx": $$2,
-    "./islands/LightBox.tsx": $$3,
-    "./islands/Map.tsx": $$4,
-    "./islands/PlaceDetails.tsx": $$5,
+    "./islands/Globe.tsx": $$1,
+    "./islands/LightBox.tsx": $$2,
+    "./islands/Map.tsx": $$3,
+    "./islands/PlaceDetails.tsx": $$4,
   },
   baseUrl: import.meta.url,
   config,
