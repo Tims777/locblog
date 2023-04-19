@@ -6,6 +6,6 @@ interface NavigationProps {
 
 export default function Navigation(props: NavigationProps) {
   return (
-    <nav class="[&>*]:flex [&>*]:justify-around [&>*]:list-none">{props.children}</nav>
+    <nav class="children:(flex,justify-around,list-none)">{props.children}</nav>
   );
 }

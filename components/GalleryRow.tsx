@@ -18,12 +18,11 @@ export default function GalleryRow(props: GalleryRowProps) {
   const childCount = count(props.children);
   const classes = [
     "grid",
-    `grid-cols-${childCount}`,
-    "max-sm:grid-cols-1",
+    `grid-cols-(${childCount},max-sm:1)`,
     "my-2",
     "gap-2",
     "items-center",
-    "[&>*]:w-full",
+    "children:w-full",
   ];
   return <div class={classes.join(" ")}>{props.children}</div>;
 }
