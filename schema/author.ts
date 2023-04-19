@@ -1,4 +1,4 @@
-import { createSchema, text, uuid, type Type } from "./validators.ts";
+import { createSchema, text, type Type, uuid } from "./validators.ts";
 
 export const AuthorSchema = createSchema({
   id: uuid,

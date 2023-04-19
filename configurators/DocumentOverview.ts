@@ -28,7 +28,9 @@ function getFilter(attribs: Record<string, string | null | undefined>) {
   if (attribs.category) {
     const categoryFilter = new Filter([], "or");
     categoryFilter.add(
-      ...attribs.category.split(",").map((c) => Condition.like("path", `${c}/%`)),
+      ...attribs.category.split(",").map((c) =>
+        Condition.like("path", `${c}/%`)
+      ),
     );
     filter.add(categoryFilter);
   }

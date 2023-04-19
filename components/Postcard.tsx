@@ -1,7 +1,7 @@
 export interface PostcardProps {
-  image?: string,
-  title?: string,
-  href?: string,
+  image?: string;
+  title?: string;
+  href?: string;
 }
 
 export default function Postcard(props: PostcardProps) {

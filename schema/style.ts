@@ -1,4 +1,4 @@
-import { createSchema, text, type Type, array } from "./validators.ts";
+import { array, createSchema, text, type Type } from "./validators.ts";
 
 export const StyleSchema = createSchema({
   name: text,
