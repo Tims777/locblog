@@ -4,7 +4,6 @@ import { FlightSchema } from "../schema/flight.ts";
 import { GallerySchema } from "../schema/gallery.ts";
 import { PlaceDetailsSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
-import object from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.11.2/src/object.ts";
 
 export interface QueryProps {
   where?: Filter | Record<string, string>;
