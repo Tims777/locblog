@@ -7,7 +7,7 @@ import Globe from "../islands/Globe.tsx";
 import configureGlobe from "../configurators/Globe.ts";
 import DocumentOverview from "../components/DocumentOverview.tsx";
 import configureDocumentOverview from "../configurators/DocumentOverview.ts";
-import Navigation from "../components/Navigation.tsx";
+import Navigation from "../islands/Navigation.tsx";
 import type { ConfiguratorContext } from "../types.d.ts";
 
 const config = {

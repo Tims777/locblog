@@ -1,4 +1,11 @@
-import { type ComponentChild, createElement, render, type VNode } from "preact";
+import {
+  type ComponentChild,
+  type ComponentType,
+  createElement,
+  Fragment,
+  render,
+  type VNode,
+} from "preact";
 import { type StateUpdater } from "preact/hooks";
 
 export function renderToElement(node: ComponentChild): Element {
@@ -23,16 +30,22 @@ export function createStepper(
 }
 
 export function revive(el: unknown): VNode | null {
-  if (el && typeof el === "object" && "type" in el && "props" in el) {
-    if (typeof el.type === "string" && typeof el.props === "object") {
-      const type = el.type;
-      const { children, ...props } = el.props as Record<string, unknown>;
-      const resurectedChildren = Array.isArray(children)
-        ? children.map(revive)
-        : revive(children);
-      return createElement(type, props, resurectedChildren);
-    }
+  if (el === null || el === undefined) {
+    return null;
   }
+  if (Array.isArray(el)) {
+    return createElement(Fragment, {}, el.map(revive));
+  }
+  if (typeof el === "object" && "props" in el) {
+    if (typeof el.props === "object") {
+      const type = "type" in el ? el.type as ComponentType : Fragment;
+      const { children, ...props } = el.props as { children: unknown };
+      return createElement(type, props, revive(children));
+    }
+  } else if (["string", "number", "boolean"].indexOf(typeof el) >= 0) {
+    return createElement(Fragment, {}, el);
+  }
+  console.warn("Could not revive", el, typeof el);
   return null;
 }
 
