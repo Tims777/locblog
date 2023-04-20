@@ -4,6 +4,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { Mdast } from "preactify-markdown/types.d.ts";
 import db from "../services/database.ts";
 import md from "../services/markdown.ts";
+import redirect from "../services/redirect.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
 
 export const config: RouteConfig = {
@@ -37,7 +38,7 @@ export const handler: Handlers<PreparedDocument> = {
     });
 
     if (!docs.length) {
-      return ctx.renderNotFound();
+      return redirect.for(req.url) ?? ctx.renderNotFound();
     }
 
     const doc = docs[0];
