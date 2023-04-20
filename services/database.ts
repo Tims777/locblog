@@ -6,6 +6,7 @@ import { PlaceDetailsSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
 
 export interface QueryProps {
+  what?: string[];
   where?: Filter | Record<string, string>;
   orderBy?: string;
   limit?: number;
@@ -76,17 +77,22 @@ class View<S> {
   ) {}
 
   public async query(props?: QueryProps) {
+    const result = await this.execute(props);
+    const validator = array.of(this.schema);
+    return validator(result);
+  }
+
+  public async execute<T>(props?: QueryProps) {
     const client = await this.database.pool.connect();
     const args: unknown[] = [];
-    let query = `select * from ${this.name}`;
+    let query = `select ${props?.what?.join(", ") ?? "*"} from ${this.name}`;
     if (props?.where) query += ` where ${prepare(props?.where, args)}`;
     if (props?.orderBy) query += ` order by ${props.orderBy}`;
     if (props?.limit) query += ` limit ${props.limit}`;
     if (props?.offset) query += ` offset ${props.offset}`;
-    const result = await client.queryObject(query, args);
+    const result = await client.queryObject<T>(query, args);
     client.release();
-    const validator = array.of(this.schema);
-    return validator(result.rows);
+    return result.rows;
   }
 }
 

@@ -9,18 +9,36 @@ export interface DocumentOverviewProps {
 
 export default function DocumentOverview(props: DocumentOverviewProps) {
   const navigation = [];
-  if (props.page != 0) {
+  const navigationClasses = [
+    "text-center",
+    "m-2",
+    "children:(mx-1,no-underline,hover:(underline,decoration-solid))",
+  ].join(" ");
+  if (props.page > 1) {
     navigation.push(
       <a href={`?page=${props.page - 1}`}>&larr;</a>,
     );
   }
-  if (props.page != props.pageCount) {
+  const pageCount = props.pageCount ?? 0;
+  if (pageCount > 1) {
+    for (let i = 1; i <= pageCount; i++) {
+      navigation.push(
+        <a href={`?page=${i}`} class={i == props.page ? "font-bold" : ""}>
+          {i}
+        </a>,
+      );
+    }
+  }
+  if (props.page < (props.pageCount ?? Infinity)) {
     navigation.push(
       <a href={`?page=${props.page + 1}`}>&rarr;</a>,
     );
   }
   return (
     <>
+      <div class={navigationClasses}>
+        {navigation}
+      </div>
       <div class="not-prose">
         {props.documents.map((p) => (
           <Postcard
@@ -30,7 +48,7 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
           />
         ))}
       </div>
-      <div class="text-center">
+      <div class={navigationClasses}>
         {navigation}
       </div>
     </>

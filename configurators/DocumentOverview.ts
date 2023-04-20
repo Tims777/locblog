@@ -2,6 +2,8 @@ import db, { Condition, Filter } from "../services/database.ts";
 import type { Directive } from "preactify-markdown/types.d.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
 
+const PAGE_SIZE = 10;
+
 export default async function configure(
   directive: Directive,
   context?: ConfiguratorContext,
@@ -9,17 +11,28 @@ export default async function configure(
   const attribs = directive.attributes ?? {};
   const where = getFilter(attribs);
   const orderBy = "published desc";
-  const limit = 10;
-  const page = getPageNumber(context?.req.url ?? "");
-  const offset = page * limit;
-  const query = db.document.query({ where, orderBy, limit, offset });
-  return { documents: await query, page };
+  const limit = PAGE_SIZE;
+  const { total } = (await db.document.execute<{ total: bigint }>({
+    what: ["count(*) as total"],
+    where,
+  }))[0];
+  const pageCount = Math.ceil(Number(total) / PAGE_SIZE);
+  const page = getPageNumber(context?.req.url ?? "", pageCount);
+  const offset = (page - 1) * PAGE_SIZE;
+  const documents = await db.document.query({ where, orderBy, limit, offset });
+  return { documents, page, pageCount };
 }
 
-function getPageNumber(url: string) {
+function getPageNumber(url: string, max: number) {
+  // 1-indexed for end users convenience
   const param = new URL(url).searchParams.get("page");
-  const num = param ? parseInt(param) : 0;
-  return num >= 0 ? num : 0;
+  const num = param ? parseInt(param) : 1;
+  if (num >= 1) {
+    if (num <= max) return num;
+    else return max;
+  } else {
+    return 0;
+  }
 }
 
 function getFilter(attribs: Record<string, string | null | undefined>) {
