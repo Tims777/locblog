@@ -19,7 +19,7 @@ class RedirectService {
                 /\$([0-9]+)/,
                 (_, index) => index in groups ? groups[index] : "",
               );
-              return Response.redirect(target);
+              return Response.redirect(target, 301);
             }
         }
         return null;
