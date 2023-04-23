@@ -19,7 +19,7 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
       <a href={`?page=${props.page - 1}`}>&larr;</a>,
     );
   }
-  const pageCount = 20;
+  const pageCount = props.pageCount ?? 0;
   if (pageCount > 1) {
     for (let i = 1; i <= pageCount; i++) {
       navigation.push(
