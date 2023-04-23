@@ -1,5 +1,5 @@
 import MarkdownPreactifier from "preactify-markdown/mod.ts";
-import Gallery from "../islands/Gallery.tsx";
+import Gallery from "../components/Gallery.tsx";
 import configureGallery from "../configurators/Gallery.ts";
 import Map from "../islands/Map.tsx";
 import configureMap from "../configurators/Map.ts";

@@ -1,7 +1,7 @@
-import { type VNode } from "preact";
+import type { ComponentChildren } from "preact";
 
 interface GalleryRowProps {
-  children?: VNode | VNode[];
+  children: ComponentChildren;
 }
 
 function count(x: unknown | unknown[]): number {

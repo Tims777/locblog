@@ -3,6 +3,8 @@ import { makeArray } from "../helpers/preact-helpers.ts";
 import { type Media } from "../schema/media.ts";
 import GalleryCaption from "./GalleryCaption.tsx";
 
+export const galleryContentClass = "gallery-content";
+
 function appendClasses(
   props: Record<string, unknown>,
   ...newClassNames: string[]
@@ -36,10 +38,10 @@ export interface CustomGalleryContent {
   content: VNode;
 }
 
-type GalleryContentProps = { class: string } & (Media | CustomGalleryContent);
+type GalleryContentProps = (Media | CustomGalleryContent);
 
 export default function GalleryContent(props: GalleryContentProps) {
-  const contentClasses = [props.class, "w-full", "peer/content"];
+  const contentClasses = [galleryContentClass, "w-full", "peer/content"];
   let caption, content;
   switch (props.type) {
     case "image": {

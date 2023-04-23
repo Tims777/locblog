@@ -4,6 +4,7 @@ import { type SlideData, type UIElementData } from "photoswipe";
 import GalleryCaption from "../components/GalleryCaption.tsx";
 import { render } from "preact";
 import { createContext } from "preact";
+import { Head } from "$fresh/runtime.ts";
 
 const LIGHTBOX_CONTEXT = createContext({ initialized: false });
 
@@ -98,5 +99,5 @@ export default function LightBox(props: LightBoxProps) {
 
     context.initialized = true;
   }
-  return null;
+  return <script/>;
 }
