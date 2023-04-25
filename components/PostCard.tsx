@@ -67,7 +67,7 @@ export function BackSide(props: PostCardProps) {
       class="absolute w-full h-full px-4 py-8 bg-gray-50 rotate-y-180 preserve-3d"
       href={props.href}
     >
-      <div class="h-full w-1/2 float-left flex place-content-center place-items-center border-(r-1,gray-600)">
+      <div class="h-full w-1/2 float-left flex place-content-center place-items-center border-(r-1,gray-600) overflow-y-auto">
         {props.summary}
       </div>
       <div class="h-full w-1/2 float-left">
