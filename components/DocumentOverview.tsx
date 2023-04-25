@@ -1,5 +1,5 @@
 import { type Document } from "../schema/document.ts";
-import Postcard from "./Postcard.tsx";
+import PostCard from "./PostCard.tsx";
 
 export interface DocumentOverviewProps {
   documents: Document[];
@@ -41,9 +41,10 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
       </div>
       <div class="not-prose">
         {props.documents.map((p) => (
-          <Postcard
+          <PostCard
             title={p.title}
             image={p.thumbnail?.resource}
+            summary={summarize(p.content)}
             href={p.path}
           />
         ))}
@@ -53,4 +54,16 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
       </div>
     </>
   );
+}
+
+function summarize(content: string, maxWords = 50) {
+  const paragraphs = content.split("\n").filter((l) =>
+    l && !l.startsWith("#") && !l.startsWith(":")
+  );
+  let words = paragraphs.length ? paragraphs[0].split(" ") : [];
+  if (words.length > maxWords) {
+    words = words.slice(0, maxWords);
+  }
+  words.push("...");
+  return words.join(" ");
 }

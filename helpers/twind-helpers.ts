@@ -15,10 +15,18 @@ const typographyExtend = {
   },
 };
 
+const rules = [
+  [/^rotate-y-(\d+)$/, ([_, match]: any) => ({ transform:  `rotateY(${match}deg)` })],
+  [/^backface-(\w+)$/, ([_, match]: any) => ({ "backface-visibility": match })],
+  [/^perspective-(\d+)$/, ([_, match]: any) => ({ "perspective": `${match * 100}px` })],
+  ["preserve-3d", { "transform-style": "preserve-3d" }],
+]
+
 const twindConfig: Options = {
   ...defineConfig({
     presets: [presetTailWind(), presetTypography({ extend: typographyExtend })],
     variants: [["children", "&>*"]],
+    rules: rules as any,
   }),
   selfURL: import.meta.url,
 };
