@@ -12,7 +12,7 @@ export default function PostCard(props: PostCardProps) {
     "shadow-lg",
     "shadow-gray-500",
     "group-hover:rotate-y-10",
-    "group-focus:rotate-y-180",
+    "group-focus-within:rotate-y-180",
     "transition duration-1000",
     "children:backface-hidden",
     "preserve-3d",
@@ -64,17 +64,19 @@ export function FrontSide(props: PostCardProps) {
 export function BackSide(props: PostCardProps) {
   return (
     <a
-      class="absolute w-full h-full px-4 py-8 bg-gray-50 rotate-y-180 preserve-3d"
+      class="absolute w-full h-full px-4 py-8 bg-gray-50 rotate-y-180 preserve-3d max-sm:text-sm"
       href={props.href}
     >
-      <div class="h-full w-1/2 float-left flex place-content-center place-items-center border-(r-1,gray-600) overflow-y-auto">
-        {props.summary}
+      <div class="h-full w-1/2 float-left border-(r-1,gray-600) relative flex">
+        <div class="overflow-auto place-self-center max-h-full">
+          {props.summary}
+        </div>
       </div>
       <div class="h-full w-1/2 float-left">
         <div class="h-2/5 w-full">
           <img src="/stamp.png" class="w-1/2 relative float-right" />
         </div>
-        <div class="h-3/5 w-full flex place-content-center place-items-center">
+        <div class="h-3/5 w-full flex place-content-center place-items-center text-center">
           {props.title}
         </div>
       </div>
