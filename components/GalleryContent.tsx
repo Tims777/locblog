@@ -38,7 +38,7 @@ export interface CustomGalleryContent {
   content: VNode;
 }
 
-type GalleryContentProps = (Media | CustomGalleryContent);
+type GalleryContentProps = Media | CustomGalleryContent;
 
 export default function GalleryContent(props: GalleryContentProps) {
   const contentClasses = [galleryContentClass, "w-full", "peer/content"];

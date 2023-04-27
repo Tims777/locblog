@@ -99,5 +99,5 @@ export default function LightBox(props: LightBoxProps) {
 
     context.initialized = true;
   }
-  return <script/>;
+  return <script />;
 }

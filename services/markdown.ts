@@ -8,10 +8,12 @@ import configureGlobe from "../configurators/Globe.ts";
 import DocumentOverview from "../components/DocumentOverview.tsx";
 import configureDocumentOverview from "../configurators/DocumentOverview.ts";
 import Navigation from "../islands/Navigation.tsx";
+import configureDocumentMetadata from "../configurators/DocumentMetadata.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
 
 const config = {
   div: { component: "div" },
+  meta: { component: "span", configure: configureDocumentMetadata },
   navigation: { component: Navigation },
   documents: {
     component: DocumentOverview,
