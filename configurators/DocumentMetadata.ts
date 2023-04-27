@@ -1,23 +1,6 @@
 import type { Directive } from "preactify-markdown/types.d.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
-
-function format(x: unknown): string | null {
-  switch (typeof x) {
-    case "string":
-      return x;
-    case "number":
-    case "bigint":
-    case "boolean":
-      return x.toString();
-    case "object":
-      if (x === null) return null;
-      else if (x instanceof Date) return x.toLocaleDateString();
-      else return x.toString();
-    case "undefined":
-    default:
-      return null;
-  }
-}
+import formatter from "../services/format.ts";
 
 export default function configure(
   directive: Directive,
@@ -41,7 +24,7 @@ export default function configure(
   return {
     children: directive.children
       .map((x) => "value" in x ? getMetadata(x.value.split(".")) : null)
-      .map(format)
-      .filter((x) => x !== null),
+      .filter((x) => x !== null)
+      .map((x) => formatter.format(x)),
   };
 }
