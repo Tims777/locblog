@@ -17,6 +17,7 @@ interface PreparedDocument {
   header?: Mdast;
   content: Mdast;
   footer?: Mdast;
+  summary?: string;
 }
 
 async function parseAndConfigure(
@@ -43,6 +44,7 @@ export const handler: Handlers<PreparedDocument> = {
 
     const doc = docs[0];
     const title = doc.title;
+    const summary = doc.summary;
     const style = doc.style?.classes ?? [];
     const parseContext = { req, ctx, doc };
     const content = (await parseAndConfigure(doc.content, parseContext))!;
@@ -51,6 +53,7 @@ export const handler: Handlers<PreparedDocument> = {
 
     return ctx.render({
       title,
+      summary,
       style,
       header,
       content,
@@ -61,6 +64,7 @@ export const handler: Handlers<PreparedDocument> = {
 
 export default function DocumentPage(props: PageProps<PreparedDocument>) {
   const title = props.data.title ?? "LocBlog";
+  const summary = props.data.summary ?? "A blog about travelling places.";
 
   const body = [];
   if (props.data.header) {
@@ -75,6 +79,7 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
     <>
       <Head>
         <title>{title}</title>
+        <meta name="description" content={summary} />
       </Head>
       <body class={props.data.style.join(" ")}>
         {body}
