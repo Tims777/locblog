@@ -44,7 +44,7 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
           <PostCard
             title={p.title}
             image={p.thumbnail?.resource}
-            summary={summarize(p.content)}
+            summary={p.summary}
             href={p.path}
           />
         ))}
@@ -54,16 +54,4 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
       </div>
     </>
   );
-}
-
-function summarize(content: string, maxWords = 50) {
-  const paragraphs = content.split("\n").filter((l) =>
-    l && !l.startsWith("#") && !l.startsWith(":")
-  );
-  let words = paragraphs.length ? paragraphs[0].split(" ") : [];
-  if (words.length > maxWords) {
-    words = words.slice(0, maxWords);
-  }
-  words.push("...");
-  return words.join(" ");
 }

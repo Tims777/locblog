@@ -8,6 +8,7 @@ export const DocumentSchema = createSchema({
   type: text,
   title: text,
   content: text,
+  summary: text.optional(),
   thumbnail: MediaSchema.optional(),
   published: date.optional(),
   author: AuthorSchema.optional(),
