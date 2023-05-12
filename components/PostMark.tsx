@@ -1,4 +1,5 @@
 import { useId } from "preact/hooks";
+import CirclePath from "./CirclePath.tsx";
 
 const _2PI = 6.2831853;
 
@@ -24,31 +25,15 @@ export default function PostMark(props: PostMarkProps) {
       class={props.class}
       transform={`rotate(${props.rotate ?? 0})`}
     >
-      <circle
-        r={rOuter}
-        stroke="black"
-        fill="transparent"
-        stroke-width={strokeWidth}
-      />
-      <circle
-        id={id}
-        r={rInner}
-        stroke="black"
-        fill="transparent"
-        stroke-width={strokeWidth}
-      />
+      <CirclePath r={rOuter} strokeWidth={strokeWidth} />
+      <CirclePath r={rInner} strokeWidth={strokeWidth} id={id} />
       <text
-        text-anchor="middle"
         textLength={rInner * _2PI}
         lengthAdjust="spacingAndGlyphs"
+        font-size={rOuter - rInner}
         dy={-textOffset}
       >
-        <textPath
-          startOffset="50%"
-          href={`#${id}`}
-          font-size={rOuter - rInner}
-          method="stretch"
-        >
+        <textPath href={`#${id}`}>
           {textContent.trim()}&nbsp;
         </textPath>
       </text>
