@@ -1,7 +1,11 @@
+import PostMark from "./PostMark.tsx";
+
 export interface PostCardProps {
   image?: string;
   title?: string;
   href?: string;
+  posted?: string;
+  author?: string;
   summary?: string;
 }
 
@@ -11,6 +15,7 @@ export default function PostCard(props: PostCardProps) {
     "relative",
     "shadow-lg",
     "shadow-gray-500",
+    "rotate-y-0",
     "group-hover:rotate-y-10",
     "group-focus-within:rotate-y-180",
     "transition duration-1000",
@@ -62,22 +67,39 @@ export function FrontSide(props: PostCardProps) {
 }
 
 export function BackSide(props: PostCardProps) {
+  const containerClasses = [
+    "absolute",
+    "w-full",
+    "h-full",
+    "px-4",
+    "py-8",
+    "bg-gray-50",
+    "rotate-y-180",
+    "max-sm:text-sm",
+  ].join(" ");
+  const addressLines = [props.author, props.title];
   return (
     <a
-      class="absolute w-full h-full px-4 py-8 bg-gray-50 rotate-y-180 preserve-3d max-sm:text-sm"
+      class={containerClasses}
       href={props.href}
     >
       <div class="h-full w-1/2 float-left border-(r-1,gray-600) relative flex">
-        <div class="overflow-auto place-self-center max-h-full">
+        <div class="overflow-auto place-self-center max-h-full font-cursive">
           {props.summary}
         </div>
       </div>
       <div class="h-full w-1/2 float-left">
-        <div class="h-2/5 w-full">
-          <img src="/stamp.png" class="w-1/2 relative float-right" />
+        <div class="h-2/5 w-full relative">
+          <img src="/stamp.png" class="absolute w-1/2 right-0 top-6" />
+          <PostMark
+            text={`Posted ${props.posted}`}
+            class="absolute w-1/3 right-1/3 top-0 font-monospace"
+          />
         </div>
-        <div class="h-3/5 w-full flex place-content-center place-items-center text-center">
-          {props.title}
+        <div class="h-3/5 w-full flex place-content-center place-items-center text-center font-cursive">
+          <ul>
+            {addressLines.map((l) => <li>{l}</li>)}
+          </ul>
         </div>
       </div>
     </a>

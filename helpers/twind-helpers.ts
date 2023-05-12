@@ -19,7 +19,7 @@ const rules: Rule[] = [
   [/^rotate-y-(\d+)$/, ([_, match]) => ({ transform: `rotateY(${match}deg)` })],
   [
     /^backface-(\w+)$/,
-    ([_, match]) => ({ "backface-visibility": match as any }),
+    ([_, match]) => ({ "backface-visibility": match as "visible" | "hidden" }),
   ],
   [
     /^perspective-(\d+)$/,
@@ -28,10 +28,16 @@ const rules: Rule[] = [
   ["preserve-3d", { "transform-style": "preserve-3d" }],
 ];
 
+const fontFamily: Record<string, string[]> = {
+  cursive: ["cursive"],
+  monospace: ["monospace"],
+};
+
 const twindConfig: Options = {
   ...defineConfig({
     presets: [presetTailWind(), presetTypography({ extend: typographyExtend })],
     variants: [["children", "&>*"]],
+    theme: { fontFamily },
     rules,
   }),
   selfURL: import.meta.url,

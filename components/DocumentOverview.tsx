@@ -1,4 +1,5 @@
 import { type Document } from "../schema/document.ts";
+import formatter from "../services/format.ts";
 import PostCard from "./PostCard.tsx";
 
 export interface DocumentOverviewProps {
@@ -45,6 +46,8 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
             title={p.title}
             image={p.thumbnail?.resource}
             summary={p.summary}
+            posted={formatter.format(p.published)}
+            author={p.author?.name}
             href={p.path}
           />
         ))}
