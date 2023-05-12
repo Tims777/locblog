@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import type { ComponentChildren } from "preact";
 import { revive } from "../helpers/preact-helpers.ts";
+import { IS_BROWSER } from "$fresh/runtime.ts";
 
 export interface NavigationProps {
   children: ComponentChildren;
@@ -44,9 +45,7 @@ const toggleClasses = [
 export default function Navigation(props: NavigationProps) {
   const [open, setOpen] = useState<boolean>(false);
 
-  const children = typeof window !== "undefined"
-    ? revive(props.children)
-    : props.children;
+  const children = IS_BROWSER ? revive(props.children) : props.children;
 
   const toggle = () => setOpen((o) => !o);
 
