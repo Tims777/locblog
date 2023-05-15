@@ -1,5 +1,7 @@
 import PostMark from "./PostMark.tsx";
 
+const MAX_ADDRESS_LINES = 5;
+
 export interface PostCardProps {
   image?: string;
   title?: string;
@@ -7,6 +9,7 @@ export interface PostCardProps {
   posted?: string;
   author?: string;
   summary?: string;
+  address?: string[];
 }
 
 export default function PostCard(props: PostCardProps) {
@@ -77,7 +80,10 @@ export function BackSide(props: PostCardProps) {
     "rotate-y-180",
     "max-sm:text-sm",
   ].join(" ");
-  const addressLines = [props.author, props.title];
+
+  let address = props.address ?? [];
+  if (address.length > MAX_ADDRESS_LINES) address = address.slice(0, MAX_ADDRESS_LINES - 1).concat("...");
+
   return (
     <a
       class={containerClasses}
@@ -98,7 +104,7 @@ export function BackSide(props: PostCardProps) {
         </div>
         <div class="h-3/5 w-full flex place-content-center place-items-center text-center font-cursive">
           <ul>
-            {addressLines.map((l) => <li>{l}</li>)}
+            {address.map((l) => <li>{l}</li>)}
           </ul>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import { AuthorSchema } from "./author.ts";
 import { MediaSchema } from "./media.ts";
+import { PlaceSchema } from "./place.ts";
 import { StyleSchema } from "./style.ts";
-import { createSchema, date, text, Type, uuid } from "./validators.ts";
+import { array, createSchema, date, text, Type, uuid } from "./validators.ts";
 
 export const DocumentSchema = createSchema({
   id: uuid,
@@ -14,6 +15,7 @@ export const DocumentSchema = createSchema({
   author: AuthorSchema.optional(),
   style: StyleSchema.optional(),
   path: text.optional(),
+  places: array.of(PlaceSchema.optional())
 });
 
 export type Document = Type<typeof DocumentSchema>;
