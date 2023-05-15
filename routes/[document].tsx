@@ -6,6 +6,7 @@ import db from "../services/database.ts";
 import md from "../services/markdown.ts";
 import redirect from "../services/redirect.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
+import { renderToString } from "preact-render-to-string";
 
 export const config: RouteConfig = {
   routeOverride: "/:path(.*?)",
@@ -51,6 +52,12 @@ export const handler: Handlers<PreparedDocument> = {
     const header = await parseAndConfigure(doc.style?.header, parseContext);
     const footer = await parseAndConfigure(doc.style?.footer, parseContext);
 
+    if (doc.type == "svg") {
+      const svg = md.preactify(content)!;
+      const headers = { "Content-Type": "image/svg+xml" };
+      return new Response(renderToString(svg), { headers });
+    }
+
     return ctx.render({
       title,
       summary,
@@ -66,13 +73,13 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
   const title = props.data.title ?? "LocBlog";
   const summary = props.data.summary ?? "A blog about travelling places.";
 
-  const body = [];
+  const content = [];
   if (props.data.header) {
-    body.push(<header>{md.preactify(props.data.header)}</header>);
+    content.push(<header>{md.preactify(props.data.header)}</header>);
   }
-  body.push(<main>{md.preactify(props.data.content)}</main>);
+  content.push(<main>{md.preactify(props.data.content)}</main>);
   if (props.data.footer) {
-    body.push(<footer>{md.preactify(props.data.footer)}</footer>);
+    content.push(<footer>{md.preactify(props.data.footer)}</footer>);
   }
 
   return (
@@ -81,9 +88,9 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
         <title>{title}</title>
         <meta name="description" content={summary} />
       </Head>
-      <body class={props.data.style.join(" ")}>
-        {body}
-      </body>
+      <div class={props.data.style.join(" ")}>
+        {content}
+      </div>
     </>
   );
 }
