@@ -11,6 +11,7 @@ import Overlay from "ol/Overlay";
 import Cluster from "ol/source/Cluster";
 import Style from "ol/style/Style";
 import Icon from "ol/style/Icon";
+import { Control, defaults as defaultControls } from "ol/control";
 import type MapEvent from "ol/MapEvent";
 import { useGeographic } from "ol/proj";
 import { Head } from "$fresh/runtime.ts";
@@ -40,6 +41,22 @@ const PROP_DEFAULTS: Required<MapProps> = {
   focus: true,
   permalink: true,
 };
+
+class ReturnToStartPage extends Control {
+  constructor() {
+    const returnHome = () => window.location.href = "/";
+
+    const element = renderToElement(
+      <div class="ol-unselectable ol-control top-16 left-2">
+        <button title="Start page" onClick={returnHome}>🏠</button>
+      </div>,
+    );
+
+    super({
+      element: element,
+    });
+  }
+}
 
 export default function Map(props: MapProps) {
   return (
@@ -97,6 +114,10 @@ function loadStyle() {
   });
 }
 
+function loadControls() {
+  return defaultControls().extend([new ReturnToStartPage()]);
+}
+
 function updatePermalink(event: MapEvent) {
   const view = event.map.getView();
   const center = view.getCenter() ?? [undefined, undefined];
@@ -136,6 +157,7 @@ function createMap(target: HTMLElement, props: MapProps) {
   const p = { ...PROP_DEFAULTS, ...props };
   useGeographic();
   const style = loadStyle();
+  const controls = loadControls();
   const features = loadFeatures(p.features);
   const layers = loadLayers(features, style);
   const view = loadView(p.center, p.zoom);
@@ -171,6 +193,7 @@ function createMap(target: HTMLElement, props: MapProps) {
   });
 
   const map = new OlMap({
+    controls,
     target,
     layers,
     view,
