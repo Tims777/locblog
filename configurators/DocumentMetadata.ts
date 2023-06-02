@@ -10,10 +10,11 @@ export default function configure(
     return false;
   }
 
-  function getMetadata(key: string[], target = context?.doc ?? []): unknown {
+  // deno-lint-ignore no-explicit-any
+  function getMetadata(key: string[], target: Record<string, any>): unknown {
     if (key.length == 0) {
       return target;
-    } else if (key[0] in target) {
+    } else if (target && key[0] in target) {
       const child = target[key[0] as keyof typeof target];
       return getMetadata(key.splice(1), child);
     } else {
@@ -21,9 +22,11 @@ export default function configure(
     }
   }
 
+  const metadata = context?.doc ?? [];
+
   return {
     children: directive.children
-      .map((x) => "value" in x ? getMetadata(x.value.split(".")) : null)
+      .map((x) => "value" in x ? getMetadata(x.value.split("."), metadata) : null)
       .filter((x) => x !== null)
       .map((x) => formatter.format(x)),
   };
