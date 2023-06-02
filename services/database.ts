@@ -4,6 +4,7 @@ import { FlightSchema } from "../schema/flight.ts";
 import { GallerySchema } from "../schema/gallery.ts";
 import { PlaceDetailsSchema } from "../schema/place.ts";
 import { array } from "../schema/validators.ts";
+import { CommentSchema } from "../schema/comment.ts";
 
 export interface QueryProps {
   what?: string[];
@@ -119,6 +120,7 @@ class Database {
   }
 
   document = new View(this, "document_aggregate", DocumentSchema);
+  comment = new View(this, "comment", CommentSchema);
   gallery = new View(this, "gallery_aggregate", GallerySchema);
   place_overview = new View(this, "place_aggregate", PlaceDetailsSchema);
   flight_overview = new View(this, "flight_aggregate", FlightSchema);

@@ -9,11 +9,13 @@ import DocumentOverview from "../components/DocumentOverview.tsx";
 import configureDocumentOverview from "../configurators/DocumentOverview.ts";
 import Navigation from "../islands/Navigation.tsx";
 import configureDocumentMetadata from "../configurators/DocumentMetadata.ts";
+import configureDocumentComments from "../configurators/DocumentComments.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
 
 const config = {
   div: { component: "div" },
   meta: { component: "span", configure: configureDocumentMetadata },
+  comments: { component: "div", configure: configureDocumentComments },
   navigation: { component: Navigation },
   documents: {
     component: DocumentOverview,
