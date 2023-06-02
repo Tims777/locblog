@@ -21,8 +21,12 @@ export class Condition<T> {
   ) {}
 
   public prepare(args: unknown[]) {
-    const argIndex = args.push(this.value);
-    return `${this.field} ${this.operator} $${argIndex}`;
+    if (this.value === null) {
+      return `${this.field} ${this.operator}`;
+    } else {
+      const argIndex = args.push(this.value);
+      return `${this.field} ${this.operator} $${argIndex}`;
+    }
   }
 
   public static eq<T>(field: string, value: T) {
@@ -35,6 +39,14 @@ export class Condition<T> {
 
   public static like<T>(field: string, value: T) {
     return new Condition(field, value, "like");
+  }
+
+  public static isNull(field: string) {
+    return new Condition(field, null, "is null");
+  }
+
+  public static isNotNull(field: string) {
+    return new Condition(field, null, "is not null");
   }
 }
 

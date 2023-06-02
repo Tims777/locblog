@@ -17,26 +17,23 @@ export default async function configure(
     where,
   }))[0];
   const pageCount = Math.ceil(Number(total) / PAGE_SIZE);
-  const page = getPageNumber(context?.req.url ?? "", pageCount);
-  const offset = (page - 1) * PAGE_SIZE;
+  const page = getPageNumber(context?.req.url ?? "", 1, pageCount);
+  const offset = Math.max(page - 1, 0) * PAGE_SIZE;
   const documents = await db.document.query({ where, orderBy, limit, offset });
   return { documents, page, pageCount };
 }
 
-function getPageNumber(url: string, max: number) {
-  // 1-indexed for end users convenience
+function getPageNumber(url: string, min: number, max: number) {
   const param = new URL(url).searchParams.get("page");
-  const num = param ? parseInt(param) : 1;
-  if (num >= 1) {
-    if (num <= max) return num;
-    else return max;
-  } else {
-    return 0;
-  }
+  const num = param ? parseInt(param) : min;
+  if (num < min) return min;
+  if (num > max) return max;
+  return num;
 }
 
 function getFilter(attribs: Record<string, string | null | undefined>) {
   const filter = new Filter();
+  filter.add(Condition.isNotNull("published"));
   if (attribs.type) filter.add(Condition.eq("type", attribs.type));
   if (attribs.category) {
     const categoryFilter = new Filter([], "or");
