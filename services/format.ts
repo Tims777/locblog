@@ -20,6 +20,10 @@ class FormattingService {
     }
   }
 
+  public surround(x: string, prefix?: string, suffix?: string): string {
+    return [prefix, x, suffix].filter(x => x !== undefined).join("");
+  }
+
   // deno-lint-ignore ban-types
   public formatObject(x: object): string {
     if (x instanceof Date) return x.toLocaleDateString(this.locale);
