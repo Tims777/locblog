@@ -19,11 +19,11 @@ export default function GalleryRow(props: GalleryRowProps) {
   const classes = [
     "grid",
     `grid-cols-(${childCount},max-sm:1)`,
-    `children:aspect-[3/${childCount}]`,
     "my-2",
     "gap-2",
     "items-center",
     "children:w-full",
   ];
+  if (childCount > 1) classes.push(`children:aspect-[3/${childCount}]`);
   return <div class={classes.join(" ")}>{props.children}</div>;
 }
