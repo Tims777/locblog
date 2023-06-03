@@ -1,9 +1,13 @@
+interface FormatArgs {
+  dateOnly?: boolean;
+}
+
 class FormattingService {
   constructor(
     private locale = Deno.env.get("LANG") ?? navigator.language,
   ) {}
 
-  public format(x: unknown): string {
+  public format(x: unknown, args?: FormatArgs): string {
     switch (typeof x) {
       case "string":
         return x;
@@ -13,7 +17,7 @@ class FormattingService {
         return x.toString();
       case "object":
         if (x === null) return "";
-        return this.formatObject(x);
+        return this.formatObject(x, args);
       case "undefined":
       default:
         return "";
@@ -25,15 +29,10 @@ class FormattingService {
   }
 
   // deno-lint-ignore ban-types
-  public formatObject(x: object): string {
+  public formatObject(x: object, args?: FormatArgs): string {
     if (x instanceof Date) {
       const date = x.toLocaleDateString(this.locale);
-      if (
-        x.getHours() == 12 &&
-        x.getMinutes() == 0 &&
-        x.getSeconds() == 0 &&
-        x.getMilliseconds() == 0
-      ) {
+      if (args?.dateOnly) {
         return date;
       } else {
         const time = x.toLocaleTimeString(this.locale);

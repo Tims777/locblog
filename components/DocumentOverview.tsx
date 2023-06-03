@@ -46,7 +46,7 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
             title={p.title}
             image={p.thumbnail?.resource}
             summary={p.summary}
-            posted={formatter.format(p.published)}
+            posted={formatter.format(p.published, { dateOnly: true })}
             author={p.author?.name}
             href={p.path}
             address={p.places.map((p) => p?.name ?? "")}
