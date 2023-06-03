@@ -1,10 +1,9 @@
-import { useContext, useEffect, useRef } from "preact/hooks";
+import { useContext, useEffect } from "preact/hooks";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import { type SlideData, type UIElementData } from "photoswipe";
 import GalleryCaption from "../components/GalleryCaption.tsx";
 import { render } from "preact";
 import { createContext } from "preact";
-import { Head } from "$fresh/runtime.ts";
 
 const LIGHTBOX_CONTEXT = createContext({ initialized: false });
 
@@ -34,7 +33,7 @@ const itemDataFilter = (
   if (imgEl instanceof HTMLImageElement) {
     const maxZoom = 2;
     const width = window.screen.width * maxZoom;
-    const ratio = imgEl.height / imgEl.width;
+    const ratio = imgEl.naturalHeight / imgEl.naturalWidth;
     const height = width * ratio;
     itemData.w = width;
     itemData.h = height;
