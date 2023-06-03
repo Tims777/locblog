@@ -52,7 +52,7 @@ export default function GalleryContent(props: GalleryContentProps) {
           data-pswp-description={props.description}
         >
           <img
-            class="w-full object-cover aspect-[3/2]"
+            class="w-full object-cover aspect-[1/1]"
             src={props.preview ?? props.resource}
             alt={props.alt}
             title={props.title}
