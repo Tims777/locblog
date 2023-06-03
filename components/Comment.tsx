@@ -24,13 +24,9 @@ export default function Comment(props: CommentProps) {
   ].join(" ");
   return (
     <div class="w-full flex items-center mb-4">
-      <div
-        tabIndex={0}
-        class="flex-none w-10 h-10 relative group"
-        title={props.author}
-      >
+      <div class="flex-none w-10 h-10 relative group" tabIndex={0}>
         <div class={expandingAuthorCircleClasses}>
-          <span class="inline-block w-4 text-center font-bold">
+          <span class="inline-block w-4 text-center font-bold font-monospace text-xl leading-10">
             {props.author[0]}
           </span>
           <span class="invisible group-focus-within:visible group-hover:visible">

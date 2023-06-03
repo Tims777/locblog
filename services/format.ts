@@ -21,13 +21,26 @@ class FormattingService {
   }
 
   public surround(x: string, prefix?: string, suffix?: string): string {
-    return [prefix, x, suffix].filter(x => x !== undefined).join("");
+    return [prefix, x, suffix].filter((x) => x !== undefined).join("");
   }
 
   // deno-lint-ignore ban-types
   public formatObject(x: object): string {
-    if (x instanceof Date) return x.toLocaleDateString(this.locale);
-    else return x.toString();
+    if (x instanceof Date) {
+      const date = x.toLocaleDateString(this.locale);
+      if (
+        x.getHours() == 12 &&
+        x.getMinutes() == 0 &&
+        x.getSeconds() == 0 &&
+        x.getMilliseconds() == 0
+      ) {
+        return date;
+      } else {
+        const time = x.toLocaleTimeString(this.locale);
+        return `${date} ${time}`;
+      }
+    }
+    return x.toString();
   }
 }
 
