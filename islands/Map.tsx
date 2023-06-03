@@ -122,8 +122,8 @@ function updatePermalink(event: MapEvent) {
   const view = event.map.getView();
   const center = view.getCenter() ?? [undefined, undefined];
   const state = {
-    lat: center[0]?.toFixed(3),
-    lon: center[1]?.toFixed(3),
+    lat: center[1]?.toFixed(3),
+    lon: center[0]?.toFixed(3),
     zoom: view.getZoom()?.toFixed(0),
   };
   const url = new URL(window.location.href);
@@ -137,7 +137,7 @@ function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
   const params = new URL(window.location.href).searchParams;
   let center = defaultCenter;
   if (params.has("lat") && params.has("lon")) {
-    center = [params.get("lat")!, params.get("lon")!].map(
+    center = [params.get("lon")!, params.get("lat")!].map(
       parseFloat,
     ) as GeoLocation;
   }
