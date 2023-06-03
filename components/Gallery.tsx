@@ -56,7 +56,7 @@ export default function Gallery(props: GalleryProps) {
 
   return (
     <>
-      <figure class={[galleryClass, "not-prose"].join(" ")}>
+      <figure class={[galleryClass, "not-prose", "m-2"].join(" ")}>
         {rows}
       </figure>
       <LightBox
