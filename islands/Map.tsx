@@ -50,7 +50,7 @@ class ReturnToStartPage extends Control {
       <div class="ol-unselectable ol-control top-16 left-2">
         <button title="Start page" onClick={returnHome}>🏠</button>
       </div>,
-    );
+    ) as HTMLElement;
 
     super({
       element: element,

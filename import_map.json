@@ -16,7 +16,7 @@
     "photoswipe": "https://esm.sh/photoswipe@5.3.7",
     "photoswipe/": "https://esm.sh/photoswipe@5.3.7/",
     "d3": "https://esm.sh/d3@7.8.2",
-    "ol/": "https://cdn.skypack.dev/ol@7.3.0/",
+    "ol/": "https://esm.sh/ol@7.4.0/",
     "computed-types": "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.11.2/src/index.ts",
     "preactify-markdown/": "https://raw.githubusercontent.com/Tims777/preactify-markdown/0.3.1/"
   }
