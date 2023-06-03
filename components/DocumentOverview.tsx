@@ -49,7 +49,7 @@ export default function DocumentOverview(props: DocumentOverviewProps) {
             posted={formatter.format(p.published, { dateOnly: true })}
             author={p.author?.name}
             href={p.path}
-            address={p.places.map((p) => p?.name ?? "")}
+            address={p.places?.map((p) => p.name)}
           />
         ))}
       </div>

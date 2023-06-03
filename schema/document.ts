@@ -15,7 +15,7 @@ export const DocumentSchema = createSchema({
   author: AuthorSchema.optional(),
   style: StyleSchema.optional(),
   path: text.optional(),
-  places: array.of(PlaceSchema.optional())
+  places: array.of(PlaceSchema).optional()
 });
 
 export type Document = Type<typeof DocumentSchema>;

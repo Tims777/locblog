@@ -16,7 +16,7 @@ class RedirectService {
         const groups = result.pathname.groups;
         const target = to.replace(
           /\$([0-9]+)/,
-          (_, index) => index in groups ? groups[index] : "",
+          (_, index) => index in groups ? groups[index] ?? "" : "",
         );
         return Response.redirect(target, 301);
       }
