@@ -1,5 +1,4 @@
 import OlMap from "ol/Map";
-import View from "ol/View";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import OSM from "ol/source/OSM";
@@ -145,7 +144,7 @@ function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
   if (params.has("zoom")) {
     zoom = parseFloat(params.get("zoom")!);
   }
-  return new View({
+  return Promise.resolve({
     minZoom,
     maxZoom,
     center,
@@ -154,8 +153,8 @@ function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
 }
 
 function createMap(target: HTMLElement, props: MapProps) {
-  const p = { ...PROP_DEFAULTS, ...props };
   useGeographic();
+  const p = { ...PROP_DEFAULTS, ...props };
   const style = loadStyle();
   const controls = loadControls();
   const features = loadFeatures(p.features);
