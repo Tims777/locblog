@@ -4,7 +4,7 @@ interface FormatArgs {
 
 class FormattingService {
   constructor(
-    private locale = Deno.env.get("LANG") ?? navigator.language,
+    private locale = Deno.env.get("LOCALE") ?? navigator.language,
   ) {}
 
   public format(x: unknown, args?: FormatArgs): string {
@@ -28,7 +28,6 @@ class FormattingService {
     return [prefix, x, suffix].filter((x) => x !== undefined).join("");
   }
 
-  // deno-lint-ignore ban-types
   public formatObject(x: object, args?: FormatArgs): string {
     if (x instanceof Date) {
       const date = x.toLocaleDateString(this.locale);
