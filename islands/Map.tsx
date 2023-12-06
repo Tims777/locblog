@@ -2,6 +2,8 @@ import OlMap from "ol/Map";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import OSM from "ol/source/OSM";
+import StadiaMaps from "ol/source/StadiaMaps";
+import XYZ from "ol/source/XYZ";
 import VectorSource from "ol/source/Vector";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
@@ -88,18 +90,25 @@ function loadLayers(features: Feature[], style: Style) {
     distance: 10,
     minDistance: 5,
   });
-  const tileSource = new OSM({}); // new Stamen({layer: "terrain-background"})
   return [
-    new TileLayer({
-      source: tileSource,
-      preload: Infinity,
+    /*new TileLayer({
+      source: new StadiaMaps({layer: "stamen_terrain_background", retina: true }),
     }),
-    new VectorLayer({
+    new TileLayer({
+      source: new StadiaMaps({layer: "stamen_terrain_lines", retina: true }),
+    }),*/
+    new TileLayer({
+      source: new XYZ({ url: "https://tiles-eu.stadiamaps.com/data/satellite/{z}/{x}/{y}.jpg", maxZoom: 20 })
+    }),
+    new TileLayer({
+      source: new StadiaMaps({layer: "stamen_terrain_labels", retina: true }),
+    }),
+    /*new VectorLayer({
       source: clusterSource,
       style,
       updateWhileInteracting: true,
       updateWhileAnimating: true,
-    }),
+    }),*/
   ];
 }
 
