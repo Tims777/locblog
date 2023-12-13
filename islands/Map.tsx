@@ -3,6 +3,7 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import OSM from "ol/source/OSM";
 import StadiaMaps from "ol/source/StadiaMaps";
+import BingMaps from "ol/source/BingMaps.js";
 import XYZ from "ol/source/XYZ";
 import VectorSource from "ol/source/Vector";
 import TileLayer from "ol/layer/Tile";
@@ -97,11 +98,17 @@ function loadLayers(features: Feature[], style: Style) {
     new TileLayer({
       source: new StadiaMaps({layer: "stamen_terrain_lines", retina: true }),
     }),*/
-    new TileLayer({
+    /*new TileLayer({
       source: new XYZ({ url: "https://tiles-eu.stadiamaps.com/data/satellite/{z}/{x}/{y}.jpg", maxZoom: 20 })
+    }),*/
+    new TileLayer({
+      source: new BingMaps({
+        key: Deno.env.get("BING_MAPS_KEY")!,
+        imagerySet: "Aerial",
+      }),
     }),
     new TileLayer({
-      source: new StadiaMaps({layer: "stamen_terrain_labels", retina: true }),
+      source: new StadiaMaps({ layer: "stamen_terrain_labels" }),
     }),
     /*new VectorLayer({
       source: clusterSource,
