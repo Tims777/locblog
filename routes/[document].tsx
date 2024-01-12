@@ -88,9 +88,9 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
         <title>{title}</title>
         <meta name="description" content={summary} />
       </Head>
-      <div class={props.data.style.join(" ")}>
+      <body class={props.data.style.join(" ")}>
         {content}
-      </div>
+      </body>
     </>
   );
 }
