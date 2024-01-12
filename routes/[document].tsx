@@ -58,28 +58,31 @@ export const handler: Handlers<PreparedDocument> = {
       return new Response(renderToString(svg), { headers });
     }
 
-    return ctx.render({
+    ctx.state = {
       title,
       summary,
       style,
       header,
       content,
       footer,
-    });
+    };
+
+    return ctx.render();
   },
 };
 
-export default function DocumentPage(props: PageProps<PreparedDocument>) {
-  const title = props.data.title ?? "LocBlog";
-  const summary = props.data.summary ?? "A blog about travelling places.";
+export default function DocumentPage(props: PageProps<void, PreparedDocument>) {
+  const { header, content, footer, style } = props.state;
+  const title = props.state.title ?? "LocBlog";
+  const summary = props.state.summary ?? "A blog about travelling places.";
 
-  const content = [];
-  if (props.data.header) {
-    content.push(<header>{md.preactify(props.data.header)}</header>);
+  const body = [];
+  if (header) {
+    body.push(<header>{md.preactify(header)}</header>);
   }
-  content.push(<main>{md.preactify(props.data.content)}</main>);
-  if (props.data.footer) {
-    content.push(<footer>{md.preactify(props.data.footer)}</footer>);
+  body.push(<main>{md.preactify(content)}</main>);
+  if (footer) {
+    body.push(<footer>{md.preactify(footer)}</footer>);
   }
 
   return (
@@ -88,8 +91,8 @@ export default function DocumentPage(props: PageProps<PreparedDocument>) {
         <title>{title}</title>
         <meta name="description" content={summary} />
       </Head>
-      <body class={props.data.style.join(" ")}>
-        {content}
+      <body class={style.join(" ")}>
+        {body}
       </body>
     </>
   );
