@@ -96,7 +96,7 @@ class View<S> {
   }
 
   public async execute<T>(props?: QueryProps) {
-    const client = await this.database.pool.connect();
+    const client = await this.database.pool!.connect();
     const args: unknown[] = [];
     let query = `select ${props?.what?.join(", ") ?? "*"} from ${this.name}`;
     if (props?.where) query += ` where ${prepare(props?.where, args)}`;
@@ -110,13 +110,13 @@ class View<S> {
 }
 
 class Database {
-  pool: Pool;
+  pool?: Pool;
 
   constructor(
     dbString = Deno.env.get("DATABASE"),
   ) {
-    if (!dbString) console.error("DATABASE is not set.");
-    this.pool = new Pool(dbString, 3, true);
+    if (dbString) this.pool = new Pool(dbString, 3, true);
+    else console.error("DATABASE is not set.");
   }
 
   document = new View(this, "document_aggregate", DocumentSchema);
