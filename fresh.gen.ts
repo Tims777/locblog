@@ -11,7 +11,7 @@ import * as $LightBox from "./islands/LightBox.tsx";
 import * as $Map from "./islands/Map.tsx";
 import * as $Navigation from "./islands/Navigation.tsx";
 import * as $PlaceDetails from "./islands/PlaceDetails.tsx";
-import { type Manifest } from "$fresh/server.ts";
+import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {

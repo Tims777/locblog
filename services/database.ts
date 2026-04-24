@@ -1,4 +1,4 @@
-import { Pool } from "postgres";
+import { Pool } from "@db/postgres";
 import { DocumentSchema } from "../schema/document.ts";
 import { FlightSchema } from "../schema/flight.ts";
 import { GallerySchema } from "../schema/gallery.ts";
