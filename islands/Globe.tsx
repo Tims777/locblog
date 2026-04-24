@@ -1,7 +1,6 @@
 import { geoOrthographic, geoPath, select as d3Select } from "d3";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { GeoObject, Rotation, Translation } from "../types.d.ts";
-import { default as world } from "../static/world.json" assert { type: "json" };
 
 const background = {
   type: "Sphere",
@@ -77,7 +76,6 @@ function createGlobe(props: StaticGlobeProps) {
   const path = createPathGenerator(props.rotation, props.translation);
   const allFeatures = [
     background,
-    ...world.features,
     ...props.features,
   ] as GeoObject[];
   return allFeatures.map((feature) => {
@@ -108,7 +106,6 @@ function updateGlobe(
   const path = createPathGenerator(props.rotation, props.translation);
   const allFeatures = [
     background,
-    ...world.features,
     ...props.features,
   ] as GeoObject[];
   const globe = d3Select(target);

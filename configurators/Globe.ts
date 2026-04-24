@@ -1,6 +1,7 @@
 import { type Directive } from "preactify-markdown/types.d.ts";
 import { type GlobeProps } from "../islands/Globe.tsx";
 import { type GeoObject, type Rotation } from "../types.d.ts";
+import { default as world } from "../static/world.json" with { type: "json" };
 import db from "../services/database.ts";
 
 export default async function configure(
@@ -13,6 +14,7 @@ export default async function configure(
     orderBy: "date asc",
   });
   const features = [
+    ...world.features,
     ...visits.map((v) => ({
       type: "Point",
       coordinates: [v.longitude, v.latitude],
