@@ -82,7 +82,9 @@ export function BackSide(props: PostCardProps) {
   ].join(" ");
 
   let address = props.address ?? [];
-  if (address.length > MAX_ADDRESS_LINES) address = address.slice(0, MAX_ADDRESS_LINES - 1).concat("...");
+  if (address.length > MAX_ADDRESS_LINES) {
+    address = address.slice(0, MAX_ADDRESS_LINES - 1).concat("...");
+  }
 
   return (
     <a

@@ -7,7 +7,7 @@ interface GalleryRowProps {
 function count(x: unknown | unknown[]): number {
   if (Array.isArray(x)) {
     return x.length;
-  } else if (!(typeof x in ["undefined", "null"])) {
+  } else if (!((typeof x) in ["undefined", "null"])) {
     return 1;
   } else {
     return 0;

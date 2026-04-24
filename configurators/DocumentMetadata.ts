@@ -29,7 +29,9 @@ export default function configure(
 
   return {
     children: directive.children
-      .map((x) => "value" in x ? getMetadata(x.value.split("."), metadata) : null)
+      .map((x) =>
+        "value" in x ? getMetadata(x.value.split("."), metadata) : null
+      )
       .map((x) => formatter.format(x))
       .filter((x) => x != "")
       .map((x) => formatter.surround(x, prefix, suffix)),

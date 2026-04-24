@@ -1,6 +1,8 @@
 import { type Options } from "$fresh/plugins/twindv1.ts";
 import presetTailWind from "twind-preset-tailwind";
-import presetTypography, { type TypographyOptions } from "twind-preset-typography";
+import presetTypography, {
+  type TypographyOptions,
+} from "twind-preset-typography";
 
 const typographyExtend: TypographyOptions["extend"] = {
   h1: {
@@ -15,10 +17,15 @@ const typographyExtend: TypographyOptions["extend"] = {
 };
 
 const rules = [
-  [/^rotate-y-(\d+)$/, ([_, match]: string[]) => ({ transform: `rotateY(${match}deg)` })],
+  [
+    /^rotate-y-(\d+)$/,
+    ([_, match]: string[]) => ({ transform: `rotateY(${match}deg)` }),
+  ],
   [
     /^backface-(\w+)$/,
-    ([_, match]: string[]) => ({ "backface-visibility": match as "visible" | "hidden" }),
+    ([_, match]: string[]) => ({
+      "backface-visibility": match as "visible" | "hidden",
+    }),
   ],
   [
     /^perspective-(\d+)$/,

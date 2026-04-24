@@ -32,5 +32,3 @@ jobs:
           project: "locblog"
           entrypoint: "main.ts"
           root: "."
-          
-          
