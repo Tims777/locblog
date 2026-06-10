@@ -3,7 +3,9 @@ class RedirectService {
 
   constructor(redirects: string | undefined = Deno.env.get("REDIRECTS")) {
     if (redirects) {
-      for (const [from, to] of JSON.parse(redirects)) {
+      const parsedRedirects = JSON.parse(redirects);
+      console.log("Redirects enabled:", parsedRedirects)
+      for (const [from, to] of parsedRedirects) {
         this.redirects.push([new URLPattern(from), to]);
       }
     }
