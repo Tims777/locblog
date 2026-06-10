@@ -5,6 +5,7 @@
 import * as $_document_ from "./routes/[document].tsx";
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
+import * as $_middleware from "./routes/_middleware.ts";
 import * as $api_gallery_name_ from "./routes/api/gallery/[name].ts";
 import * as $Globe from "./islands/Globe.tsx";
 import * as $LightBox from "./islands/LightBox.tsx";
@@ -18,6 +19,7 @@ const manifest = {
     "./routes/[document].tsx": $_document_,
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
+    "./routes/_middleware.ts": $_middleware,
     "./routes/api/gallery/[name].ts": $api_gallery_name_,
   },
   islands: {

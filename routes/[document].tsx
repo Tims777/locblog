@@ -40,7 +40,7 @@ export const handler: Handlers<PreparedDocument> = {
     });
 
     if (!docs.length) {
-      return redirect.for(req.url) ?? ctx.renderNotFound();
+      return ctx.renderNotFound();
     }
 
     const doc = docs[0];
