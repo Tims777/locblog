@@ -5,7 +5,7 @@ interface FormatArgs {
 
 class FormattingService {
   constructor(
-    private locale = global.Deno?.env.get("LOCALE") ?? navigator.language,
+    private locale = (typeof Deno !== "undefined" ? Deno.env.get("LOCALE") : undefined),
   ) {
     console.debug(`Locale: ${this.locale}`)
   }
