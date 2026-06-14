@@ -5,8 +5,10 @@ interface FormatArgs {
 
 class FormattingService {
   constructor(
-    private locale = globalThis.Deno?.env.get("LOCALE") ?? navigator.language,
-  ) {}
+    private locale = global.Deno?.env.get("LOCALE") ?? navigator.language,
+  ) {
+    console.debug(`Locale: ${this.locale}`)
+  }
 
   public format(x: unknown, args?: FormatArgs): string {
     switch (typeof x) {
@@ -17,8 +19,8 @@ class FormattingService {
       case "boolean":
         return x.toString();
       case "object":
-        if (x === null) return args?.fallback ?? "";
-        return this.formatObject(x, args);
+        if (x !== null) return this.formatObject(x, args);
+        /* else: fall through */
       case "undefined":
       default:
         return args?.fallback ?? "";
