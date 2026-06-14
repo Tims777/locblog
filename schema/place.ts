@@ -26,7 +26,6 @@ export const PlaceDetailsSchema = createSchema({
   ...PlaceFundamentals,
   visits: array.of(VisitSchema),
   resource: url.optional(),
-  parent: uuid.optional(),
   last_visit: date.optional(),
 });
 

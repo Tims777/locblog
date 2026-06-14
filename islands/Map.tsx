@@ -35,7 +35,7 @@ export interface MapProps {
 
 const PROP_DEFAULTS: Required<MapProps> = {
   center: [0, 0],
-  zoom: 7,
+  zoom: 5,
   features: [],
   focus: true,
   permalink: true,

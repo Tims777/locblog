@@ -5,7 +5,7 @@ export const FlightSchema = createSchema({
   id: uuid,
   from: PlaceSchema,
   to: PlaceSchema,
-  date: date,
+  date: date.optional(),
 });
 
 export type Flight = Type<typeof FlightSchema>;

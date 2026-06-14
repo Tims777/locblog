@@ -1,10 +1,11 @@
 interface FormatArgs {
   dateOnly?: boolean;
+  fallback?: string;
 }
 
 class FormattingService {
   constructor(
-    private locale = Deno.env.get("LOCALE") ?? navigator.language,
+    private locale = globalThis.Deno?.env.get("LOCALE") ?? navigator.language,
   ) {}
 
   public format(x: unknown, args?: FormatArgs): string {
@@ -16,11 +17,11 @@ class FormattingService {
       case "boolean":
         return x.toString();
       case "object":
-        if (x === null) return "";
+        if (x === null) return args?.fallback ?? "";
         return this.formatObject(x, args);
       case "undefined":
       default:
-        return "";
+        return args?.fallback ?? "";
     }
   }
 

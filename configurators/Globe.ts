@@ -1,6 +1,6 @@
 import { type Directive } from "preactify-markdown/types.d.ts";
 import { type GlobeProps } from "../islands/Globe.tsx";
-import { type GeoObject, type Rotation } from "../types.d.ts";
+import { type GeoObject } from "../types.d.ts";
 import { default as world } from "../static/world.json" with { type: "json" };
 import db from "../services/database.ts";
 
@@ -33,7 +33,11 @@ export default async function configure(
       },
     })),
   ] as GeoObject[];
-  const first = visits[0];
-  const initialRotation: Rotation = [-first.longitude, 0];
-  return { features, initialRotation, ...directive.attributes };
+  const props = { features, ...directive.attributes };
+  const first = visits.at(0);
+  if (first) {
+    return { initialRotation: [-first.longitude, 0], ...props };
+  } else {
+    return props;
+  }
 }

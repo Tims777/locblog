@@ -3,6 +3,7 @@ import { createStepper } from "../helpers/preact-helpers.ts";
 import { type MaybeSerialized } from "../helpers/serialization-helpers.ts";
 import TableBuilder from "../helpers/table-helpers.tsx";
 import { type PlaceDetails } from "../schema/place.ts";
+import formatter from "../services/format.ts";
 
 interface PlaceDetailsProps {
   places: MaybeSerialized<PlaceDetails>[];
@@ -41,7 +42,7 @@ export default function PlaceDetails(props: PlaceDetailsProps) {
   return new TableBuilder(tableTitle)
     .appendMany(
       "Visited",
-      place.visits.map((v) => new Date(v.date).toLocaleDateString()),
+      place.visits.map((v) => formatter.format(v.date, {fallback: "✓"})),
     )
     .append("Latitude", place.latitude.toFixed(3))
     .append("Longitude", place.longitude.toFixed(3))

@@ -36,11 +36,13 @@ export default class TableBuilder {
           <th colSpan={colCount}>{this.title}</th>
         </tr>
       )
-      : <></>;
-    const rows = [
-      titleRow,
-      ...this.cells.map((r) => <tr>{r}</tr>),
-    ];
-    return <table>{rows}</table>;
+      : null;
+    const bodyRows = this.cells.map((r) => <tr>{r}</tr>);
+    return (
+      <table>
+        <thead>{titleRow}</thead>
+        <tbody>{bodyRows}</tbody>
+      </table>
+    );
   }
 }
