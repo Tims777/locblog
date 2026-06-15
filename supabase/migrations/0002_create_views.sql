@@ -1,4 +1,4 @@
-create view public.document_aggregate
+create view document_aggregate
 as
 select
   document.id,
@@ -33,7 +33,7 @@ group by
   t.id,
   s.name;
 
-create view public.flight_aggregate
+create view flight_aggregate
 as
 select
   flight.id,
@@ -44,11 +44,9 @@ select
 from
   flight
   left join place f on flight."from" = f.id
-  left join place t on flight."to" = t.id
-where
-  flight.date < now();
+  left join place t on flight."to" = t.id;
 
-create view public.gallery_aggregate
+create view gallery_aggregate
 as
 select
   gallery.id,
@@ -60,7 +58,7 @@ from
 group by
   gallery.id;
 
-create view public.place_aggregate
+create view place_aggregate
 as
 select
   place.id,

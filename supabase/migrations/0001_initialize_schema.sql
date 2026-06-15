@@ -6,13 +6,6 @@ create table place (
   constraint place_pkey primary key (id)
 );
 
-create table place_resource (
-  place uuid not null,
-  resource text not null,
-  constraint place_resource_pkey primary key (place),
-  constraint place_resource_place_fkey foreign KEY (place) references place (id)
-);
-
 create table visit (
   id uuid not null default extensions.uuid_generate_v4 (),
   place uuid not null,
