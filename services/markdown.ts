@@ -10,10 +10,13 @@ import configureDocumentOverview from "../configurators/DocumentOverview.ts";
 import Navigation from "../islands/Navigation.tsx";
 import configureDocumentMetadata from "../configurators/DocumentMetadata.ts";
 import configureDocumentComments from "../configurators/DocumentComments.ts";
+import configureIcon from "../configurators/Icon.ts";
 import type { ConfiguratorContext } from "../types.d.ts";
+import type { DirectiveOptions } from "preactify-markdown/types.d.ts";
 
 const config = {
   div: { component: "div" },
+  icon: { component: "span", configure: configureIcon },
   meta: { component: "span", configure: configureDocumentMetadata },
   comments: { component: "div", configure: configureDocumentComments },
   navigation: { component: Navigation },
@@ -26,5 +29,5 @@ const config = {
   globe: { component: Globe, configure: configureGlobe },
 } as const;
 
-const md = new MarkdownPreactifier<ConfiguratorContext>(config);
+const md = new MarkdownPreactifier<ConfiguratorContext>(config as DirectiveOptions);
 export default md;
