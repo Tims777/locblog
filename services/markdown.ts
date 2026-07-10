@@ -16,6 +16,7 @@ import type { DirectiveOptions } from "preactify-markdown/types.d.ts";
 
 const config = {
   div: { component: "div" },
+  span: { component: "span" },
   icon: { component: "span", configure: configureIcon },
   meta: { component: "span", configure: configureDocumentMetadata },
   comments: { component: "div", configure: configureDocumentComments },
