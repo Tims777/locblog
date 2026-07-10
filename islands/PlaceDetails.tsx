@@ -42,7 +42,10 @@ export default function PlaceDetails(props: PlaceDetailsProps) {
   return new TableBuilder(tableTitle)
     .appendMany(
       "Visited",
-      place.visits.map((v) => formatter.format(v.date, {fallback: "✓"})),
+      place.visits.map((v) => {
+        const date = v.date ? new Date(v.date) : undefined;
+        return formatter.format(date, { fallback: "✓", dateOnly: true });
+      }),
     )
     .append("Latitude", place.latitude.toFixed(3))
     .append("Longitude", place.longitude.toFixed(3))

@@ -5,9 +5,10 @@ interface FormatArgs {
 
 class FormattingService {
   constructor(
-    private locale = (typeof Deno !== "undefined" ? Deno.env.get("LOCALE") : undefined),
+    private locale =
+      (typeof Deno !== "undefined" ? Deno.env.get("LOCALE") : undefined),
   ) {
-    console.debug(`Locale: ${this.locale}`)
+    console.debug(`Locale: ${this.locale}`);
   }
 
   public format(x: unknown, args?: FormatArgs): string {
