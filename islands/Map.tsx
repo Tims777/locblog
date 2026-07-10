@@ -14,7 +14,7 @@ import { Control, defaults as defaultControls } from "ol/control";
 import type MapEvent from "ol/MapEvent";
 import { useGeographic } from "ol/proj";
 import { Head } from "$fresh/runtime.ts";
-import { GeoLocation } from "../types.d.ts";
+import { Vec2 } from "../types.d.ts";
 import PlaceDetails from "../islands/PlaceDetails.tsx";
 import { renderToElement } from "../helpers/preact-helpers.ts";
 import PopupContainer from "../components/PopupContainer.tsx";
@@ -26,7 +26,7 @@ const minZoom = 2;
 const maxZoom = 20;
 
 export interface MapProps {
-  center?: GeoLocation;
+  center?: Vec2;
   zoom?: number;
   features?: MaybeSerialized<Place[]>;
   focus?: boolean;
@@ -132,13 +132,13 @@ function updatePermalink(event: MapEvent) {
   window.history.replaceState(state, "", url);
 }
 
-function loadView(defaultCenter: GeoLocation, defaultZoom: number) {
+function loadView(defaultCenter: Vec2, defaultZoom: number) {
   const params = new URL(window.location.href).searchParams;
   let center = defaultCenter;
   if (params.has("lat") && params.has("lon")) {
     center = [params.get("lon")!, params.get("lat")!].map(
       parseFloat,
-    ) as GeoLocation;
+    ) as Vec2;
   }
   let zoom = defaultZoom;
   if (params.has("zoom")) {

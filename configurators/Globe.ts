@@ -36,7 +36,7 @@ export default async function configure(
   const props = { features, ...directive.attributes };
   const first = visits.at(0);
   if (first) {
-    return { initialRotation: [-first.longitude, 0], ...props };
+    return { initialRotation: [-first.longitude, 0, 0], ...props };
   } else {
     return props;
   }
