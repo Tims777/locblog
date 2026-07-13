@@ -1,10 +1,8 @@
 import {
-  drag as d3Drag,
   geoOrthographic,
   geoPath,
   pointer as d3Pointer,
   select as d3Select,
-  svg,
 } from "d3";
 import type { BaseType } from "d3";
 import { useEffect, useRef } from "preact/hooks";
@@ -113,16 +111,20 @@ export default function Globe(props: Partial<GlobeProps>) {
       location.assign(hrefWithPosition(p.href, coords));
     };
 
-    svg.addEventListener("click", onClick, true);
-    const dragBehavior = d3Drag<SVGSVGElement, unknown>()
-      .on("start", (e) => onDragStart(e.sourceEvent))
-      .on("drag", (e) => onDrag(e.sourceEvent))
-      .on("end", (e) => onDragEnd(e.sourceEvent));
-    d3Select(svg).call(dragBehavior);
+    svg.addEventListener("click", onClick);
+    svg.addEventListener("pointerdown", onDragStart);
+    svg.addEventListener("pointermove", onDrag);
+    svg.addEventListener("pointerup", onDragEnd);
+    svg.addEventListener("pointercancel", onDragEnd);
+    svg.addEventListener("lostpointercapture", onDragEnd);
 
     return () => {
-      svg.removeEventListener("click", onClick, true);
-      d3Select(svg).on("drag", null);
+      svg.removeEventListener("click", onClick);
+      svg.removeEventListener("pointerdown", onDragStart);
+      svg.removeEventListener("pointermove", onDrag);
+      svg.removeEventListener("pointerup", onDragEnd);
+      svg.removeEventListener("pointercancel", onDragEnd);
+      svg.removeEventListener("lostpointercapture", onDragEnd);
     };
   }, []);
 
