@@ -12,8 +12,9 @@ const background = {
   type: "Sphere",
   properties: { fill: "lightgray" },
 };
-const acceleration = 1;
+const acceleration = 0.2;
 const maxAnimationStep = 0.05;
+const minDragDist = 4.0;
 
 export interface GlobeProps {
   features?: GeoObject[];
@@ -36,7 +37,6 @@ interface DragState {
 
 export default function Globe(props: Partial<GlobeProps>) {
   const p = { ...PROP_DEFAULTS, ...props };
-  const svgRef = useRef<SVGSVGElement>(null);
   const globeRef = useRef<SVGGElement>(null);
   const dragStateRef = useRef<DragState>(null);
   const momentumRef = useRef<Vec3>([0, 0, 0]);
@@ -77,66 +77,77 @@ export default function Globe(props: Partial<GlobeProps>) {
 
   // Globe Dragging
   useEffect(() => {
-    if (!svgRef.current) return;
-    const svg = svgRef.current;
+    if (!globeRef.current) return;
+    const globe = globeRef.current;
 
-    const onDragStart = (event: MouseEvent) => {
-      const coords = getCoords(event, rotationRef.current, svg);
+    let preventClick = false;
+    const onDragStart = (event: PointerEvent) => {
+      const coords = getCoords(event, rotationRef.current, globe);
       if (!coords) return;
+      preventClick = false;
       momentumRef.current = [0, 0, 0];
       dragStateRef.current = {
         c0: coords,
         r0: rotationRef.current,
       };
-      svg.style.cursor = "grabbing";
+      globe.style.cursor = "grabbing";
+      globe.setPointerCapture(event.pointerId);
+      event.preventDefault();
     };
-    const onDrag = (event: MouseEvent) => {
+    const onDrag = (event: PointerEvent) => {
       if (!dragStateRef.current) return;
       const drag = dragStateRef.current;
-      const coords = getCoords(event, drag.r0, svg);
+      const coords = getCoords(event, drag.r0, globe);
       if (!coords) return;
-      const deltaR = [coords[0] - drag.c0[0], 0, 0];
-      const newR = drag.r0.map((r0, i) => r0 + deltaR[i]) as Vec3;
+      const deltaR = coords.map((_, i) => coords[i] - drag.c0[i]);
+      if (Math.hypot(...deltaR) > minDragDist) preventClick = true;
+      const newR = [drag.r0[0] + deltaR[0], drag.r0[1], drag.r0[2]] as Vec3;
       rotationRef.current = newR;
       if (globeRef.current) draw(globeRef.current, p.features, newR);
+      event.preventDefault();
     };
-    const onDragEnd = (_event: MouseEvent) => {
+    const onDragEnd = (event: PointerEvent) => {
       dragStateRef.current = null;
-      svg.style.cursor = "grab";
+      globe.style.cursor = "";
+      event.preventDefault();
     };
-    const onClick = (event: MouseEvent) => {
+    const onClick = (event: PointerEvent) => {
+      if (preventClick) {
+        event.preventDefault();
+        preventClick = false;
+        return;
+      }
       if (!p.href) return;
       const coords = getCoords(event, rotationRef.current);
       if (!coords) return;
       location.assign(hrefWithPosition(p.href, coords));
     };
 
-    svg.addEventListener("click", onClick);
-    svg.addEventListener("pointerdown", onDragStart);
-    svg.addEventListener("pointermove", onDrag);
-    svg.addEventListener("pointerup", onDragEnd);
-    svg.addEventListener("pointercancel", onDragEnd);
-    svg.addEventListener("lostpointercapture", onDragEnd);
+    globe.addEventListener("click", onClick);
+    globe.addEventListener("pointerdown", onDragStart);
+    globe.addEventListener("pointermove", onDrag);
+    globe.addEventListener("pointerup", onDragEnd);
+    globe.addEventListener("pointercancel", onDragEnd);
+    globe.addEventListener("lostpointercapture", onDragEnd);
 
     return () => {
-      svg.removeEventListener("click", onClick);
-      svg.removeEventListener("pointerdown", onDragStart);
-      svg.removeEventListener("pointermove", onDrag);
-      svg.removeEventListener("pointerup", onDragEnd);
-      svg.removeEventListener("pointercancel", onDragEnd);
-      svg.removeEventListener("lostpointercapture", onDragEnd);
+      globe.removeEventListener("click", onClick);
+      globe.removeEventListener("pointerdown", onDragStart);
+      globe.removeEventListener("pointermove", onDrag);
+      globe.removeEventListener("pointerup", onDragEnd);
+      globe.removeEventListener("pointercancel", onDragEnd);
+      globe.removeEventListener("lostpointercapture", onDragEnd);
     };
   }, []);
 
   return (
     <svg
-      ref={svgRef}
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-250 -250 500 500"
-      class="w-full h-full cursor-grab"
+      class="w-full h-full"
     >
-      <g ref={globeRef} />
+      <g ref={globeRef} class="cursor-grab" />
     </svg>
   );
 }
